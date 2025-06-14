@@ -1,0 +1,99 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import { supabase } from '../../../lib/supabase';
+
+const { projectId } = Astro.params;
+
+if (!projectId) {
+  return Astro.redirect('/tools');
+}
+
+// In a real app, you'd verify the user owns this project
+// For now, we'll just pass the projectId to the component
+---
+
+<Layout title="Design Editor - CutGlueBuild.com" description="Edit and refine your designs with our powerful in-app editor.">
+  <Header />
+  
+  <main class="pt-16 h-screen bg-gray-50 dark:bg-gray-900">
+    <div id="editor-container" class="h-full">
+      <!-- Editor will be mounted here -->
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import DesignEditor from '../../../components/tools/DesignEditor.tsx';
+  import RevisionHistory from '../../../components/tools/RevisionHistory.tsx';
+  import { createRoot } from 'react-dom/client';
+  import React from 'react';
+  import { Toaster } from 'react-hot-toast';
+
+  const projectId = window.location.pathname.split('/').pop();
+  
+  function EditorApp() {
+    const [showHistory, setShowHistory] = React.useState(false);
+    const [currentProject, setCurrentProject] = React.useState(null);
+
+    React.useEffect(() => {
+      // Fetch project data
+      // This would normally be done server-side or with proper auth
+      console.log('Loading project:', projectId);
+    }, []);
+
+    return React.createElement('div', { className: 'h-full flex' }, [
+      React.createElement('div', { 
+        key: 'editor',
+        className: showHistory ? 'flex-1' : 'w-full' 
+      }, [
+        React.createElement(DesignEditor, {
+          projectId: projectId,
+          initialSvgData: currentProject?.svg_data,
+          canvasSettings: currentProject?.canvas_settings,
+          onSave: (svgData) => {
+            console.log('Design saved:', svgData);
+          }
+        })
+      ]),
+      
+      showHistory && React.createElement('div', {
+        key: 'history',
+        className: 'w-80 border-l border-gray-200 dark:border-gray-700'
+      }, [
+        React.createElement(RevisionHistory, {
+          projectId: projectId,
+          currentRevisionId: currentProject?.current_revision_id,
+          onRevisionRestore: (revisionId) => {
+            console.log('Revision restored:', revisionId);
+            // Reload the editor with the restored revision
+          }
+        })
+      ]),
+      
+      React.createElement('button', {
+        key: 'toggle',
+        onClick: () => setShowHistory(!showHistory),
+        className: 'fixed top-20 right-4 z-10 btn btn-primary',
+        children: showHistory ? 'Hide History' : 'Show History'
+      }),
+      
+      React.createElement(Toaster, { key: 'toaster' })
+    ]);
+  }
+
+  const container = document.getElementById('editor-container');
+  if (container) {
+    const root = createRoot(container);
+    root.render(React.createElement(EditorApp));
+  }
+</script>
+
+<style>
+  /* Ensure full height */
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+</style>

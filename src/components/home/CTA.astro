@@ -1,0 +1,68 @@
+---
+import { motion } from 'framer-motion';
+---
+
+<section class="py-24 bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-primary-900 dark:via-gray-900 dark:to-secondary-900 relative overflow-hidden">
+  <!-- Background Elements -->
+  <div class="absolute inset-0 overflow-hidden">
+    <div class="absolute top-20 left-20 w-64 h-64 bg-gradient-to-br from-primary-400/10 to-secondary-400/10 rounded-full blur-3xl animate-pulse-slow"></div>
+    <div class="absolute bottom-20 right-20 w-64 h-64 bg-gradient-to-br from-secondary-400/10 to-primary-400/10 rounded-full blur-3xl animate-pulse-slow"></div>
+  </div>
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+    <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+      Ready to Start
+      <span class="bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">
+        Creating?
+      </span>
+    </h2>
+    
+    <p class="text-xl text-gray-600 dark:text-gray-300 mb-12 max-w-2xl mx-auto">
+      Join thousands of makers who've transformed their ideas into reality. Get started with our AI tools today.
+    </p>
+
+    <!-- CTA Buttons -->
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+      <a href="/tools" class="btn btn-primary text-lg px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 inline-flex items-center group">
+        Try AI Tools Free
+        <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+        </svg>
+      </a>
+      
+      <a href="/pricing" class="btn btn-outline text-lg px-8 py-4 rounded-xl hover:bg-primary-50 dark:hover:bg-primary-900 transition-all duration-300">
+        View Pricing
+      </a>
+    </div>
+
+    <!-- Trust Indicators -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
+      <div class="flex items-center justify-center space-x-3">
+        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+        </div>
+        <span class="text-gray-700 dark:text-gray-300 font-medium">No Credit Card Required</span>
+      </div>
+      
+      <div class="flex items-center justify-center space-x-3">
+        <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+          </svg>
+        </div>
+        <span class="text-gray-700 dark:text-gray-300 font-medium">Secure & Private</span>
+      </div>
+      
+      <div class="flex items-center justify-center space-x-3">
+        <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+          </svg>
+        </div>
+        <span class="text-gray-700 dark:text-gray-300 font-medium">Instant Results</span>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,20 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/home/Hero.tsx';
+import Features from '../components/home/Features.astro';
+import Templates from '../components/home/Templates.astro';
+import Testimonials from '../components/home/Testimonials.astro';
+import CTA from '../components/home/CTA.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="CutGlueBuild.com - Cut. Glue. Build. Repeat." description="Transform your creative ideas into laser-cut masterpieces with AI-powered tools, premium templates, and step-by-step guides.">
+  <Header />
+  <Hero client:load />
+  <Features />
+  <Templates />
+  <Testimonials />
+  <CTA />
+  <Footer />
+</Layout>
