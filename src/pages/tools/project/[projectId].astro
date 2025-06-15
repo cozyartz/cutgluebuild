@@ -1,0 +1,347 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import { supabase } from '../../../lib/supabase';
+
+const { projectId } = Astro.params;
+
+if (!projectId) {
+  return Astro.redirect('/tools');
+}
+
+// In a real app, you'd fetch the project from the database and verify ownership
+// For now, we'll use mock data
+const mockProject = {
+  id: projectId,
+  title: 'Geometric Shield Design',
+  description: 'A beautiful geometric pattern perfect for wall art or decorative panels',
+  svg_data: `
+    <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="10" width="180" height="180" fill="none" stroke="#000" stroke-width="2"/>
+      <circle cx="100" cy="100" r="70" fill="none" stroke="#000" stroke-width="2"/>
+      <polygon points="100,40 140,80 140,120 100,160 60,120 60,80" fill="none" stroke="#000" stroke-width="2"/>
+      <circle cx="100" cy="100" r="20" fill="none" stroke="#000" stroke-width="1"/>
+    </svg>
+  `,
+  project_type: 'svg_generated',
+  metadata: {
+    material: 'wood',
+    dimensions: { width: 200, height: 200 },
+    style: 'geometric'
+  },
+  canvas_settings: {
+    width: 800,
+    height: 600,
+    backgroundColor: '#ffffff'
+  },
+  created_at: '2024-12-15T10:00:00Z'
+};
+
+const project = mockProject;
+---
+
+<Layout title={`${project.title} - CutGlueBuild.com`} description={project.description}>
+  <Header />
+  
+  <main class="pt-20 min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <!-- Project Header -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8">
+        <div class="flex items-start justify-between">
+          <div class="flex-1">
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              {project.title}
+            </h1>
+            <p class="text-gray-600 dark:text-gray-300 mb-6">
+              {project.description}
+            </p>
+            
+            <div class="flex flex-wrap gap-4 mb-6">
+              <div class="flex items-center space-x-2">
+                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v6a2 2 0 002 2h4a2 2 0 002-2V5z"></path>
+                </svg>
+                <span class="text-sm text-gray-600 dark:text-gray-400">
+                  Type: {project.project_type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                </span>
+              </div>
+              
+              {project.metadata?.material && (
+                <div class="flex items-center space-x-2">
+                  <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                  </svg>
+                  <span class="text-sm text-gray-600 dark:text-gray-400">
+                    Material: {project.metadata.material}
+                  </span>
+                </div>
+              )}
+              
+              {project.metadata?.dimensions && (
+                <div class="flex items-center space-x-2">
+                  <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" view-box="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+                  </svg>
+                  <span class="text-sm text-gray-600 dark:text-gray-400">
+                    Size: {project.metadata.dimensions.width}×{project.metadata.dimensions.height}mm
+                  </span>
+                </div>
+              )}
+              
+              <div class="flex items-center space-x-2">
+                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                <span class="text-sm text-gray-600 dark:text-gray-400">
+                  Created: {new Date(project.created_at).toLocaleDateString()}
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex items-center space-x-3 ml-6">
+            <a href={`/tools/editor/${project.id}`} class="btn btn-primary">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+              </svg>
+              Edit Design
+            </a>
+            
+            <button id="download-btn" class="btn btn-outline">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+              Download SVG
+            </button>
+            
+            <button id="share-btn" class="btn btn-outline">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
+              </svg>
+              Share
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-8">
+        <!-- Main Preview -->
+        <div class="lg:col-span-2">
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">Design Preview</h2>
+            
+            <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 flex items-center justify-center min-h-96">
+              <div class="bg-white rounded-lg shadow-lg p-8">
+                <div set:html={project.svg_data} />
+              </div>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <div class="flex items-center space-x-4">
+                <button id="zoom-out" class="btn btn-outline text-sm">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                  </svg>
+                </button>
+                <span class="text-sm text-gray-600 dark:text-gray-400" id="zoom-level">100%</span>
+                <button id="zoom-in" class="btn btn-outline text-sm">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                  </svg>
+                </button>
+              </div>
+              
+              <div class="flex items-center space-x-2">
+                <button id="fullscreen-btn" class="btn btn-outline text-sm">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+                  </svg>
+                  Fullscreen
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="space-y-6">
+          <!-- Project Actions -->
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Actions</h3>
+            
+            <div class="space-y-3">
+              <button class="w-full btn btn-primary">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                </svg>
+                Duplicate Project
+              </button>
+              
+              <button class="w-full btn btn-outline">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                </svg>
+                Add to Favorites
+              </button>
+              
+              <button class="w-full btn btn-outline text-red-600 hover:bg-red-50 dark:hover:bg-red-900">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+                Delete Project
+              </button>
+            </div>
+          </div>
+
+          <!-- Project Details -->
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Project Details</h3>
+            
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Project Name
+                </label>
+                <input 
+                  type="text" 
+                  value={project.title}
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white text-sm"
+                />
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Description
+                </label>
+                <textarea 
+                  rows="3"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white text-sm resize-none"
+                >{project.description}</textarea>
+              </div>
+              
+              <button class="w-full btn btn-outline text-sm">
+                Save Changes
+              </button>
+            </div>
+          </div>
+
+          <!-- Export Options -->
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Export Options</h3>
+            
+            <div class="space-y-3">
+              <button class="w-full btn btn-outline text-sm justify-start">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Download SVG
+              </button>
+              
+              <button class="w-full btn btn-outline text-sm justify-start">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                Export as PNG
+              </button>
+              
+              <button class="w-full btn btn-outline text-sm justify-start">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Export as PDF
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script define:vars={{ project }}>
+  // Download functionality
+  const downloadBtn = document.getElementById('download-btn');
+  if (downloadBtn) {
+    downloadBtn.addEventListener('click', () => {
+      const blob = new Blob([project.svg_data], { type: 'image/svg+xml' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${project.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.svg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  // Share functionality
+  const shareBtn = document.getElementById('share-btn');
+  if (shareBtn) {
+    shareBtn.addEventListener('click', async () => {
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: project.title,
+            text: project.description,
+            url: window.location.href
+          });
+        } catch (error) {
+          console.log('Error sharing:', error);
+        }
+      } else {
+        // Fallback: copy to clipboard
+        navigator.clipboard.writeText(window.location.href);
+        alert('Project link copied to clipboard!');
+      }
+    });
+  }
+
+  // Zoom functionality
+  let zoomLevel = 100;
+  const zoomInBtn = document.getElementById('zoom-in');
+  const zoomOutBtn = document.getElementById('zoom-out');
+  const zoomLevelSpan = document.getElementById('zoom-level');
+
+  function updateZoom() {
+    const svgContainer = document.querySelector('[set\\:html]');
+    if (svgContainer) {
+      svgContainer.style.transform = `scale(${zoomLevel / 100})`;
+      zoomLevelSpan.textContent = `${zoomLevel}%`;
+    }
+  }
+
+  if (zoomInBtn) {
+    zoomInBtn.addEventListener('click', () => {
+      zoomLevel = Math.min(zoomLevel + 25, 200);
+      updateZoom();
+    });
+  }
+
+  if (zoomOutBtn) {
+    zoomOutBtn.addEventListener('click', () => {
+      zoomLevel = Math.max(zoomLevel - 25, 25);
+      updateZoom();
+    });
+  }
+
+  // Fullscreen functionality
+  const fullscreenBtn = document.getElementById('fullscreen-btn');
+  if (fullscreenBtn) {
+    fullscreenBtn.addEventListener('click', () => {
+      const previewContainer = document.querySelector('.min-h-96');
+      if (previewContainer) {
+        if (previewContainer.requestFullscreen) {
+          previewContainer.requestFullscreen();
+        }
+      }
+    });
+  }
+</script>
+
+<style>
+  [set\:html] {
+    transition: transform 0.2s ease;
+    transform-origin: center;
+  }
+</style>
