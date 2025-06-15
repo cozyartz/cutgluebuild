@@ -1,0 +1,297 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+---
+
+<Layout title="Project Ideas Generator - CutGlueBuild.com" description="Get personalized project suggestions based on your materials, tools, and skill level.">
+  <Header />
+  
+  <main class="pt-16 h-screen bg-gray-50 dark:bg-gray-900">
+    <div class="h-full flex">
+      <!-- Left Panel - Input Form -->
+      <div class="w-96 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col">
+        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+          <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Project Ideas</h1>
+          <p class="text-gray-600 dark:text-gray-400 text-sm">Get personalized project suggestions</p>
+        </div>
+        
+        <div class="flex-1 p-6 overflow-y-auto">
+          <form id="project-generator-form" class="space-y-6">
+            <!-- Skill Level -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                Skill Level
+              </label>
+              <div class="space-y-2">
+                <label class="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <input type="radio" name="skill" value="beginner" class="mr-3" checked />
+                  <div>
+                    <div class="font-medium text-gray-900 dark:text-white">Beginner</div>
+                    <div class="text-xs text-gray-600 dark:text-gray-400">New to laser cutting/crafting</div>
+                  </div>
+                </label>
+                <label class="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <input type="radio" name="skill" value="intermediate" class="mr-3" />
+                  <div>
+                    <div class="font-medium text-gray-900 dark:text-white">Intermediate</div>
+                    <div class="text-xs text-gray-600 dark:text-gray-400">Some experience with projects</div>
+                  </div>
+                </label>
+                <label class="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <input type="radio" name="skill" value="advanced" class="mr-3" />
+                  <div>
+                    <div class="font-medium text-gray-900 dark:text-white">Advanced</div>
+                    <div class="text-xs text-gray-600 dark:text-gray-400">Experienced maker</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Available Materials -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                Available Materials
+              </label>
+              <div class="grid grid-cols-2 gap-2">
+                <label class="flex items-center p-2 border border-gray-300 dark:border-gray-600 rounded cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <input type="checkbox" name="materials" value="wood" class="mr-2" />
+                  <span class="text-sm text-gray-700 dark:text-gray-300">Wood</span>
+                </label>
+                <label class="flex items-center p-2 border border-gray-300 dark:border-gray-600 rounded cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <input type="checkbox" name="materials" value="acrylic" class="mr-2" />
+                  <span class="text-sm text-gray-700 dark:text-gray-300">Acrylic</span>
+                </label>
+                <label class="flex items-center p-2 border border-gray-300 dark:border-gray-600 rounded cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <input type="checkbox" name="materials" value="cardboard" class="mr-2" />
+                  <span class="text-sm text-gray-700 dark:text-gray-300">Cardboard</span>
+                </label>
+                <label class="flex items-center p-2 border border-gray-300 dark:border-gray-600 rounded cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <input type="checkbox" name="materials" value="leather" class="mr-2" />
+                  <span class="text-sm text-gray-700 dark:text-gray-300">Leather</span>
+                </label>
+                <label class="flex items-center p-2 border border-gray-300 dark:border-gray-600 rounded cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <input type="checkbox" name="materials" value="fabric" class="mr-2" />
+                  <span class="text-sm text-gray-700 dark:text-gray-300">Fabric</span>
+                </label>
+                <label class="flex items-center p-2 border border-gray-300 dark:border-gray-600 rounded cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <input type="checkbox" name="materials" value="metal" class="mr-2" />
+                  <span class="text-sm text-gray-700 dark:text-gray-300">Metal</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Tools Available -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                Tools Available
+              </label>
+              <div class="space-y-2">
+                <label class="flex items-center p-2 border border-gray-300 dark:border-gray-600 rounded cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <input type="checkbox" name="tools" value="laser" class="mr-2" />
+                  <span class="text-sm text-gray-700 dark:text-gray-300">Laser Cutter</span>
+                </label>
+                <label class="flex items-center p-2 border border-gray-300 dark:border-gray-600 rounded cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <input type="checkbox" name="tools" value="cricut" class="mr-2" />
+                  <span class="text-sm text-gray-700 dark:text-gray-300">Cricut Machine</span>
+                </label>
+                <label class="flex items-center p-2 border border-gray-300 dark:border-gray-600 rounded cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <input type="checkbox" name="tools" value="cnc" class="mr-2" />
+                  <span class="text-sm text-gray-700 dark:text-gray-300">CNC Router</span>
+                </label>
+                <label class="flex items-center p-2 border border-gray-300 dark:border-gray-600 rounded cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <input type="checkbox" name="tools" value="hand" class="mr-2" />
+                  <span class="text-sm text-gray-700 dark:text-gray-300">Hand Tools</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Project Type -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                Project Type
+              </label>
+              <select name="type" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white">
+                <option value="any">Any Project</option>
+                <option value="home-decor">Home Decor</option>
+                <option value="gifts">Gifts</option>
+                <option value="tools">Tools & Jigs</option>
+                <option value="art">Art Projects</option>
+                <option value="functional">Functional Items</option>
+                <option value="toys">Toys & Games</option>
+              </select>
+            </div>
+
+            <!-- Time Available -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                Time Available
+              </label>
+              <select name="time" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white">
+                <option value="1-2">1-2 hours</option>
+                <option value="3-5">3-5 hours</option>
+                <option value="6-10">6-10 hours</option>
+                <option value="10+">10+ hours</option>
+              </select>
+            </div>
+
+            <!-- Generate Button -->
+            <button
+              type="submit"
+              class="w-full btn btn-primary py-3 text-base font-medium"
+              id="generate-btn"
+            >
+              Get Project Ideas
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Right Panel - Results -->
+      <div class="flex-1 flex flex-col">
+        <!-- Header -->
+        <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-6">
+          <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Project Suggestions</h2>
+          <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">Personalized ideas based on your preferences</p>
+        </div>
+
+        <!-- Results Area -->
+        <div class="flex-1 p-6 overflow-y-auto">
+          <div id="results-container">
+            <div class="text-center py-16">
+              <svg class="w-24 h-24 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+              </svg>
+              <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Ready for Inspiration?</h3>
+              <p class="text-gray-600 dark:text-gray-400">Fill out the form to get personalized project ideas</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  const form = document.getElementById('project-generator-form');
+  const generateBtn = document.getElementById('generate-btn');
+  const resultsContainer = document.getElementById('results-container');
+
+  const mockProjects = [
+    {
+      title: "Geometric Wall Art",
+      difficulty: "Beginner",
+      time: "2-3 hours",
+      materials: ["Wood", "Acrylic"],
+      description: "Create stunning geometric patterns for your wall. Perfect for beginners with clean, simple cuts.",
+      steps: ["Design selection", "Material preparation", "Laser cutting", "Assembly", "Mounting"],
+      image: "🎨"
+    },
+    {
+      title: "Custom Coaster Set",
+      difficulty: "Beginner",
+      time: "1-2 hours",
+      materials: ["Wood", "Leather"],
+      description: "Personalized coasters with your own designs. Great for gifts or home use.",
+      steps: ["Design creation", "Material cutting", "Edge finishing", "Protective coating"],
+      image: "☕"
+    },
+    {
+      title: "Desk Organizer",
+      difficulty: "Intermediate",
+      time: "3-4 hours",
+      materials: ["Wood", "Acrylic"],
+      description: "Multi-compartment organizer for your workspace. Customizable sizes and layouts.",
+      steps: ["Measurement", "Design layout", "Cutting", "Assembly", "Finishing"],
+      image: "📝"
+    }
+  ];
+
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(form);
+      const skill = formData.get('skill');
+      const materials = formData.getAll('materials');
+      const tools = formData.getAll('tools');
+      const type = formData.get('type');
+      const time = formData.get('time');
+
+      // Update button state
+      generateBtn.textContent = 'Generating Ideas...';
+      generateBtn.disabled = true;
+
+      try {
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Filter and display mock projects
+        const filteredProjects = mockProjects.filter(project => {
+          return project.difficulty.toLowerCase() === skill || skill === 'any';
+        });
+
+        displayResults(filteredProjects);
+        
+      } catch (error) {
+        console.error('Generation error:', error);
+        alert('Failed to generate project ideas. Please try again.');
+      } finally {
+        generateBtn.textContent = 'Get Project Ideas';
+        generateBtn.disabled = false;
+      }
+    });
+  }
+
+  function displayResults(projects) {
+    resultsContainer.innerHTML = `
+      <div class="space-y-6">
+        ${projects.map(project => `
+          <div class="card p-6 hover:shadow-lg transition-shadow duration-200">
+            <div class="flex items-start space-x-4">
+              <div class="text-4xl">${project.image}</div>
+              <div class="flex-1">
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="text-xl font-semibold text-gray-900 dark:text-white">${project.title}</h3>
+                  <div class="flex items-center space-x-2">
+                    <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded text-xs font-medium">
+                      ${project.difficulty}
+                    </span>
+                    <span class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded text-xs font-medium">
+                      ${project.time}
+                    </span>
+                  </div>
+                </div>
+                
+                <p class="text-gray-600 dark:text-gray-300 mb-4">${project.description}</p>
+                
+                <div class="mb-4">
+                  <h4 class="font-medium text-gray-900 dark:text-white mb-2">Materials:</h4>
+                  <div class="flex flex-wrap gap-2">
+                    ${project.materials.map(material => `
+                      <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-sm">
+                        ${material}
+                      </span>
+                    `).join('')}
+                  </div>
+                </div>
+                
+                <div class="mb-4">
+                  <h4 class="font-medium text-gray-900 dark:text-white mb-2">Steps:</h4>
+                  <ol class="list-decimal list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                    ${project.steps.map(step => `<li>${step}</li>`).join('')}
+                  </ol>
+                </div>
+                
+                <div class="flex space-x-3">
+                  <button class="btn btn-primary text-sm">Start Project</button>
+                  <button class="btn btn-outline text-sm">Save Idea</button>
+                  <button class="btn btn-outline text-sm">View Tutorial</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+</script>

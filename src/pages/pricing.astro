@@ -1,0 +1,206 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Pricing - CutGlueBuild.com" description="Choose the perfect plan for your creative projects. From free tools to professional features.">
+  <Header />
+  
+  <main class="pt-20 min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <!-- Hero Section -->
+      <div class="text-center mb-16">
+        <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+          Simple
+          <span class="bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">
+            Pricing
+          </span>
+        </h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          Start free and upgrade as you grow. All plans include access to our core tools and templates.
+        </p>
+      </div>
+
+      <!-- Pricing Cards -->
+      <div class="grid md:grid-cols-3 gap-8 mb-16">
+        <!-- Free Plan -->
+        <div class="card p-8 relative">
+          <div class="text-center mb-8">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Starter</h3>
+            <div class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+              $0
+              <span class="text-lg font-normal text-gray-600 dark:text-gray-400">/month</span>
+            </div>
+            <p class="text-gray-600 dark:text-gray-400">Perfect for getting started</p>
+          </div>
+          
+          <ul class="space-y-4 mb-8">
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              5 AI tool uses per day
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Basic templates
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Community support
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Export to SVG
+            </li>
+          </ul>
+          
+          <button class="w-full btn btn-outline py-3">Get Started Free</button>
+        </div>
+
+        <!-- Maker Plan -->
+        <div class="card p-8 relative border-2 border-primary-500">
+          <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+            <span class="bg-primary-500 text-white px-4 py-1 rounded-full text-sm font-medium">Most Popular</span>
+          </div>
+          
+          <div class="text-center mb-8">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Maker</h3>
+            <div class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+              $19
+              <span class="text-lg font-normal text-gray-600 dark:text-gray-400">/month</span>
+            </div>
+            <p class="text-gray-600 dark:text-gray-400">For serious makers</p>
+          </div>
+          
+          <ul class="space-y-4 mb-8">
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              100 AI tool uses per day
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Premium templates
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Project history
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Priority support
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Advanced vectorization
+            </li>
+          </ul>
+          
+          <button class="w-full btn btn-primary py-3">Start Free Trial</button>
+        </div>
+
+        <!-- Pro Plan -->
+        <div class="card p-8 relative">
+          <div class="text-center mb-8">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Pro</h3>
+            <div class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+              $49
+              <span class="text-lg font-normal text-gray-600 dark:text-gray-400">/month</span>
+            </div>
+            <p class="text-gray-600 dark:text-gray-400">For professionals</p>
+          </div>
+          
+          <ul class="space-y-4 mb-8">
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Unlimited AI tool uses
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              All premium templates
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Private community access
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              Early feature access
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              API access
+            </li>
+          </ul>
+          
+          <button class="w-full btn btn-outline py-3">Contact Sales</button>
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">
+          Frequently Asked Questions
+        </h2>
+        
+        <div class="space-y-6">
+          <div class="card p-6">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              Can I change plans anytime?
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300">
+              Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately.
+            </p>
+          </div>
+          
+          <div class="card p-6">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              What payment methods do you accept?
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300">
+              We accept all major credit cards, PayPal, and bank transfers for annual plans.
+            </p>
+          </div>
+          
+          <div class="card p-6">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              Is there a free trial?
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300">
+              Yes! All paid plans come with a 14-day free trial. No credit card required.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

@@ -1,0 +1,333 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<Layout title="Blog - CutGlueBuild.com" description="Learn laser cutting techniques, project tutorials, and maker tips from our community of creators.">
+  <Header />
+  
+  <main class="pt-20 min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <!-- Hero Section -->
+      <div class="text-center mb-16">
+        <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+          Maker
+          <span class="bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">
+            Blog
+          </span>
+        </h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          Tutorials, tips, and inspiration for laser cutting, crafting, and making amazing projects.
+        </p>
+      </div>
+
+      <!-- Featured Post -->
+      <div class="card mb-12 overflow-hidden">
+        <div class="md:flex">
+          <div class="md:w-1/2">
+            <div class="h-64 md:h-full bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center">
+              <div class="text-white text-center">
+                <svg class="w-16 h-16 mx-auto mb-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2L2 7V10C2 16 6 20.5 12 22C18 20.5 22 16 22 10V7L12 2Z"/>
+                </svg>
+                <p class="text-sm opacity-90">Featured Article</p>
+              </div>
+            </div>
+          </div>
+          <div class="md:w-1/2 p-8">
+            <div class="flex items-center mb-4">
+              <span class="px-3 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full text-sm font-medium">
+                Tutorial
+              </span>
+              <span class="ml-3 text-sm text-gray-600 dark:text-gray-400">5 min read</span>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+              <a href="/blog/beginner-guide-laser-cutting" class="hover:text-primary-500 transition-colors">
+                Complete Beginner's Guide to Laser Cutting
+              </a>
+            </h2>
+            <p class="text-gray-600 dark:text-gray-300 mb-6">
+              Everything you need to know to get started with laser cutting. From choosing materials to your first project, we cover it all in this comprehensive guide.
+            </p>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                  CG
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-gray-900 dark:text-white">CutGlueBuild Team</p>
+                  <p class="text-xs text-gray-600 dark:text-gray-400">Dec 15, 2024</p>
+                </div>
+              </div>
+              <a href="/blog/beginner-guide-laser-cutting" class="btn btn-primary text-sm">
+                Read More
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Categories Filter -->
+      <div class="flex flex-wrap gap-3 mb-8">
+        <button class="px-4 py-2 bg-primary-500 text-white rounded-full text-sm font-medium">
+          All Posts
+        </button>
+        <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium hover:bg-gray-300 dark:hover:bg-gray-600">
+          Tutorials
+        </button>
+        <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium hover:bg-gray-300 dark:hover:bg-gray-600">
+          Tips & Tricks
+        </button>
+        <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium hover:bg-gray-300 dark:hover:bg-gray-600">
+          Project Ideas
+        </button>
+        <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium hover:bg-gray-300 dark:hover:bg-gray-600">
+          Materials
+        </button>
+      </div>
+
+      <!-- Blog Posts Grid -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        <!-- Blog Post 1 -->
+        <article class="card card-hover overflow-hidden">
+          <div class="h-48 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
+            <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2Z"/>
+            </svg>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center mb-3">
+              <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded text-xs font-medium">
+                Tips
+              </span>
+              <span class="ml-2 text-xs text-gray-600 dark:text-gray-400">3 min read</span>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+              <a href="/blog/choosing-right-wood" class="hover:text-primary-500 transition-colors">
+                Choosing the Right Wood for Your Project
+              </a>
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+              Not all woods are created equal for laser cutting. Learn which types work best for different projects.
+            </p>
+            <div class="flex items-center justify-between">
+              <div class="text-xs text-gray-500 dark:text-gray-500">Dec 12, 2024</div>
+              <a href="/blog/choosing-right-wood" class="text-primary-500 hover:text-primary-600 text-sm font-medium">
+                Read More →
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Blog Post 2 -->
+        <article class="card card-hover overflow-hidden">
+          <div class="h-48 bg-gradient-to-br from-green-400 to-blue-500 flex items-center justify-center">
+            <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/>
+            </svg>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center mb-3">
+              <span class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded text-xs font-medium">
+                Project
+              </span>
+              <span class="ml-2 text-xs text-gray-600 dark:text-gray-400">7 min read</span>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+              <a href="/blog/diy-plant-markers" class="hover:text-primary-500 transition-colors">
+                DIY Garden Plant Markers
+              </a>
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+              Create beautiful, weather-resistant plant markers for your garden using laser-cut wood and simple techniques.
+            </p>
+            <div class="flex items-center justify-between">
+              <div class="text-xs text-gray-500 dark:text-gray-500">Dec 10, 2024</div>
+              <a href="/blog/diy-plant-markers" class="text-primary-500 hover:text-primary-600 text-sm font-medium">
+                Read More →
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Blog Post 3 -->
+        <article class="card card-hover overflow-hidden">
+          <div class="h-48 bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center">
+            <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+            </svg>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center mb-3">
+              <span class="px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded text-xs font-medium">
+                Design
+              </span>
+              <span class="ml-2 text-xs text-gray-600 dark:text-gray-400">4 min read</span>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+              <a href="/blog/design-principles" class="hover:text-primary-500 transition-colors">
+                5 Design Principles for Laser Cutting
+              </a>
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+              Master these fundamental design principles to create better laser-cut projects that look professional.
+            </p>
+            <div class="flex items-center justify-between">
+              <div class="text-xs text-gray-500 dark:text-gray-500">Dec 8, 2024</div>
+              <a href="/blog/design-principles" class="text-primary-500 hover:text-primary-600 text-sm font-medium">
+                Read More →
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Blog Post 4 -->
+        <article class="card card-hover overflow-hidden">
+          <div class="h-48 bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center">
+            <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2L2 7V10C2 16 6 20.5 12 22C18 20.5 22 16 22 10V7L12 2Z"/>
+            </svg>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center mb-3">
+              <span class="px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded text-xs font-medium">
+                Safety
+              </span>
+              <span class="ml-2 text-xs text-gray-600 dark:text-gray-400">6 min read</span>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+              <a href="/blog/laser-safety-guide" class="hover:text-primary-500 transition-colors">
+                Essential Laser Cutting Safety Guide
+              </a>
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+              Stay safe while creating amazing projects. Learn the essential safety practices every laser cutter should know.
+            </p>
+            <div class="flex items-center justify-between">
+              <div class="text-xs text-gray-500 dark:text-gray-500">Dec 5, 2024</div>
+              <a href="/blog/laser-safety-guide" class="text-primary-500 hover:text-primary-600 text-sm font-medium">
+                Read More →
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Blog Post 5 -->
+        <article class="card card-hover overflow-hidden">
+          <div class="h-48 bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center">
+            <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+            </svg>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center mb-3">
+              <span class="px-2 py-1 bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 rounded text-xs font-medium">
+                Software
+              </span>
+              <span class="ml-2 text-xs text-gray-600 dark:text-gray-400">8 min read</span>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+              <a href="/blog/best-design-software" class="hover:text-primary-500 transition-colors">
+                Best Design Software for Beginners
+              </a>
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+              Compare the top design software options for creating laser-cut projects, from free tools to professional suites.
+            </p>
+            <div class="flex items-center justify-between">
+              <div class="text-xs text-gray-500 dark:text-gray-500">Dec 3, 2024</div>
+              <a href="/blog/best-design-software" class="text-primary-500 hover:text-primary-600 text-sm font-medium">
+                Read More →
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Blog Post 6 -->
+        <article class="card card-hover overflow-hidden">
+          <div class="h-48 bg-gradient-to-br from-pink-400 to-red-500 flex items-center justify-center">
+            <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H5C3.9 1 3 1.9 3 3V21C3 22.1 3.9 23 5 23H19C20.1 23 21 22.1 21 21V9Z"/>
+            </svg>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center mb-3">
+              <span class="px-2 py-1 bg-pink-100 dark:bg-pink-900 text-pink-800 dark:text-pink-200 rounded text-xs font-medium">
+                Business
+              </span>
+              <span class="ml-2 text-xs text-gray-600 dark:text-gray-400">10 min read</span>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+              <a href="/blog/selling-laser-cut-products" class="hover:text-primary-500 transition-colors">
+                How to Start Selling Laser-Cut Products
+              </a>
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+              Turn your hobby into a business. Learn how to price, market, and sell your laser-cut creations online.
+            </p>
+            <div class="flex items-center justify-between">
+              <div class="text-xs text-gray-500 dark:text-gray-500">Dec 1, 2024</div>
+              <a href="/blog/selling-laser-cut-products" class="text-primary-500 hover:text-primary-600 text-sm font-medium">
+                Read More →
+              </a>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Newsletter Signup -->
+      <div class="card p-8 text-center bg-gradient-to-r from-primary-500 to-secondary-500 text-white">
+        <h2 class="text-2xl font-bold mb-4">Stay Updated</h2>
+        <p class="mb-6 opacity-90">Get the latest tutorials, tips, and project ideas delivered to your inbox.</p>
+        <form class="max-w-md mx-auto flex gap-3">
+          <input
+            type="email"
+            placeholder="Enter your email"
+            class="flex-1 px-4 py-2 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
+          />
+          <button type="submit" class="btn bg-white text-primary-500 hover:bg-gray-100 px-6">
+            Subscribe
+          </button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  // Category filter functionality
+  const categoryButtons = document.querySelectorAll('button[class*="px-4 py-2"]');
+  
+  categoryButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      // Remove active state from all buttons
+      categoryButtons.forEach(btn => {
+        btn.classList.remove('bg-primary-500', 'text-white');
+        btn.classList.add('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+      });
+      
+      // Add active state to clicked button
+      button.classList.remove('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+      button.classList.add('bg-primary-500', 'text-white');
+      
+      // In a real app, this would filter the blog posts
+      console.log('Filter by:', button.textContent);
+    });
+  });
+
+  // Newsletter form
+  const newsletterForm = document.querySelector('form');
+  if (newsletterForm) {
+    newsletterForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = e.target.querySelector('input[type="email"]').value;
+      if (email) {
+        alert('Thanks for subscribing! We\'ll send you our latest updates.');
+        e.target.reset();
+      }
+    });
+  }
+</script>

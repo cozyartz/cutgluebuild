@@ -1,0 +1,225 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<Layout title="Account - CutGlueBuild.com" description="Manage your CutGlueBuild account, subscription, and projects.">
+  <Header />
+  
+  <main class="pt-20 min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid lg:grid-cols-4 gap-8">
+        <!-- Sidebar -->
+        <div class="lg:col-span-1">
+          <div class="card p-6 sticky top-24">
+            <nav class="space-y-2">
+              <a href="#profile" class="block px-3 py-2 rounded-lg bg-primary-50 dark:bg-primary-900 text-primary-700 dark:text-primary-300 font-medium">
+                Profile
+              </a>
+              <a href="#subscription" class="block px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                Subscription
+              </a>
+              <a href="#projects" class="block px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                Projects
+              </a>
+              <a href="#billing" class="block px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                Billing
+              </a>
+              <a href="#settings" class="block px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                Settings
+              </a>
+            </nav>
+          </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="lg:col-span-3 space-y-8">
+          <!-- Profile Section -->
+          <section id="profile" class="card p-8">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Profile Information</h2>
+            
+            <div class="flex items-center space-x-6 mb-8">
+              <div class="w-20 h-20 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                JD
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">John Doe</h3>
+                <p class="text-gray-600 dark:text-gray-400">john@example.com</p>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 mt-2">
+                  Maker Plan
+                </span>
+              </div>
+            </div>
+
+            <form class="grid md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Full Name
+                </label>
+                <input type="text" value="John Doe" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Email
+                </label>
+                <input type="email" value="john@example.com" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white">
+              </div>
+              <div class="md:col-span-2">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+              </div>
+            </form>
+          </section>
+
+          <!-- Usage Stats -->
+          <section class="card p-8">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Usage This Month</h2>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+              <div class="text-center p-6 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                <div class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">47</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">AI Tool Uses</div>
+                <div class="text-xs text-gray-500 dark:text-gray-500 mt-1">53 remaining</div>
+              </div>
+              <div class="text-center p-6 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                <div class="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">12</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Projects Created</div>
+              </div>
+              <div class="text-center p-6 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                <div class="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">8</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Templates Downloaded</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Recent Projects -->
+          <section id="projects" class="card p-8">
+            <div class="flex items-center justify-between mb-6">
+              <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Recent Projects</h2>
+              <a href="/tools" class="btn btn-primary">New Project</a>
+            </div>
+            
+            <div class="space-y-4">
+              <div class="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                <div class="flex items-center space-x-4">
+                  <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-orange-600 dark:text-orange-400" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2L2 7V10C2 16 6 20.5 12 22C18 20.5 22 16 22 10V7L12 2Z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="font-medium text-gray-900 dark:text-white">Geometric Shield</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Created 2 days ago</p>
+                  </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <button class="btn btn-outline text-sm">Edit</button>
+                  <button class="btn btn-primary text-sm">Download</button>
+                </div>
+              </div>
+              
+              <div class="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                <div class="flex items-center space-x-4">
+                  <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2Z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="font-medium text-gray-900 dark:text-white">Custom Box Design</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Created 1 week ago</p>
+                  </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <button class="btn btn-outline text-sm">Edit</button>
+                  <button class="btn btn-primary text-sm">Download</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Subscription Section -->
+          <section id="subscription" class="card p-8">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Subscription</h2>
+            
+            <div class="flex items-center justify-between p-6 bg-green-50 dark:bg-green-900/20 rounded-lg mb-6">
+              <div>
+                <h3 class="font-semibold text-green-900 dark:text-green-100">Maker Plan</h3>
+                <p class="text-green-700 dark:text-green-300">$19/month • Renews on Jan 15, 2025</p>
+              </div>
+              <div class="flex space-x-3">
+                <button class="btn btn-outline">Change Plan</button>
+                <button class="btn btn-primary">Manage Billing</button>
+              </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="font-medium text-gray-900 dark:text-white mb-3">Plan Features</h4>
+                <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                  <li class="flex items-center">
+                    <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    100 AI tool uses per day
+                  </li>
+                  <li class="flex items-center">
+                    <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Premium templates
+                  </li>
+                  <li class="flex items-center">
+                    <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Priority support
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-medium text-gray-900 dark:text-white mb-3">Billing History</h4>
+                <div class="space-y-2 text-sm">
+                  <div class="flex justify-between">
+                    <span class="text-gray-600 dark:text-gray-400">Dec 15, 2024</span>
+                    <span class="text-gray-900 dark:text-white">$19.00</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600 dark:text-gray-400">Nov 15, 2024</span>
+                    <span class="text-gray-900 dark:text-white">$19.00</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  // Add interactivity for account management
+  document.addEventListener('DOMContentLoaded', () => {
+    // Handle navigation
+    const navLinks = document.querySelectorAll('nav a[href^="#"]');
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          
+          // Update active nav item
+          navLinks.forEach(l => l.classList.remove('bg-primary-50', 'dark:bg-primary-900', 'text-primary-700', 'dark:text-primary-300'));
+          navLinks.forEach(l => l.classList.add('text-gray-700', 'dark:text-gray-300', 'hover:bg-gray-100', 'dark:hover:bg-gray-700'));
+          
+          link.classList.remove('text-gray-700', 'dark:text-gray-300', 'hover:bg-gray-100', 'dark:hover:bg-gray-700');
+          link.classList.add('bg-primary-50', 'dark:bg-primary-900', 'text-primary-700', 'dark:text-primary-300');
+        }
+      });
+    });
+  });
+</script>

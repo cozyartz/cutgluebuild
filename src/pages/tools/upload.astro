@@ -1,0 +1,368 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+---
+
+<Layout title="Upload & Vectorize - CutGlueBuild.com" description="Convert photos and images into clean, laser-ready vector files with AI-powered tracing.">
+  <Header />
+  
+  <main class="pt-16 h-screen bg-gray-50 dark:bg-gray-900">
+    <div class="h-full flex">
+      <!-- Left Panel - Upload & Settings -->
+      <div class="w-96 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col">
+        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+          <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Upload & Vectorize</h1>
+          <p class="text-gray-600 dark:text-gray-400 text-sm">Convert images to laser-ready vectors</p>
+        </div>
+        
+        <div class="flex-1 p-6 overflow-y-auto">
+          <!-- Upload Area -->
+          <div class="mb-8">
+            <div id="upload-area" class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center hover:border-primary-500 dark:hover:border-primary-400 transition-colors cursor-pointer">
+              <svg class="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+              </svg>
+              <p class="text-gray-600 dark:text-gray-400 mb-2">Drop images here or click to upload</p>
+              <p class="text-xs text-gray-500 dark:text-gray-500">PNG, JPG, GIF up to 10MB</p>
+              <input type="file" id="file-input" class="hidden" accept="image/*" multiple />
+            </div>
+          </div>
+
+          <!-- Vectorization Settings -->
+          <div id="settings-panel" class="space-y-6 hidden">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Trace Quality
+              </label>
+              <select id="quality" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white">
+                <option value="low">Low (Fast)</option>
+                <option value="medium" selected>Medium (Balanced)</option>
+                <option value="high">High (Detailed)</option>
+                <option value="ultra">Ultra (Slow)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Color Mode
+              </label>
+              <div class="space-y-2">
+                <label class="flex items-center p-2 border border-gray-300 dark:border-gray-600 rounded cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <input type="radio" name="colorMode" value="monochrome" class="mr-2" checked />
+                  <span class="text-sm text-gray-700 dark:text-gray-300">Monochrome (Cut only)</span>
+                </label>
+                <label class="flex items-center p-2 border border-gray-300 dark:border-gray-600 rounded cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <input type="radio" name="colorMode" value="grayscale" class="mr-2" />
+                  <span class="text-sm text-gray-700 dark:text-gray-300">Grayscale (Engrave)</span>
+                </label>
+                <label class="flex items-center p-2 border border-gray-300 dark:border-gray-600 rounded cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <input type="radio" name="colorMode" value="color" class="mr-2" />
+                  <span class="text-sm text-gray-700 dark:text-gray-300">Full Color</span>
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Smoothing
+              </label>
+              <input type="range" id="smoothing" min="0" max="100" value="50" class="w-full" />
+              <div class="flex justify-between text-xs text-gray-500 dark:text-gray-500 mt-1">
+                <span>Sharp</span>
+                <span>Smooth</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Threshold
+              </label>
+              <input type="range" id="threshold" min="0" max="255" value="128" class="w-full" />
+              <div class="flex justify-between text-xs text-gray-500 dark:text-gray-500 mt-1">
+                <span>Light</span>
+                <span>Dark</span>
+              </div>
+            </div>
+
+            <button
+              id="vectorize-btn"
+              class="w-full btn btn-primary py-3 text-base font-medium"
+            >
+              Vectorize Image
+            </button>
+          </div>
+
+          <!-- Upload History -->
+          <div class="mt-8">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Uploads</h3>
+            <div class="space-y-3">
+              <div class="p-3 border border-gray-200 dark:border-gray-700 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                <div class="text-sm font-medium text-gray-900 dark:text-white">Logo Design</div>
+                <div class="text-xs text-gray-600 dark:text-gray-400">Vectorized 1 hour ago</div>
+              </div>
+              <div class="p-3 border border-gray-200 dark:border-gray-700 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                <div class="text-sm font-medium text-gray-900 dark:text-white">Photo Portrait</div>
+                <div class="text-xs text-gray-600 dark:text-gray-400">Vectorized yesterday</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel - Preview -->
+      <div class="flex-1 flex flex-col">
+        <!-- Toolbar -->
+        <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+              <button class="btn btn-outline text-sm" id="zoom-out">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                </svg>
+              </button>
+              <span class="text-sm text-gray-600 dark:text-gray-400" id="zoom-level">100%</span>
+              <button class="btn btn-outline text-sm" id="zoom-in">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+              </button>
+              
+              <div class="border-l border-gray-300 dark:border-gray-600 pl-4 ml-4">
+                <button class="btn btn-outline text-sm" id="toggle-view">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+                  </svg>
+                  Split View
+                </button>
+              </div>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+              <button class="btn btn-outline text-sm" id="edit-btn" disabled>
+                Edit Vector
+              </button>
+              <button class="btn btn-primary text-sm" id="download-btn" disabled>
+                Download SVG
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Preview Area -->
+        <div class="flex-1 bg-gray-100 dark:bg-gray-900 relative overflow-hidden">
+          <div id="preview-container" class="w-full h-full flex items-center justify-center">
+            <div id="preview-content" class="bg-white rounded-lg shadow-lg p-8 max-w-4xl max-h-4xl">
+              <div class="text-center text-gray-400 dark:text-gray-600">
+                <svg class="w-24 h-24 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                <p class="text-lg font-medium">No image uploaded</p>
+                <p class="text-sm">Upload an image to see the preview and vectorization</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  const uploadArea = document.getElementById('upload-area');
+  const fileInput = document.getElementById('file-input');
+  const settingsPanel = document.getElementById('settings-panel');
+  const vectorizeBtn = document.getElementById('vectorize-btn');
+  const editBtn = document.getElementById('edit-btn');
+  const downloadBtn = document.getElementById('download-btn');
+  const previewContent = document.getElementById('preview-content');
+  const toggleViewBtn = document.getElementById('toggle-view');
+  
+  let currentImage = null;
+  let currentVector = null;
+  let splitView = false;
+
+  // Upload area click handler
+  if (uploadArea) {
+    uploadArea.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+    // Drag and drop handlers
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('border-primary-500', 'dark:border-primary-400');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('border-primary-500', 'dark:border-primary-400');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('border-primary-500', 'dark:border-primary-400');
+      
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        handleFileUpload(files[0]);
+      }
+    });
+  }
+
+  // File input handler
+  if (fileInput) {
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        handleFileUpload(e.target.files[0]);
+      }
+    });
+  }
+
+  function handleFileUpload(file) {
+    if (!file.type.startsWith('image/')) {
+      alert('Please upload an image file');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      currentImage = e.target.result;
+      displayImage(currentImage);
+      settingsPanel.classList.remove('hidden');
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function displayImage(imageSrc) {
+    previewContent.innerHTML = `
+      <div class="grid ${splitView ? 'grid-cols-2 gap-4' : 'grid-cols-1'}">
+        <div class="text-center">
+          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Original</h3>
+          <img src="${imageSrc}" alt="Original" class="max-w-full max-h-96 mx-auto rounded-lg shadow-md" />
+        </div>
+        ${splitView && currentVector ? `
+          <div class="text-center">
+            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Vectorized</h3>
+            <div class="max-w-full max-h-96 mx-auto">${currentVector}</div>
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }
+
+  // Vectorize button handler
+  if (vectorizeBtn) {
+    vectorizeBtn.addEventListener('click', async () => {
+      if (!currentImage) return;
+
+      vectorizeBtn.textContent = 'Vectorizing...';
+      vectorizeBtn.disabled = true;
+
+      try {
+        // Simulate vectorization process
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        
+        // Mock SVG output
+        currentVector = `
+          <svg width="300" height="300" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+            <rect x="50" y="50" width="200" height="200" fill="none" stroke="#000" stroke-width="2"/>
+            <circle cx="150" cy="150" r="75" fill="none" stroke="#000" stroke-width="2"/>
+            <path d="M100 100 L200 200 M200 100 L100 200" stroke="#000" stroke-width="1"/>
+          </svg>
+        `;
+        
+        splitView = true;
+        displayImage(currentImage);
+        
+        editBtn.disabled = false;
+        downloadBtn.disabled = false;
+        toggleViewBtn.textContent = 'Single View';
+        
+      } catch (error) {
+        console.error('Vectorization error:', error);
+        alert('Failed to vectorize image. Please try again.');
+      } finally {
+        vectorizeBtn.textContent = 'Vectorize Image';
+        vectorizeBtn.disabled = false;
+      }
+    });
+  }
+
+  // Toggle view button
+  if (toggleViewBtn) {
+    toggleViewBtn.addEventListener('click', () => {
+      if (currentVector) {
+        splitView = !splitView;
+        displayImage(currentImage);
+        toggleViewBtn.textContent = splitView ? 'Single View' : 'Split View';
+      }
+    });
+  }
+
+  // Download functionality
+  if (downloadBtn) {
+    downloadBtn.addEventListener('click', () => {
+      if (currentVector) {
+        const blob = new Blob([currentVector], { type: 'image/svg+xml' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'vectorized-image.svg';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+    });
+  }
+
+  // Edit functionality
+  if (editBtn) {
+    editBtn.addEventListener('click', () => {
+      if (currentVector) {
+        const projectData = {
+          title: 'Vectorized Image',
+          svgData: currentVector,
+          projectType: 'upload_vectorized'
+        };
+        
+        localStorage.setItem('tempProject', JSON.stringify(projectData));
+        window.location.href = '/tools/editor/temp';
+      }
+    });
+  }
+
+  // Zoom controls
+  let zoomLevel = 100;
+  const zoomInBtn = document.getElementById('zoom-in');
+  const zoomOutBtn = document.getElementById('zoom-out');
+  const zoomLevelSpan = document.getElementById('zoom-level');
+
+  if (zoomInBtn) {
+    zoomInBtn.addEventListener('click', () => {
+      zoomLevel = Math.min(zoomLevel + 25, 200);
+      updateZoom();
+    });
+  }
+
+  if (zoomOutBtn) {
+    zoomOutBtn.addEventListener('click', () => {
+      zoomLevel = Math.max(zoomLevel - 25, 25);
+      updateZoom();
+    });
+  }
+
+  function updateZoom() {
+    const container = document.getElementById('preview-content');
+    if (container) {
+      container.style.transform = `scale(${zoomLevel / 100})`;
+      zoomLevelSpan.textContent = `${zoomLevel}%`;
+    }
+  }
+</script>
+
+<style>
+  #preview-content {
+    transition: transform 0.2s ease;
+    transform-origin: center;
+  }
+</style>
