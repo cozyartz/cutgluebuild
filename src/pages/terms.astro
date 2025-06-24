@@ -1,0 +1,50 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const lastUpdated = 'June 23, 2025';
+---
+
+<Layout title="Terms & Conditions - CutGlueBuild.com" description="Review the terms and conditions for using CutGlueBuild's AI-powered design tools and templates.">
+  <Header />
+
+  <main class="max-w-3xl mx-auto px-4 py-16 text-gray-800 dark:text-gray-100">
+    <h1 class="text-3xl font-bold mb-6">Terms & Conditions</h1>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-10">Last updated: {lastUpdated}</p>
+
+    <section class="space-y-8 text-base leading-7">
+      <div>
+        <h2 class="text-xl font-semibold mb-2">1. Acceptance of Terms</h2>
+        <p>By using the CutGlueBuild platform ("Service"), you agree to be bound by these Terms and Conditions. If you do not accept these terms, you may not use the Service.</p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold mb-2">2. User Responsibilities</h2>
+        <p>You are solely responsible for your use of the Service, including any content you generate or upload. You agree not to use the Service for any unlawful or unauthorized purpose.</p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold mb-2">3. Intellectual Property</h2>
+        <p>All content, templates, code, and tools provided by CutGlueBuild remain the intellectual property of the company. You may not copy, distribute, or reverse-engineer any part of the platform without explicit permission.</p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold mb-2">4. AI Output</h2>
+        <p>AI-generated content may be unique but is not guaranteed to be error-free or copyright-free. You are responsible for ensuring that any AI-generated content complies with applicable laws and does not infringe on third-party rights.</p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold mb-2">5. Limitation of Liability</h2>
+        <p>CutGlueBuild is not liable for any direct, indirect, incidental, or consequential damages arising from your use of the Service. Use at your own risk.</p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold mb-2">6. Modifications</h2>
+        <p>We reserve the right to update these terms at any time. Continued use of the Service after changes constitutes acceptance of the new terms.</p>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>

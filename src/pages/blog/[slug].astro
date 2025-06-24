@@ -2,303 +2,46 @@
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import { supabase } from '../../lib/supabase';
+
+import fs from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
 
 const { slug } = Astro.params;
+const blogDir = path.resolve('./src/content/blog');
+const filePath = path.join(blogDir, `${slug}.md`);
 
-if (!slug) {
-  return Astro.redirect('/blog');
+if (!fs.existsSync(filePath)) {
+  throw new Error(`Post not found: ${slug}`);
 }
 
-// In a real app, fetch the blog post from the database
-// For now, we'll use mock data
-const mockPost = {
-  title: 'Complete Beginner\'s Guide to Laser Cutting',
-  slug: 'beginner-guide-laser-cutting',
-  excerpt: 'Everything you need to know to get started with laser cutting. From choosing materials to your first project.',
-  content: `
-    <h2>Getting Started with Laser Cutting</h2>
-    <p>Laser cutting is an incredibly versatile manufacturing process that uses a focused laser beam to cut through various materials with precision and speed. Whether you're a hobbyist looking to create custom projects or an entrepreneur starting a small business, laser cutting opens up a world of possibilities.</p>
-    
-    <h3>What is Laser Cutting?</h3>
-    <p>Laser cutting works by directing a high-powered laser through optics to cut or engrave materials. The laser beam melts, burns, or vaporizes the material, leaving a clean, precise edge. This process is controlled by computer numerical control (CNC) systems, allowing for incredibly detailed and repeatable cuts.</p>
-    
-    <h3>Types of Laser Cutters</h3>
-    <p>There are several types of laser cutters available:</p>
-    <ul>
-      <li><strong>CO2 Lasers:</strong> Most common for hobbyists, great for wood, acrylic, and fabric</li>
-      <li><strong>Fiber Lasers:</strong> Best for metals and some plastics</li>
-      <li><strong>Diode Lasers:</strong> Entry-level option, limited power but affordable</li>
-    </ul>
-    
-    <h3>Materials You Can Cut</h3>
-    <p>Different lasers can cut different materials:</p>
-    <ul>
-      <li>Wood (plywood, MDF, hardwoods)</li>
-      <li>Acrylic and plastics</li>
-      <li>Cardboard and paper</li>
-      <li>Leather and fabric</li>
-      <li>Some metals (with appropriate laser type)</li>
-    </ul>
-    
-    <h3>Safety First</h3>
-    <p>Laser cutting involves high-powered equipment and potentially hazardous materials. Always:</p>
-    <ul>
-      <li>Wear appropriate safety glasses</li>
-      <li>Ensure proper ventilation</li>
-      <li>Never leave the laser unattended while cutting</li>
-      <li>Keep a fire extinguisher nearby</li>
-      <li>Read and follow all manufacturer safety guidelines</li>
-    </ul>
-    
-    <h3>Your First Project</h3>
-    <p>Start with something simple like coasters or keychains. These projects help you learn the basics without requiring complex designs or expensive materials.</p>
-    
-    <h3>Design Software</h3>
-    <p>Popular software options include:</p>
-    <ul>
-      <li>Adobe Illustrator</li>
-      <li>Inkscape (free)</li>
-      <li>Fusion 360</li>
-      <li>LightBurn (laser-specific)</li>
-    </ul>
-    
-    <h3>Tips for Success</h3>
-    <ul>
-      <li>Always test settings on scrap material first</li>
-      <li>Keep detailed notes of successful settings</li>
-      <li>Start with lower power and increase gradually</li>
-      <li>Clean your laser regularly for best results</li>
-      <li>Join online communities for support and inspiration</li>
-    </ul>
-  `,
-  author: 'CutGlueBuild Team',
-  tags: ['beginner', 'tutorial', 'laser-cutting', 'safety'],
-  published: true,
-  featured_image: '/images/blog/laser-cutting-guide.jpg',
-  reading_time: 5,
-  published_at: '2024-12-15T10:00:00Z',
-  created_at: '2024-12-15T10:00:00Z'
+const fileContent = fs.readFileSync(filePath, 'utf-8');
+const { data, content } = matter(fileContent);
+
+const post = {
+  ...data,
+  content,
+  slug,
+  reading_time: Math.ceil(content.split(' ').length / 200),
 };
-
-// Check if this is the requested slug
-if (slug !== mockPost.slug) {
-  return Astro.redirect('/blog');
-}
-
-const post = mockPost;
 ---
 
-<Layout 
-  title={`${post.title} - CutGlueBuild.com`} 
-  description={post.excerpt}
-  image={post.featured_image}
-  type="article"
->
+<Layout title={`${post.title} - CutGlueBuild`} description={post.excerpt} image={post.featured_image}>
   <Header />
-  
   <main class="pt-20 min-h-screen bg-gray-50 dark:bg-gray-900">
     <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <!-- Article Header -->
-      <header class="mb-12">
-        <div class="text-center mb-8">
-          <div class="flex flex-wrap justify-center gap-2 mb-4">
-            {post.tags.map(tag => (
-              <span class="px-3 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full text-sm font-medium">
-                {tag}
-              </span>
-            ))}
-          </div>
-          
-          <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
-            {post.title}
-          </h1>
-          
-          <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
-            {post.excerpt}
-          </p>
-          
-          <div class="flex items-center justify-center space-x-6 text-sm text-gray-600 dark:text-gray-400">
-            <div class="flex items-center">
-              <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">
-                CG
-              </div>
-              <span>{post.author}</span>
-            </div>
-            <div class="flex items-center">
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-              {post.reading_time} min read
-            </div>
-            <div class="flex items-center">
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-              </svg>
-              {new Date(post.published_at).toLocaleDateString()}
-            </div>
-          </div>
+      <header class="mb-12 text-center">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">{post.title}</h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300">{post.excerpt}</p>
+        <div class="text-sm text-gray-500 mt-2">
+          {new Date(post.published_at).toLocaleDateString()} • {post.reading_time} min read
         </div>
-        
-        {post.featured_image && (
-          <div class="aspect-video bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center mb-8">
-            <div class="text-white text-center">
-              <svg class="w-24 h-24 mx-auto mb-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2L2 7V10C2 16 6 20.5 12 22C18 20.5 22 16 22 10V7L12 2Z"/>
-              </svg>
-              <p class="text-lg opacity-90">Featured Article</p>
-            </div>
-          </div>
-        )}
       </header>
 
-      <!-- Article Content -->
-      <div class="prose prose-lg dark:prose-invert max-w-none">
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8">
-          <div set:html={post.content} />
-        </div>
+      <div class="prose prose-lg dark:prose-invert">
+        <div set:html={Astro.markdown(post.content).value} />
       </div>
-
-      <!-- Article Footer -->
-      <footer class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center space-x-4">
-            <span class="text-sm text-gray-600 dark:text-gray-400">Share this article:</span>
-            <div class="flex space-x-3">
-              <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(Astro.url.toString())}`} 
-                 target="_blank" 
-                 class="p-2 text-gray-400 hover:text-blue-500 transition-colors">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
-                </svg>
-              </a>
-              <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(Astro.url.toString())}`} 
-                 target="_blank" 
-                 class="p-2 text-gray-400 hover:text-blue-600 transition-colors">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
-              </a>
-              <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(Astro.url.toString())}`} 
-                 target="_blank" 
-                 class="p-2 text-gray-400 hover:text-blue-700 transition-colors">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                </svg>
-              </a>
-            </div>
-          </div>
-          
-          <a href="/blog" class="btn btn-outline">
-            ← Back to Blog
-          </a>
-        </div>
-      </footer>
     </article>
-
-    <!-- Related Articles -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
-        Related Articles
-      </h2>
-      
-      <div class="grid md:grid-cols-3 gap-8">
-        <!-- Related Article 1 -->
-        <article class="card card-hover overflow-hidden">
-          <div class="h-48 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
-            <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2Z"/>
-            </svg>
-          </div>
-          <div class="p-6">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-              <a href="/blog/choosing-right-wood" class="hover:text-primary-500 transition-colors">
-                Choosing the Right Wood for Your Project
-              </a>
-            </h3>
-            <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
-              Not all woods are created equal for laser cutting. Learn which types work best for different projects.
-            </p>
-            <div class="text-xs text-gray-500 dark:text-gray-500">3 min read</div>
-          </div>
-        </article>
-
-        <!-- Related Article 2 -->
-        <article class="card card-hover overflow-hidden">
-          <div class="h-48 bg-gradient-to-br from-green-400 to-blue-500 flex items-center justify-center">
-            <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/>
-            </svg>
-          </div>
-          <div class="p-6">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-              <a href="/blog/diy-plant-markers" class="hover:text-primary-500 transition-colors">
-                DIY Garden Plant Markers
-              </a>
-            </h3>
-            <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
-              Create beautiful, weather-resistant plant markers for your garden using laser-cut wood.
-            </p>
-            <div class="text-xs text-gray-500 dark:text-gray-500">7 min read</div>
-          </div>
-        </article>
-
-        <!-- Related Article 3 -->
-        <article class="card card-hover overflow-hidden">
-          <div class="h-48 bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center">
-            <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2L2 7V10C2 16 6 20.5 12 22C18 20.5 22 16 22 10V7L12 2Z"/>
-            </svg>
-          </div>
-          <div class="p-6">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-              <a href="/blog/laser-safety-guide" class="hover:text-primary-500 transition-colors">
-                Essential Laser Cutting Safety Guide
-              </a>
-            </h3>
-            <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
-              Stay safe while creating amazing projects. Learn the essential safety practices.
-            </p>
-            <div class="text-xs text-gray-500 dark:text-gray-500">6 min read</div>
-          </div>
-        </article>
-      </div>
-    </section>
   </main>
-
   <Footer />
 </Layout>
-
-<style>
-  .prose {
-    @apply text-gray-700 dark:text-gray-300;
-  }
-  
-  .prose h2 {
-    @apply text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4;
-  }
-  
-  .prose h3 {
-    @apply text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3;
-  }
-  
-  .prose p {
-    @apply mb-4 leading-relaxed;
-  }
-  
-  .prose ul {
-    @apply mb-4 pl-6;
-  }
-  
-  .prose li {
-    @apply mb-2 list-disc;
-  }
-  
-  .prose strong {
-    @apply font-semibold text-gray-900 dark:text-white;
-  }
-  
-  .prose code {
-    @apply bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-sm font-mono;
-  }
-</style>
