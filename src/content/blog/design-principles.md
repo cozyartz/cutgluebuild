@@ -1,7 +1,7 @@
 ---
 title: "5 Design Principles for Better Laser Cutting Projects"
-description: "Learn key design principles to improve your laser cutting results. From spacing and alignment to functional layering, these ideas will elevate your maker game."
-pubDate: "2024-12-08"
+excerpt: "Learn key design principles to improve your laser cutting results. From spacing and alignment to functional layering, these ideas will elevate your maker game."
+published_at: "2024-12-08"
 author: "CutGlueBuild Team"
 image: "/images/blog/design-principles-hero.jpg"
 tags: ["design", "tutorial", "laser-cutting"]
