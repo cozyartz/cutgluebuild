@@ -2,44 +2,34 @@
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
 
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
-
-const { slug } = Astro.params;
-const blogDir = path.resolve('./src/content/blog');
-const filePath = path.join(blogDir, `${slug}.md`);
-
-if (!fs.existsSync(filePath)) {
-  throw new Error(`Post not found: ${slug}`);
+export async function getStaticPaths() {
+  const blogEntries = await getCollection('blog');
+  return blogEntries.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
 }
 
-const fileContent = fs.readFileSync(filePath, 'utf-8');
-const { data, content } = matter(fileContent);
-
-const post = {
-  ...data,
-  content,
-  slug,
-  reading_time: Math.ceil(content.split(' ').length / 200),
-};
+const { entry } = Astro.props;
+const { Content } = await entry.render();
 ---
 
-<Layout title={`${post.title} - CutGlueBuild`} description={post.excerpt} image={post.featured_image}>
+<Layout title={`${entry.data.title} - CutGlueBuild`} description={entry.data.excerpt} image={entry.data.image}>
   <Header />
   <main class="pt-20 min-h-screen bg-gray-50 dark:bg-gray-900">
     <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <header class="mb-12 text-center">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-white">{post.title}</h1>
-        <p class="text-xl text-gray-600 dark:text-gray-300">{post.excerpt}</p>
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">{entry.data.title}</h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300 mb-6">{entry.data.excerpt}</p>
         <div class="text-sm text-gray-500 mt-2">
-          {new Date(post.published_at).toLocaleDateString()} • {post.reading_time} min read
+          {new Date(entry.data.published_at).toLocaleDateString()} • {entry.data.reading_time} min read
         </div>
       </header>
 
-      <div class="prose prose-lg dark:prose-invert">
-        <div set:html={Astro.markdown(post.content).value} />
+      <div class="prose prose-lg dark:prose-invert max-w-none">
+        <Content />
       </div>
     </article>
   </main>

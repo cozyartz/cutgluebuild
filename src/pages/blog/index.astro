@@ -1,65 +1,71 @@
 ---
-// index.astro
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
+import { getCollection } from 'astro:content';
 
-const blogDir = path.resolve('./src/content/blog');
-const blogFiles = fs.readdirSync(blogDir);
-
-const posts = blogFiles.map((filename) => {
-  const slug = filename.replace('.md', '');
-  const fileContent = fs.readFileSync(path.join(blogDir, filename), 'utf-8');
-  const { data, content } = matter(fileContent);
-  return {
-    slug,
-    ...data,
-    content,
-    reading_time: Math.ceil(content.split(' ').length / 200)
-  };
-}).sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
+const posts = await getCollection('blog');
+const sortedPosts = posts.sort((a, b) => new Date(b.data.published_at).getTime() - new Date(a.data.published_at).getTime());
 ---
 
 <Layout title="Maker Blog - CutGlueBuild" description="Laser cutting inspiration and tutorials.">
   <Header />
 
   <main class="pt-20 min-h-screen bg-gray-50 dark:bg-gray-900">
-    <!-- Hero, filters, and Featured Post sections -->
-    <!-- Paste your static blog hero HTML here -->
-    
-    <!-- Dynamic Post Cards -->
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-      {posts.map(post => (
-        <article class="card card-hover overflow-hidden">
-          <div class="h-48 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
-            <!-- Placeholder SVG or category-based icon -->
-            <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2Z"/>
-            </svg>
-          </div>
-          <div class="p-6">
-            <div class="flex items-center mb-3">
-              <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded text-xs font-medium">{post.tags?.[0]}</span>
-              <span class="ml-2 text-xs text-gray-600 dark:text-gray-400">{post.reading_time} min read</span>
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-primary-900 dark:via-gray-900 dark:to-secondary-900 py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+          Maker
+          <span class="bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">
+            Blog
+          </span>
+        </h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          Tutorials, tips, and inspiration for laser cutting, CNC, and digital fabrication.
+        </p>
+      </div>
+    </div>
+
+    <!-- Blog Posts -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {sortedPosts.map(post => (
+          <article class="card card-hover overflow-hidden">
+            <div class="h-48 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
+              <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2Z"/>
+              </svg>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-              <a href={`/blog/${post.slug}`} class="hover:text-primary-500 transition-colors">
-                {post.title}
-              </a>
-            </h3>
-            <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">{post.excerpt}</p>
-            <div class="flex items-center justify-between">
-              <div class="text-xs text-gray-500 dark:text-gray-500">{new Date(post.published_at).toLocaleDateString()}</div>
-              <a href={`/blog/${post.slug}`} class="text-primary-500 hover:text-primary-600 text-sm font-medium">
-                Read More →
-              </a>
+            <div class="p-6">
+              <div class="flex items-center mb-3">
+                {post.data.tags && post.data.tags[0] && (
+                  <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded text-xs font-medium">
+                    {post.data.tags[0]}
+                  </span>
+                )}
+                <span class="ml-2 text-xs text-gray-600 dark:text-gray-400">
+                  {post.data.reading_time} min read
+                </span>
+              </div>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                <a href={`/blog/${post.slug}`} class="hover:text-primary-500 transition-colors">
+                  {post.data.title}
+                </a>
+              </h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">{post.data.excerpt}</p>
+              <div class="flex items-center justify-between">
+                <div class="text-xs text-gray-500 dark:text-gray-500">
+                  {new Date(post.data.published_at).toLocaleDateString()}
+                </div>
+                <a href={`/blog/${post.slug}`} class="text-primary-500 hover:text-primary-600 text-sm font-medium">
+                  Read More →
+                </a>
+              </div>
             </div>
-          </div>
-        </article>
-      ))}
+          </article>
+        ))}
+      </div>
     </div>
   </main>
 
