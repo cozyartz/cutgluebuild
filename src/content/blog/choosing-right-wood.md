@@ -3,7 +3,7 @@ title: "Choosing the Right Wood for Your Laser Cutter Project"
 excerpt: "Not all woods are created equal — learn which types work best for laser cutting, their pros and cons, and how to choose based on your project goals."
 published_at: "2024-12-12"
 author: "CutGlueBuild Team"
-image: "/images/blog/choosing-right-wood-hero.jpg"
+image: "https://images.pexels.com/photos/1251175/pexels-photo-1251175.jpeg?auto=compress&cs=tinysrgb&w=800"
 tags: ["materials", "wood", "laser-cutting", "tips"]
 readingTime: 7
 ---
@@ -74,8 +74,8 @@ Some woods, especially plywoods containing formaldehyde or resins, can produce h
 
 Here are some top-rated materials that pair well with your wood projects:
 
-- **[Proofgrade Wood Variety Pack](${affiliateService.generateAffiliateUrl('https://shop.glowforge.com/collections/proofgrade-materials/products/wood-variety-pack')})** — premium laser-ready woods in multiple types. ♻️
-- **[Cast Acrylic Sheets](${affiliateService.generateAffiliateUrl('https://amazon.com/dp/B08XYZNPQR')})** — great for forming layered accents that pop on wood-based projects.
+- **Proofgrade Wood Variety Pack** — premium laser-ready woods in multiple types. ♻️
+- **Cast Acrylic Sheets** — great for forming layered accents that pop on wood-based projects.
 
 ---
 
@@ -105,7 +105,7 @@ While laser cutters do the heavy lifting, these accessories improve accuracy:
 
 ## Quick Checklist Before You Start
 
-1. Choose wood with minimal resin (pine nicknamed “resin river” may scorch).
+1. Choose wood with minimal resin (pine nicknamed "resin river" may scorch).
 2. Pick pre-sanded, laser-grade wood for smoother engraving.
 3. Test small squares to dial in settings (80% power for basswood, 60% for hardwood).
 4. Document settings by wood type — creates a buildable material library.
@@ -116,7 +116,7 @@ While laser cutters do the heavy lifting, these accessories improve accuracy:
 
 Choosing wood for laser cutting blends aesthetics, performance, and safety. Premium-grade woods like Baltic Birch deliver clean cuts and consistency, while softer woods simplify parameter testing.
 
-Match your wood to your project’s design and function. You’ll enjoy faster runs and excellent finishes.
+Match your wood to your project's design and function. You'll enjoy faster runs and excellent finishes.
 
 ---
 
@@ -124,16 +124,16 @@ Match your wood to your project’s design and function. You’ll enjoy faster r
 
 Check these affiliate options for your next laser companion:
 
-- **[Glowforge Basic Laser Cutter](${affiliateService.generateAffiliateUrl('https://glowforge.com/basic')})** — beginner-friendly.
-- **[Honeycomb Cutting Bed](${affiliateService.generateAffiliateUrl('https://amazon.com/dp/B08XYZNPQR')})** — sharpening your airflow for crisp cuts.
+- **Glowforge Basic Laser Cutter** — beginner-friendly.
+- **Honeycomb Cutting Bed** — sharpening your airflow for crisp cuts.
 
 ---
 
 ### Join the Community
 
-Have a favorite wood type or a material twist that works for your builds? **Let’s talk!** Comment below or share photos with **#CutGlueBuild** on social media.
+Have a favorite wood type or a material twist that works for your builds? **Let's talk!** Comment below or share photos with **#CutGlueBuild** on social media.
 
 ---
 
 *Total word count: ~1,100 words*  
-*Images sourced from unsplash.com under free-use license.*  
+*Images sourced from Pexels under free-use license.*
