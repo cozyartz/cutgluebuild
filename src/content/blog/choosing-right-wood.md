@@ -8,7 +8,7 @@ tags: ["materials", "wood", "laser-cutting", "tips"]
 readingTime: 7
 ---
 
-![Laser cut wooden puzzle pieces](../assets/choosing-right-wood-wood-pieces.jpg)
+![Laser cut wooden puzzle pieces](/images/blog/choosing-right-wood-wood-pieces.jpg)
 
 ## Why Wood Type Matters 🌲
 
