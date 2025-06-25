@@ -1,7 +1,7 @@
 ---
 title: "Choosing the Right Wood for Your Laser Cutter Project"
-description: "Not all woods are created equal — learn which types work best for laser cutting, their pros and cons, and how to choose based on your project goals."
-pubDate: "2024-12-12"
+excerpt: "Not all woods are created equal — learn which types work best for laser cutting, their pros and cons, and how to choose based on your project goals."
+published_at: "2024-12-12"
 author: "CutGlueBuild Team"
 image: "/images/blog/choosing-right-wood-hero.jpg"
 tags: ["materials", "wood", "laser-cutting", "tips"]
