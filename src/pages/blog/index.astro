@@ -2,72 +2,201 @@
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import { getCollection } from 'astro:content';
+import BlogGrid from '../../components/blog/BlogGrid.astro';
+import { getAllPosts } from '../../lib/blog';
 
-const posts = await getCollection('blog');
-const sortedPosts = posts.sort((a, b) => new Date(b.data.published_at).getTime() - new Date(a.data.published_at).getTime());
+const posts = await getAllPosts();
+const featuredPost = posts[0];
+const recentPosts = posts.slice(1, 7);
+const categories = ['All', 'Tutorials', 'Materials', 'Safety', 'Business', 'Projects'];
 ---
 
 <Layout title="Maker Blog - CutGlueBuild" description="Laser cutting inspiration and tutorials.">
   <Header />
 
   <main class="pt-20 min-h-screen bg-gray-50 dark:bg-gray-900">
-    <!-- Hero Section -->
-    <div class="bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-primary-900 dark:via-gray-900 dark:to-secondary-900 py-16">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-          Maker
-          <span class="bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">
+    <!-- Hero Section with Animated Background -->
+    <div class="relative bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-primary-900 dark:via-gray-900 dark:to-secondary-900 py-20 overflow-hidden">
+      <!-- Animated Background Elements -->
+      <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-primary-400/10 to-secondary-400/10 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-secondary-400/10 to-primary-400/10 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-primary-300/5 to-secondary-300/5 rounded-full blur-3xl animate-bounce-slow"></div>
+      </div>
+
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-primary-500/10 to-secondary-500/10 border border-primary-500/20 mb-8">
+          <svg class="w-5 h-5 text-primary-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+          </svg>
+          <span class="text-sm font-medium text-primary-700 dark:text-primary-300">
+            Latest Tutorials & Insights
+          </span>
+        </div>
+
+        <h1 class="text-5xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+          <span class="block">Maker</span>
+          <span class="block bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">
             Blog
           </span>
         </h1>
-        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-          Tutorials, tips, and inspiration for laser cutting, CNC, and digital fabrication.
+        
+        <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed mb-12">
+          Tutorials, tips, and inspiration for laser cutting, CNC, and digital fabrication. From beginner guides to advanced techniques.
         </p>
+
+        <!-- Search Bar -->
+        <div class="max-w-md mx-auto mb-8">
+          <div class="relative">
+            <input 
+              type="text" 
+              placeholder="Search articles..."
+              class="w-full px-6 py-4 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 pl-12"
+            />
+            <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto">
+          <div class="text-center">
+            <div class="text-3xl font-bold text-primary-500 mb-1">{posts.length}+</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Articles</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-bold text-secondary-500 mb-1">50K+</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Readers</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-bold text-primary-500 mb-1">100+</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Tutorials</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-bold text-secondary-500 mb-1">4.9★</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Rating</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Blog Posts -->
+    <!-- Category Filter -->
+    <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-16 z-40">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex space-x-1 overflow-x-auto">
+            {categories.map(category => (
+              <button class="category-filter px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 hover:scale-105 active" data-category={category.toLowerCase()}>
+                {category}
+              </button>
+            ))}
+          </div>
+          
+          <div class="flex items-center space-x-4">
+            <select class="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm">
+              <option>Latest</option>
+              <option>Most Popular</option>
+              <option>Oldest</option>
+            </select>
+            
+            <div class="flex items-center space-x-2">
+              <button class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" title="Grid View">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                </svg>
+              </button>
+              <button class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" title="List View">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Blog Content -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {sortedPosts.map(post => (
-          <article class="card card-hover overflow-hidden">
-            <div class="h-48 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
-              <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2Z"/>
-              </svg>
-            </div>
-            <div class="p-6">
-              <div class="flex items-center mb-3">
-                {post.data.tags && post.data.tags[0] && (
-                  <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded text-xs font-medium">
-                    {post.data.tags[0]}
-                  </span>
-                )}
-                <span class="ml-2 text-xs text-gray-600 dark:text-gray-400">
-                  {post.data.reading_time} min read
-                </span>
-              </div>
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                <a href={`/blog/${post.slug}`} class="hover:text-primary-500 transition-colors">
-                  {post.data.title}
-                </a>
-              </h3>
-              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">{post.data.excerpt}</p>
-              <div class="flex items-center justify-between">
-                <div class="text-xs text-gray-500 dark:text-gray-500">
-                  {new Date(post.data.published_at).toLocaleDateString()}
-                </div>
-                <a href={`/blog/${post.slug}`} class="text-primary-500 hover:text-primary-600 text-sm font-medium">
-                  Read More →
-                </a>
-              </div>
-            </div>
-          </article>
-        ))}
+      <BlogGrid posts={posts} featured={true} layout="grid" />
+      
+      <!-- Load More Button -->
+      <div class="text-center mt-16">
+        <button class="btn btn-primary px-8 py-4 text-lg font-medium rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+          Load More Articles
+          <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Newsletter Section -->
+    <div class="bg-gradient-to-r from-primary-500 to-secondary-500 py-16">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-bold text-white mb-4">Never Miss a Tutorial</h2>
+        <p class="text-xl text-white/90 mb-8">Get the latest laser cutting tips, project ideas, and maker insights delivered to your inbox.</p>
+        
+        <form class="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
+          <input 
+            type="email" 
+            placeholder="Enter your email"
+            class="flex-1 px-6 py-4 rounded-xl text-gray-900 shadow-lg focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-500"
+          />
+          <button type="submit" class="btn bg-white text-primary-600 hover:bg-gray-100 px-8 py-4 rounded-xl font-semibold shadow-lg">
+            Subscribe
+          </button>
+        </form>
+        
+        <p class="text-white/75 text-sm mt-4">Join 10,000+ makers. No spam, unsubscribe anytime.</p>
       </div>
     </div>
   </main>
 
   <Footer />
 </Layout>
+
+<script>
+  // Category filter functionality
+  document.querySelectorAll('.category-filter').forEach(button => {
+    button.addEventListener('click', () => {
+      // Remove active class from all buttons
+      document.querySelectorAll('.category-filter').forEach(btn => btn.classList.remove('active'));
+      // Add active class to clicked button
+      button.classList.add('active');
+      
+      // Filter logic would go here
+      const category = button.dataset.category;
+      console.log('Filter by category:', category);
+    });
+  });
+
+  // Search functionality
+  const searchInput = document.querySelector('input[placeholder="Search articles..."]');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      // Search logic would go here
+      console.log('Search query:', query);
+    });
+  }
+</script>
+
+<style>
+  .category-filter {
+    @apply bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-primary-100 dark:hover:bg-primary-900 hover:text-primary-700 dark:hover:text-primary-300;
+  }
+  
+  .category-filter.active {
+    @apply bg-primary-500 text-white shadow-lg;
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  .animate-bounce-slow {
+    animation: bounce 6s infinite;
+  }
+</style>

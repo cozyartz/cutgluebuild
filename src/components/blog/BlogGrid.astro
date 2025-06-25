@@ -1,0 +1,180 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BlogPost from './BlogPost.astro';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+  featured?: boolean;
+  layout?: 'grid' | 'masonry' | 'list';
+}
+
+const { posts, featured = false, layout = 'grid' } = Astro.props;
+const [featuredPost, ...regularPosts] = posts;
+---
+
+<div class={`blog-grid blog-grid-${layout}`}>
+  {featured && featuredPost && (
+    <div class="featured-section mb-20">
+      <div class="text-center mb-12">
+        <div class="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-primary-500/10 to-secondary-500/10 border border-primary-500/20 mb-6">
+          <svg class="w-4 h-4 text-primary-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3l14 9-14 9V3z"></path>
+          </svg>
+          <span class="text-sm font-medium text-primary-700 dark:text-primary-300">Featured Article</span>
+        </div>
+        <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">Editor's Pick</h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-primary-500 to-secondary-500 mx-auto rounded-full"></div>
+      </div>
+      
+      <div class="max-w-5xl mx-auto">
+        <div class="featured-post-container">
+          <BlogPost post={featuredPost} featured={true} />
+        </div>
+      </div>
+    </div>
+  )}
+  
+  {regularPosts.length > 0 && (
+    <div class="regular-posts-section">
+      <div class="flex items-center justify-between mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Latest Articles</h2>
+        <div class="w-16 h-1 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full"></div>
+      </div>
+      
+      {layout === 'grid' && (
+        <div class="posts-grid">
+          {regularPosts.map((post, index) => (
+            <div class="post-item" style={`animation-delay: ${index * 0.1}s`}>
+              <BlogPost post={post} />
+            </div>
+          ))}
+        </div>
+      )}
+      
+      {layout === 'masonry' && (
+        <div class="masonry-grid">
+          {regularPosts.map((post, index) => (
+            <div class="masonry-item" style={`animation-delay: ${index * 0.1}s`}>
+              <BlogPost post={post} />
+            </div>
+          ))}
+        </div>
+      )}
+      
+      {layout === 'list' && (
+        <div class="list-grid">
+          {regularPosts.map((post, index) => (
+            <div class="list-item" style={`animation-delay: ${index * 0.1}s`}>
+              <BlogPost post={post} layout="list" />
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )}
+</div>
+
+<style>
+  .featured-post-container {
+    position: relative;
+    transform: perspective(1000px) rotateX(2deg);
+    transition: transform 0.3s ease;
+  }
+  
+  .featured-post-container:hover {
+    transform: perspective(1000px) rotateX(0deg) scale(1.02);
+  }
+  
+  .featured-section {
+    position: relative;
+  }
+  
+  .featured-section::before {
+    content: '';
+    position: absolute;
+    top: -4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(135deg, theme('colors.primary.500'), theme('colors.secondary.500'));
+    border-radius: 50%;
+    opacity: 0.05;
+    z-index: -1;
+  }
+  
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    align-items: start;
+  }
+  
+  .post-item {
+    animation: fadeInUp 0.6s ease-out both;
+  }
+  
+  .masonry-grid {
+    column-count: 1;
+    column-gap: 2rem;
+    column-fill: balance;
+  }
+  
+  @media (min-width: 768px) {
+    .masonry-grid {
+      column-count: 2;
+    }
+    
+    .posts-grid {
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .masonry-grid {
+      column-count: 3;
+    }
+    
+    .posts-grid {
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    }
+  }
+  
+  .masonry-item {
+    break-inside: avoid;
+    margin-bottom: 2rem;
+    animation: fadeInUp 0.6s ease-out both;
+  }
+  
+  .list-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .list-item {
+    animation: fadeInLeft 0.6s ease-out both;
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+</style>

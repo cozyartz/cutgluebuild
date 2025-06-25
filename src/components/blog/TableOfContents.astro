@@ -1,0 +1,76 @@
+---
+interface Props {
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const { headings } = Astro.props;
+const toc = headings.filter(h => h.depth <= 3);
+---
+
+{toc.length > 0 && (
+  <div class="toc">
+    <div class="flex items-center mb-4">
+      <svg class="w-5 h-5 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+      </svg>
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Table of Contents</h3>
+    </div>
+    <nav>
+      <ul class="space-y-2">
+        {toc.map(heading => (
+          <li style={`margin-left: ${(heading.depth - 1) * 1}rem`}>
+            <a 
+              href={`#${heading.slug}`}
+              class="block py-1 px-2 rounded hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
+            >
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+)}
+
+<script>
+  // Smooth scrolling for TOC links
+  document.querySelectorAll('.toc a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        
+        // Update active link
+        document.querySelectorAll('.toc a').forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      }
+    });
+  });
+  
+  // Highlight current section in TOC
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        const tocLink = document.querySelector(`.toc a[href="#${id}"]`);
+        if (tocLink) {
+          document.querySelectorAll('.toc a').forEach(l => l.classList.remove('active'));
+          tocLink.classList.add('active');
+        }
+      }
+    });
+  }, { rootMargin: '-20% 0px -80% 0px' });
+  
+  document.querySelectorAll('h1, h2, h3').forEach(heading => {
+    if (heading.id) {
+      observer.observe(heading);
+    }
+  });
+</script>
+
+<style>
+  .toc a.active {
+    @apply bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 font-medium;
+  }
+</style>

@@ -1,0 +1,46 @@
+---
+// Reading progress bar component
+---
+
+<div class="reading-progress" id="reading-progress"></div>
+
+<script>
+  function updateReadingProgress() {
+    const article = document.querySelector('article');
+    const progressBar = document.getElementById('reading-progress');
+    
+    if (!article || !progressBar) return;
+    
+    const articleTop = article.offsetTop;
+    const articleHeight = article.offsetHeight;
+    const windowHeight = window.innerHeight;
+    const scrollTop = window.pageYOffset;
+    
+    const articleBottom = articleTop + articleHeight - windowHeight;
+    const progress = Math.min(Math.max((scrollTop - articleTop) / (articleBottom - articleTop), 0), 1);
+    
+    progressBar.style.width = `${progress * 100}%`;
+    
+    // Add reading time estimate
+    const readingTimeEl = document.getElementById('reading-time-remaining');
+    if (readingTimeEl) {
+      const totalReadingTime = parseInt(readingTimeEl.dataset.totalTime || '5');
+      const remainingTime = Math.ceil(totalReadingTime * (1 - progress));
+      readingTimeEl.textContent = remainingTime > 0 ? `${remainingTime} min left` : 'Finished reading';
+    }
+  }
+  
+  window.addEventListener('scroll', updateReadingProgress);
+  window.addEventListener('resize', updateReadingProgress);
+  updateReadingProgress();
+</script>
+
+<!-- Reading time indicator -->
+<div class="fixed top-20 right-4 z-50 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 border border-gray-200 dark:border-gray-700 hidden lg:block">
+  <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    </svg>
+    <span id="reading-time-remaining" data-total-time="5">5 min read</span>
+  </div>
+</div>
