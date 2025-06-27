@@ -1,0 +1,214 @@
+<svg width="400" height="500" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Modular Drawer Organizer System -->
+  
+  <!-- Large Compartment Base -->
+  <g id="large-compartment" transform="translate(10, 10)">
+    <!-- Bottom panel -->
+    <rect x="0" y="0" width="100" height="60" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Side walls (4 pieces) -->
+    <rect x="110" y="0" width="100" height="15" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="110" y="20" width="100" height="15" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="220" y="0" width="60" height="15" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="220" y="20" width="60" height="15" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Finger joints for assembly -->
+    <g stroke="#000" stroke-width="0.1" fill="none">
+      <!-- Long sides finger joints -->
+      <rect x="110" y="0" width="10" height="3"/>
+      <rect x="130" y="0" width="10" height="3"/>
+      <rect x="150" y="0" width="10" height="3"/>
+      <rect x="170" y="0" width="10" height="3"/>
+      <rect x="190" y="0" width="10" height="3"/>
+      
+      <!-- Corresponding slots -->
+      <rect x="120" y="12" width="10" height="3"/>
+      <rect x="140" y="12" width="10" height="3"/>
+      <rect x="160" y="12" width="10" height="3"/>
+      <rect x="180" y="12" width="10" height="3"/>
+      <rect x="200" y="12" width="10" height="3"/>
+      
+      <!-- Short sides finger joints -->
+      <rect x="220" y="0" width="6" height="3"/>
+      <rect x="232" y="0" width="6" height="3"/>
+      <rect x="244" y="0" width="6" height="3"/>
+      <rect x="256" y="0" width="6" height="3"/>
+      <rect x="268" y="0" width="6" height="3"/>
+      
+      <!-- Corresponding slots -->
+      <rect x="226" y="12" width="6" height="3"/>
+      <rect x="238" y="12" width="6" height="3"/>
+      <rect x="250" y="12" width="6" height="3"/>
+      <rect x="262" y="12" width="6" height="3"/>
+      <rect x="274" y="12" width="6" height="3"/>
+    </g>
+    
+    <!-- Label -->
+    <text x="50" y="75" font-family="Arial" font-size="6" text-anchor="middle" fill="#666">Large Compartment</text>
+    <text x="50" y="85" font-family="Arial" font-size="4" text-anchor="middle" fill="#666">100mm x 60mm x 15mm</text>
+  </g>
+  
+  <!-- Medium Compartments -->
+  <g id="medium-compartments" transform="translate(10, 110)">
+    <!-- Bottom panels (2 pieces) -->
+    <rect x="0" y="0" width="60" height="40" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="70" y="0" width="60" height="40" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Side walls for medium boxes -->
+    <rect x="140" y="0" width="60" height="12" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="140" y="15" width="60" height="12" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="140" y="30" width="40" height="12" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="140" y="45" width="40" height="12" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Duplicate for second medium box -->
+    <rect x="210" y="0" width="60" height="12" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="210" y="15" width="60" height="12" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="210" y="30" width="40" height="12" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="210" y="45" width="40" height="12" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Simplified finger joints -->
+    <g stroke="#000" stroke-width="0.1" fill="none">
+      <rect x="140" y="0" width="8" height="2"/>
+      <rect x="155" y="0" width="8" height="2"/>
+      <rect x="170" y="0" width="8" height="2"/>
+      <rect x="185" y="0" width="8" height="2"/>
+      <rect x="148" y="10" width="8" height="2"/>
+      <rect x="163" y="10" width="8" height="2"/>
+      <rect x="178" y="10" width="8" height="2"/>
+      <rect x="193" y="10" width="8" height="2"/>
+    </g>
+    
+    <!-- Labels -->
+    <text x="30" y="55" font-family="Arial" font-size="5" text-anchor="middle" fill="#666">Medium A</text>
+    <text x="100" y="55" font-family="Arial" font-size="5" text-anchor="middle" fill="#666">Medium B</text>
+    <text x="65" y="65" font-family="Arial" font-size="4" text-anchor="middle" fill="#666">60mm x 40mm x 12mm</text>
+  </g>
+  
+  <!-- Small Compartments -->
+  <g id="small-compartments" transform="translate(10, 190)">
+    <!-- Bottom panels (4 pieces) -->
+    <rect x="0" y="0" width="30" height="30" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="35" y="0" width="30" height="30" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="70" y="0" width="30" height="30" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="105" y="0" width="30" height="30" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Side walls for small boxes (shared pieces) -->
+    <rect x="150" y="0" width="30" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="150" y="15" width="30" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="185" y="0" width="30" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="185" y="15" width="30" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="220" y="0" width="30" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="220" y="15" width="30" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="255" y="0" width="30" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="255" y="15" width="30" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- More side pieces for complete set -->
+    <rect x="150" y="30" width="30" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="185" y="30" width="30" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="220" y="30" width="30" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="255" y="30" width="30" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="150" y="45" width="30" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="185" y="45" width="30" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="220" y="45" width="30" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="255" y="45" width="30" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Basic finger joints for small boxes -->
+    <g stroke="#000" stroke-width="0.1" fill="none">
+      <rect x="150" y="0" width="5" height="2"/>
+      <rect x="160" y="0" width="5" height="2"/>
+      <rect x="170" y="0" width="5" height="2"/>
+      <rect x="155" y="8" width="5" height="2"/>
+      <rect x="165" y="8" width="5" height="2"/>
+      <rect x="175" y="8" width="5" height="2"/>
+    </g>
+    
+    <!-- Labels -->
+    <text x="70" y="75" font-family="Arial" font-size="5" text-anchor="middle" fill="#666">Small Compartments (x4)</text>
+    <text x="70" y="85" font-family="Arial" font-size="4" text-anchor="middle" fill="#666">30mm x 30mm x 10mm</text>
+  </g>
+  
+  <!-- Divider System -->
+  <g id="divider-system" transform="translate(10, 290)">
+    <!-- Long dividers with slots -->
+    <rect x="0" y="0" width="80" height="8" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="0" y="12" width="80" height="8" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="0" y="24" width="80" height="8" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Slots for interlocking (half-depth) -->
+    <rect x="20" y="0" width="3" height="4" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="40" y="0" width="3" height="4" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="60" y="0" width="3" height="4" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <rect x="20" y="16" width="3" height="4" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="40" y="16" width="3" height="4" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="60" y="16" width="3" height="4" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Short dividers with corresponding slots -->
+    <rect x="90" y="0" width="50" height="8" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="90" y="12" width="50" height="8" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="90" y="24" width="50" height="8" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="90" y="36" width="50" height="8" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Corresponding slots (bottom half) -->
+    <rect x="110" y="4" width="3" height="4" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="125" y="4" width="3" height="4" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="110" y="28" width="3" height="4" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="125" y="28" width="3" height="4" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="110" y="40" width="3" height="4" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="125" y="40" width="3" height="4" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Labels -->
+    <text x="70" y="60" font-family="Arial" font-size="5" text-anchor="middle" fill="#666">Interlocking Dividers</text>
+    <text x="70" y="70" font-family="Arial" font-size="4" text-anchor="middle" fill="#666">Create custom grid patterns</text>
+  </g>
+  
+  <!-- Tool-Specific Inserts -->
+  <g id="tool-inserts" transform="translate(150, 290)">
+    <!-- Screwdriver insert -->
+    <rect x="0" y="0" width="60" height="40" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="15" cy="10" r="3" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="30" cy="10" r="4" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="45" cy="10" r="5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="15" cy="25" r="6" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="30" cy="25" r="7" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="45" cy="25" r="8" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Wrench insert -->
+    <rect x="70" y="0" width="60" height="40" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="75" y="8" width="12" height="6" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="90" y="8" width="14" height="6" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="107" y="8" width="16" height="6" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="75" y="20" width="18" height="6" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="96" y="20" width="20" height="6" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="119" y="20" width="6" height="6" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Small parts insert -->
+    <rect x="140" y="0" width="60" height="40" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="150" cy="10" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="160" cy="10" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="170" cy="10" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="180" cy="10" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="190" cy="10" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="150" cy="20" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="160" cy="20" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="170" cy="20" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="180" cy="20" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="190" cy="20" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="150" cy="30" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="160" cy="30" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="170" cy="30" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="180" cy="30" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="190" cy="30" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Labels -->
+    <text x="30" y="55" font-family="Arial" font-size="4" text-anchor="middle" fill="#666">Screwdrivers</text>
+    <text x="100" y="55" font-family="Arial" font-size="4" text-anchor="middle" fill="#666">Wrenches</text>
+    <text x="170" y="55" font-family="Arial" font-size="4" text-anchor="middle" fill="#666">Small Parts</text>
+  </g>
+  
+  <!-- Assembly Instructions -->
+  <text x="10" y="390" font-family="Arial" font-size="8" fill="#666">Material: 3mm plywood or hardboard | Modular system fits standard drawer sizes</text>
+  <text x="10" y="405" font-family="Arial" font-size="8" fill="#666">Assembly: Finger joints provide strong connection without glue</text>
+  <text x="10" y="420" font-family="Arial" font-size="8" fill="#666">Customization: Mix and match compartment sizes for specific tools</text>
+  <text x="10" y="435" font-family="Arial" font-size="8" fill="#666">Finish: Light stain or clear coat to prevent moisture absorption</text>
+</svg>

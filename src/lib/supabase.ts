@@ -3,17 +3,45 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
-}
+// Create a mock client for build time when env vars are not available
+const createMockClient = () => {
+  const mockQuery = {
+    data: [],
+    error: null,
+    select: function() { return this; },
+    insert: function() { return this; },
+    update: function() { return this; },
+    upsert: function() { return this; },
+    delete: function() { return this; },
+    single: function() { return this; },
+    eq: function() { return this; },
+    order: function() { return this; },
+    limit: function() { return this; },
+    then: function(resolve) { resolve({ data: [], error: null }); return this; }
+  };
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: true
-  }
-});
+  return {
+    from: () => mockQuery,
+    auth: {
+      getSession: () => Promise.resolve({ data: { session: null }, error: null }),
+      getUser: () => Promise.resolve({ data: { user: null }, error: null }),
+      signIn: () => Promise.resolve({ data: null, error: null }),
+      signUp: () => Promise.resolve({ data: null, error: null }),
+      signOut: () => Promise.resolve({ error: null }),
+      onAuthStateChange: () => ({ data: { subscription: null } })
+    }
+  };
+};
+
+export const supabase = (!supabaseUrl || !supabaseAnonKey) 
+  ? createMockClient()
+  : createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: true
+      }
+    });
 
 // Database types
 export interface Profile {

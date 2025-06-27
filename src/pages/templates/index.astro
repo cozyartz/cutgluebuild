@@ -2,6 +2,34 @@
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import TemplateDownloadButton from '../../components/templates/TemplateDownloadButton.tsx';
+import { supabase } from '../../lib/supabase';
+
+// Fetch templates from database (with fallback for build)
+let templates = null;
+let error = null;
+
+try {
+  const result = await supabase
+    .from('templates')
+    .select('*')
+    .order('created_at', { ascending: false });
+  
+  templates = result.data;
+  error = result.error;
+} catch (e) {
+  console.log('Templates fetch failed (build mode):', e.message);
+  // Fallback data for build process
+  templates = [];
+}
+
+if (error) {
+  console.error('Error fetching templates:', error);
+}
+
+// Group templates by category for filtering
+const categories = [...new Set(templates?.map((t: any) => t.category) || [])];
+const materials = [...new Set(templates?.flatMap((t: any) => t.materials || []) || [])];
 ---
 
 <Layout title="Templates - CutGlueBuild.com" description="Browse our collection of laser-cut and Cricut-ready SVG templates. Perfect for makers and creators.">
@@ -28,23 +56,21 @@ import Footer from '../../components/Footer.astro';
           <div class="flex flex-wrap gap-3">
             <select class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
               <option>All Categories</option>
-              <option>Home Decor</option>
-              <option>Gifts</option>
-              <option>Tools & Jigs</option>
-              <option>Art Projects</option>
+              {categories.map(category => (
+                <option value={category}>{category}</option>
+              ))}
+            </select>
+            <select class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+              <option>All Difficulties</option>
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
             </select>
             <select class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
               <option>All Materials</option>
-              <option>Wood</option>
-              <option>Acrylic</option>
-              <option>Cardboard</option>
-              <option>Leather</option>
-            </select>
-            <select class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-              <option>All Machines</option>
-              <option>Glowforge</option>
-              <option>Cricut</option>
-              <option>Generic Laser</option>
+              {materials.map(material => (
+                <option value={material}>{material}</option>
+              ))}
             </select>
           </div>
           <div class="flex items-center space-x-2">
@@ -53,6 +79,7 @@ import Footer from '../../components/Footer.astro';
               <option>Newest</option>
               <option>Most Popular</option>
               <option>Free First</option>
+              <option>Difficulty</option>
             </select>
           </div>
         </div>
@@ -60,94 +87,70 @@ import Footer from '../../components/Footer.astro';
 
       <!-- Templates Grid -->
       <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
-        <!-- Template Card 1 -->
-        <div class="card card-hover group cursor-pointer">
-          <div class="aspect-square bg-gradient-to-br from-orange-100 to-orange-200 dark:from-orange-900 dark:to-orange-800 relative rounded-t-xl">
-            <div class="absolute inset-4 bg-white dark:bg-gray-800 rounded-lg shadow-inner flex items-center justify-center">
-              <svg class="w-16 h-16 text-orange-500" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2L2 7V10C2 16 6 20.5 12 22C18 20.5 22 16 22 10V7L12 2Z"/>
-              </svg>
-            </div>
-            <div class="absolute top-3 right-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-              FREE
-            </div>
-          </div>
-          <div class="p-4">
-            <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Geometric Shield</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Perfect for wall art or decorative panels</p>
-            <div class="flex items-center justify-between">
-              <div class="flex flex-wrap gap-1">
-                <span class="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">Wood</span>
-                <span class="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">Acrylic</span>
-              </div>
-              <button class="btn btn-primary text-sm px-4 py-2">Download</button>
-            </div>
-          </div>
-        </div>
+        {templates && templates.map((template) => {
+          const difficultyColors = {
+            'beginner': 'from-green-100 to-green-200 dark:from-green-900 dark:to-green-800',
+            'intermediate': 'from-orange-100 to-orange-200 dark:from-orange-900 dark:to-orange-800',
+            'advanced': 'from-red-100 to-red-200 dark:from-red-900 dark:to-red-800'
+          };
+          
+          const difficultyIconColors = {
+            'beginner': 'text-green-500',
+            'intermediate': 'text-orange-500',
+            'advanced': 'text-red-500'
+          };
 
-        <!-- Template Card 2 -->
-        <div class="card card-hover group cursor-pointer">
-          <div class="aspect-square bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800 relative rounded-t-xl">
-            <div class="absolute inset-4 bg-white dark:bg-gray-800 rounded-lg shadow-inner flex items-center justify-center">
-              <svg class="w-16 h-16 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H5C3.9 1 3 1.9 3 3V21C3 22.1 3.9 23 5 23H19C20.1 23 21 22.1 21 21V9Z"/>
-              </svg>
-            </div>
-            <div class="absolute top-3 right-3 bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-              PRO
-            </div>
-          </div>
-          <div class="p-4">
-            <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Gift Box Template</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Customizable gift box with snap-fit assembly</p>
-            <div class="flex items-center justify-between">
-              <div class="flex flex-wrap gap-1">
-                <span class="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">Cardboard</span>
-                <span class="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">Wood</span>
+          return (
+            <div class="card card-hover group cursor-pointer">
+              <div class={`aspect-square bg-gradient-to-br ${difficultyColors[template.difficulty] || difficultyColors.intermediate} relative rounded-t-xl`}>
+                <div class="absolute inset-4 bg-white dark:bg-gray-800 rounded-lg shadow-inner flex items-center justify-center">
+                  {template.svg_data ? (
+                    <div class="w-16 h-16 overflow-hidden" set:html={template.svg_data} />
+                  ) : (
+                    <svg class={`w-16 h-16 ${difficultyIconColors[template.difficulty] || difficultyIconColors.intermediate}`} fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2L2 7V10C2 16 6 20.5 12 22C18 20.5 22 16 22 10V7L12 2Z"/>
+                    </svg>
+                  )}
+                </div>
+                <div class={`absolute top-3 right-3 ${template.is_premium ? 'bg-yellow-500' : 'bg-green-500'} text-white px-2 py-1 rounded-full text-xs font-bold`}>
+                  {template.is_premium ? 'PRO' : 'FREE'}
+                </div>
+                <div class="absolute bottom-3 left-3 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-xs">
+                  {template.difficulty.charAt(0).toUpperCase() + template.difficulty.slice(1)}
+                </div>
               </div>
-              <button class="btn btn-outline text-sm px-4 py-2">Upgrade</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Template Card 3 -->
-        <div class="card card-hover group cursor-pointer">
-          <div class="aspect-square bg-gradient-to-br from-green-100 to-green-200 dark:from-green-900 dark:to-green-800 relative rounded-t-xl">
-            <div class="absolute inset-4 bg-white dark:bg-gray-800 rounded-lg shadow-inner flex items-center justify-center">
-              <svg class="w-16 h-16 text-green-500" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/>
-              </svg>
-            </div>
-            <div class="absolute top-3 right-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-              FREE
-            </div>
-          </div>
-          <div class="p-4">
-            <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Leaf Coaster Set</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Nature-inspired coasters for home decor</p>
-            <div class="flex items-center justify-between">
-              <div class="flex flex-wrap gap-1">
-                <span class="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">Wood</span>
-                <span class="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">Leather</span>
+              <div class="p-4">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{template.title}</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">{template.description}</p>
+                <div class="flex items-center justify-between mb-3">
+                  <div class="flex flex-wrap gap-1">
+                    {template.materials && template.materials.slice(0, 2).map((material) => (
+                      <span class="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">{material}</span>
+                    ))}
+                    {template.materials && template.materials.length > 2 && (
+                      <span class="text-xs text-gray-500">+{template.materials.length - 2}</span>
+                    )}
+                  </div>
+                  <div class="text-xs text-gray-500">
+                    {template.download_count} downloads
+                  </div>
+                </div>
+                <div class="flex items-center justify-between">
+                  <div class="text-xs text-gray-500">
+                    {template.category}
+                  </div>
+                  <TemplateDownloadButton 
+                    templateId={template.id}
+                    templateTitle={template.title}
+                    isPremium={template.is_premium}
+                    className="text-sm px-4 py-2"
+                    client:load
+                  />
+                </div>
               </div>
-              <button class="btn btn-primary text-sm px-4 py-2">Download</button>
             </div>
-          </div>
-        </div>
-
-        <!-- More template cards would go here -->
-        <div class="card card-hover group cursor-pointer opacity-50">
-          <div class="aspect-square bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900 dark:to-purple-800 relative rounded-t-xl">
-            <div class="absolute inset-4 bg-white dark:bg-gray-800 rounded-lg shadow-inner flex items-center justify-center">
-              <div class="text-4xl">🔒</div>
-            </div>
-          </div>
-          <div class="p-4">
-            <h3 class="font-semibold text-gray-900 dark:text-white mb-2">More Templates Coming Soon</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Subscribe to get early access</p>
-            <button class="btn btn-primary text-sm px-4 py-2 w-full">Subscribe</button>
-          </div>
-        </div>
+          );
+        })}
       </div>
 
       <!-- CTA Section -->

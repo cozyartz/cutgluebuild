@@ -1,0 +1,201 @@
+<svg width="500" height="600" viewBox="0 0 500 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Pegboard Tool Holders - Various Sizes -->
+  
+  <!-- Screwdriver Holder -->
+  <g id="screwdriver-holder" transform="translate(10, 10)">
+    <rect x="0" y="0" width="60" height="80" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Pegboard mounting holes (1/4" standard spacing) -->
+    <circle cx="12.5" cy="12.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="37.5" cy="12.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="12.5" cy="37.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="37.5" cy="37.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Tool slots for different screwdriver sizes -->
+    <rect x="8" y="50" width="6" height="25" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="18" y="50" width="8" height="25" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="30" y="50" width="10" height="25" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="44" y="50" width="12" height="25" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Label area -->
+    <rect x="5" y="5" width="50" height="8" fill="none" stroke="#000" stroke-width="0.05"/>
+    <text x="30" y="9" font-family="Arial" font-size="4" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">SCREWDRIVERS</text>
+  </g>
+  
+  <!-- Wrench Holder -->
+  <g id="wrench-holder" transform="translate(80, 10)">
+    <rect x="0" y="0" width="80" height="100" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Pegboard mounting holes -->
+    <circle cx="12.5" cy="12.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="37.5" cy="12.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="62.5" cy="12.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="12.5" cy="37.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="37.5" cy="37.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="62.5" cy="37.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Angled slots for wrenches -->
+    <g transform="rotate(15 40 65)">
+      <rect x="5" y="55" width="8" height="20" fill="none" stroke="#000" stroke-width="0.1"/>
+      <rect x="18" y="55" width="10" height="20" fill="none" stroke="#000" stroke-width="0.1"/>
+      <rect x="33" y="55" width="12" height="20" fill="none" stroke="#000" stroke-width="0.1"/>
+      <rect x="50" y="55" width="14" height="20" fill="none" stroke="#000" stroke-width="0.1"/>
+      <rect x="69" y="55" width="16" height="20" fill="none" stroke="#000" stroke-width="0.1"/>
+    </g>
+    
+    <!-- Label -->
+    <text x="40" y="9" font-family="Arial" font-size="4" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">WRENCHES</text>
+  </g>
+  
+  <!-- Pliers Holder -->
+  <g id="pliers-holder" transform="translate(170, 10)">
+    <rect x="0" y="0" width="70" height="90" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Pegboard mounting -->
+    <circle cx="12.5" cy="12.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="37.5" cy="12.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="57.5" cy="12.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="12.5" cy="37.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="37.5" cy="37.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="57.5" cy="37.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Clips for pliers -->
+    <path d="M10,50 Q15,45 20,50 L20,75 Q15,80 10,75 Z" fill="none" stroke="#000" stroke-width="0.1"/>
+    <path d="M25,50 Q30,45 35,50 L35,75 Q30,80 25,75 Z" fill="none" stroke="#000" stroke-width="0.1"/>
+    <path d="M40,50 Q45,45 50,50 L50,75 Q45,80 40,75 Z" fill="none" stroke="#000" stroke-width="0.1"/>
+    <path d="M55,50 Q60,45 65,50 L65,75 Q60,80 55,75 Z" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Label -->
+    <text x="35" y="9" font-family="Arial" font-size="4" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">PLIERS</text>
+  </g>
+  
+  <!-- Drill Bit Holder -->
+  <g id="drill-bit-holder" transform="translate(250, 10)">
+    <rect x="0" y="0" width="90" height="120" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Pegboard mounting -->
+    <circle cx="12.5" cy="12.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="37.5" cy="12.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="62.5" cy="12.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="77.5" cy="12.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Drill bit holes - graduated sizes -->
+    <circle cx="15" cy="30" r="1" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="25" cy="30" r="1.5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="35" cy="30" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="45" cy="30" r="2.5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="55" cy="30" r="3" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="65" cy="30" r="3.5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="75" cy="30" r="4" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Second row -->
+    <circle cx="15" cy="45" r="4.5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="25" cy="45" r="5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="35" cy="45" r="5.5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="45" cy="45" r="6" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="55" cy="45" r="6.5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="65" cy="45" r="7" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="75" cy="45" r="7.5" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Size markings -->
+    <text x="15" y="60" font-family="Arial" font-size="3" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">1/16</text>
+    <text x="25" y="60" font-family="Arial" font-size="3" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">3/32</text>
+    <text x="35" y="60" font-family="Arial" font-size="3" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">1/8</text>
+    <text x="45" y="60" font-family="Arial" font-size="3" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">5/32</text>
+    <text x="55" y="60" font-family="Arial" font-size="3" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">3/16</text>
+    <text x="65" y="60" font-family="Arial" font-size="3" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">7/32</text>
+    <text x="75" y="60" font-family="Arial" font-size="3" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">1/4</text>
+    
+    <!-- Second row markings -->
+    <text x="15" y="75" font-family="Arial" font-size="3" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">9/32</text>
+    <text x="25" y="75" font-family="Arial" font-size="3" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">5/16</text>
+    <text x="35" y="75" font-family="Arial" font-size="3" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">11/32</text>
+    <text x="45" y="75" font-family="Arial" font-size="3" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">3/8</text>
+    <text x="55" y="75" font-family="Arial" font-size="3" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">13/32</text>
+    <text x="65" y="75" font-family="Arial" font-size="3" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">7/16</text>
+    <text x="75" y="75" font-family="Arial" font-size="3" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">1/2</text>
+    
+    <!-- Label -->
+    <text x="45" y="9" font-family="Arial" font-size="4" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">DRILL BITS</text>
+  </g>
+  
+  <!-- Utility Knife/Razor Holder -->
+  <g id="utility-knife-holder" transform="translate(10, 140)">
+    <rect x="0" y="0" width="50" height="70" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Mounting holes -->
+    <circle cx="12.5" cy="12.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="37.5" cy="12.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="12.5" cy="37.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="37.5" cy="37.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Knife slots -->
+    <rect x="8" y="50" width="15" height="4" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="27" y="50" width="15" height="4" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="8" y="58" width="15" height="4" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="27" y="58" width="15" height="4" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Label -->
+    <text x="25" y="9" font-family="Arial" font-size="4" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">KNIVES</text>
+  </g>
+  
+  <!-- Measuring Tools Holder -->
+  <g id="measuring-tools-holder" transform="translate(70, 140)">
+    <rect x="0" y="0" width="80" height="100" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Mounting holes -->
+    <circle cx="12.5" cy="12.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="37.5" cy="12.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="62.5" cy="12.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="12.5" cy="37.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="37.5" cy="37.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="62.5" cy="37.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Ruler slot -->
+    <rect x="5" y="50" width="70" height="8" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Square holder -->
+    <rect x="5" y="65" width="25" height="25" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Compass holder -->
+    <circle cx="55" cy="77" r="12" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="55" cy="77" r="4" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Label -->
+    <text x="40" y="9" font-family="Arial" font-size="4" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">MEASURING</text>
+  </g>
+  
+  <!-- Small Parts Bins -->
+  <g id="small-parts-bins" transform="translate(160, 140)">
+    <rect x="0" y="0" width="120" height="80" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Mounting holes -->
+    <circle cx="12.5" cy="12.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="37.5" cy="12.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="62.5" cy="12.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="87.5" cy="12.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="107.5" cy="12.5" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Individual bins -->
+    <rect x="5" y="25" width="25" height="20" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="35" y="25" width="25" height="20" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="65" y="25" width="25" height="20" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="95" y="25" width="20" height="20" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <rect x="5" y="50" width="25" height="20" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="35" y="50" width="25" height="20" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="65" y="50" width="25" height="20" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="95" y="50" width="20" height="20" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Labels for bins -->
+    <text x="17" y="37" font-family="Arial" font-size="3" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">SCREWS</text>
+    <text x="47" y="37" font-family="Arial" font-size="3" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">NAILS</text>
+    <text x="77" y="37" font-family="Arial" font-size="3" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">WASHERS</text>
+    <text x="105" y="37" font-family="Arial" font-size="3" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">NUTS</text>
+    
+    <text x="17" y="62" font-family="Arial" font-size="3" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">BOLTS</text>
+    <text x="47" y="62" font-family="Arial" font-size="3" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">CLIPS</text>
+    <text x="77" y="62" font-family="Arial" font-size="3" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">PINS</text>
+    <text x="105" y="62" font-family="Arial" font-size="3" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">MISC</text>
+    
+    <!-- Main label -->
+    <text x="60" y="9" font-family="Arial" font-size="4" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">SMALL PARTS</text>
+  </g>
+  
+  <!-- Assembly Notes -->
+  <text x="10" y="270" font-family="Arial" font-size="8" fill="#666">Material: 3mm plywood or MDF | Standard pegboard hole spacing: 1" centers</text>
+  <text x="10" y="285" font-family="Arial" font-size="8" fill="#666">Mounting: Use 1/4" pegboard hooks or custom hangers</text>
+  <text x="10" y="300" font-family="Arial" font-size="8" fill="#666">Finish: Clear coat or paint to match shop decor</text>
+  <text x="10" y="315" font-family="Arial" font-size="8" fill="#666">Custom sizing: Adjust dimensions to fit your specific tools</text>
+</svg>

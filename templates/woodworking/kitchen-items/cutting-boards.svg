@@ -1,0 +1,335 @@
+<svg width="500" height="700" viewBox="0 0 500 700" xmlns="http://www.w3.org/2000/svg">
+  <!-- Cutting Boards - Various Styles and Sizes -->
+  
+  <!-- Large Rectangular Cutting Board (16" x 12") -->
+  <g id="large-rectangle-board" transform="translate(10, 10)">
+    <!-- Main board outline -->
+    <rect x="0" y="0" width="160" height="120" rx="8" ry="8" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Juice groove (routed channel) -->
+    <rect x="8" y="8" width="144" height="104" rx="6" ry="6" fill="none" stroke="#000" stroke-width="0.05" opacity="0.7"/>
+    
+    <!-- Handle cutout -->
+    <ellipse cx="80" cy="6" rx="15" ry="4" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Feet/rubber pad locations -->
+    <circle cx="20" cy="20" r="3" fill="none" stroke="#000" stroke-width="0.05" opacity="0.5"/>
+    <circle cx="140" cy="20" r="3" fill="none" stroke="#000" stroke-width="0.05" opacity="0.5"/>
+    <circle cx="20" cy="100" r="3" fill="none" stroke="#000" stroke-width="0.05" opacity="0.5"/>
+    <circle cx="140" cy="100" r="3" fill="none" stroke="#000" stroke-width="0.05" opacity="0.5"/>
+    
+    <!-- Optional decorative grain pattern (engraving) -->
+    <g stroke="#000" stroke-width="0.03" fill="none" opacity="0.3">
+      <path d="M20,40 Q80,35 140,40"/>
+      <path d="M20,60 Q80,65 140,60"/>
+      <path d="M20,80 Q80,75 140,80"/>
+    </g>
+    
+    <!-- Label -->
+    <text x="80" y="140" font-family="Arial" font-size="8" text-anchor="middle" fill="#666">Large Cutting Board - 16" x 12"</text>
+  </g>
+  
+  <!-- Medium Oval Cutting Board -->
+  <g id="medium-oval-board" transform="translate(190, 10)">
+    <!-- Main oval shape -->
+    <ellipse cx="60" cy="45" rx="55" ry="40" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Juice groove -->
+    <ellipse cx="60" cy="45" rx="48" ry="33" fill="none" stroke="#000" stroke-width="0.05" opacity="0.7"/>
+    
+    <!-- Handle hole -->
+    <circle cx="60" cy="10" r="6" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Decorative edge pattern -->
+    <g stroke="#000" stroke-width="0.05" fill="none" opacity="0.7">
+      <path d="M20,25 Q30,20 40,25"/>
+      <path d="M80,25 Q90,20 100,25"/>
+      <path d="M20,65 Q30,70 40,65"/>
+      <path d="M80,65 Q90,70 100,65"/>
+    </g>
+    
+    <!-- Feet positions -->
+    <circle cx="30" cy="30" r="2" fill="none" stroke="#000" stroke-width="0.05" opacity="0.5"/>
+    <circle cx="90" cy="30" r="2" fill="none" stroke="#000" stroke-width="0.05" opacity="0.5"/>
+    <circle cx="30" cy="60" r="2" fill="none" stroke="#000" stroke-width="0.05" opacity="0.5"/>
+    <circle cx="90" cy="60" r="2" fill="none" stroke="#000" stroke-width="0.05" opacity="0.5"/>
+    
+    <!-- Label -->
+    <text x="60" y="105" font-family="Arial" font-size="8" text-anchor="middle" fill="#666">Medium Oval - 14" x 10"</text>
+  </g>
+  
+  <!-- Small Round Board/Trivet -->
+  <g id="small-round-board" transform="translate(320, 10)">
+    <!-- Main circle -->
+    <circle cx="40" cy="40" r="35" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Inner juice groove -->
+    <circle cx="40" cy="40" r="28" fill="none" stroke="#000" stroke-width="0.05" opacity="0.7"/>
+    
+    <!-- Center medallion pattern -->
+    <g stroke="#000" stroke-width="0.05" fill="none" opacity="0.7">
+      <circle cx="40" cy="40" r="15"/>
+      <circle cx="40" cy="40" r="10"/>
+      <circle cx="40" cy="40" r="5"/>
+      <!-- Radial lines -->
+      <line x1="40" y1="25" x2="40" y2="30"/>
+      <line x1="52" y1="32" x2="49" y2="35"/>
+      <line x1="55" y1="40" x2="50" y2="40"/>
+      <line x1="52" y1="48" x2="49" y2="45"/>
+      <line x1="40" y1="55" x2="40" y2="50"/>
+      <line x1="28" y1="48" x2="31" y2="45"/>
+      <line x1="25" y1="40" x2="30" y2="40"/>
+      <line x1="28" y1="32" x2="31" y2="35"/>
+    </g>
+    
+    <!-- Handle notch -->
+    <rect x="37" y="5" width="6" height="8" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Feet -->
+    <circle cx="20" cy="20" r="2" fill="none" stroke="#000" stroke-width="0.05" opacity="0.5"/>
+    <circle cx="60" cy="20" r="2" fill="none" stroke="#000" stroke-width="0.05" opacity="0.5"/>
+    <circle cx="40" cy="65" r="2" fill="none" stroke="#000" stroke-width="0.05" opacity="0.5"/>
+    
+    <!-- Label -->
+    <text x="40" y="95" font-family="Arial" font-size="8" text-anchor="middle" fill="#666">Round Trivet - 8" diameter</text>
+  </g>
+  
+  <!-- Bread Board with Crumb Catcher -->
+  <g id="bread-board" transform="translate(410, 10)">
+    <!-- Main board -->
+    <rect x="0" y="0" width="80" height="120" rx="5" ry="5" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Bread slicing guides -->
+    <line x1="15" y1="20" x2="15" y2="100" stroke="#000" stroke-width="0.05" opacity="0.7"/>
+    <line x1="25" y1="20" x2="25" y2="100" stroke="#000" stroke-width="0.05" opacity="0.7"/>
+    <line x1="35" y1="20" x2="35" y2="100" stroke="#000" stroke-width="0.05" opacity="0.7"/>
+    <line x1="45" y1="20" x2="45" y2="100" stroke="#000" stroke-width="0.05" opacity="0.7"/>
+    <line x1="55" y1="20" x2="55" y2="100" stroke="#000" stroke-width="0.05" opacity="0.7"/>
+    <line x1="65" y1="20" x2="65" y2="100" stroke="#000" stroke-width="0.05" opacity="0.7"/>
+    
+    <!-- Crumb catcher groove -->
+    <rect x="5" y="105" width="70" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Handle -->
+    <circle cx="40" cy="10" r="6" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Text engraving area -->
+    <rect x="10" y="5" width="60" height="8" fill="none" stroke="#000" stroke-width="0.03" opacity="0.5"/>
+    <text x="40" y="8" font-family="Arial" font-size="4" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.02">BREAD</text>
+    
+    <!-- Label -->
+    <text x="40" y="140" font-family="Arial" font-size="8" text-anchor="middle" fill="#666">Bread Board</text>
+  </g>
+  
+  <!-- Charcuterie/Serving Board -->
+  <g id="charcuterie-board" transform="translate(10, 180)">
+    <!-- Asymmetric organic shape -->
+    <path d="M0,20 Q0,0 20,0 L120,0 Q140,0 140,20 L140,50 Q145,55 140,60 L140,80 Q140,100 120,100 L20,100 Q0,100 0,80 L0,60 Q-5,55 0,50 Z" 
+          fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Cheese well (shallow depression) -->
+    <ellipse cx="35" cy="30" rx="20" ry="15" fill="none" stroke="#000" stroke-width="0.05" opacity="0.7"/>
+    
+    <!-- Small bowls/wells for olives, nuts -->
+    <circle cx="100" cy="25" r="8" fill="none" stroke="#000" stroke-width="0.05" opacity="0.7"/>
+    <circle cx="110" cy="50" r="6" fill="none" stroke="#000" stroke-width="0.05" opacity="0.7"/>
+    <ellipse cx="25" cy="70" rx="12" ry="8" fill="none" stroke="#000" stroke-width="0.05" opacity="0.7"/>
+    
+    <!-- Cracker channel -->
+    <rect x="60" y="45" width="25" height="8" rx="4" ry="4" fill="none" stroke="#000" stroke-width="0.05" opacity="0.7"/>
+    
+    <!-- Handle -->
+    <ellipse cx="120" cy="80" rx="8" ry="12" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Decorative edge details -->
+    <g stroke="#000" stroke-width="0.05" fill="none" opacity="0.7">
+      <path d="M10,5 Q15,3 20,5"/>
+      <path d="M120,5 Q125,3 130,5"/>
+      <path d="M10,95 Q15,97 20,95"/>
+    </g>
+    
+    <!-- Label -->
+    <text x="70" y="120" font-family="Arial" font-size="8" text-anchor="middle" fill="#666">Charcuterie Board - 18" x 11"</text>
+  </g>
+  
+  <!-- Pizza Peel -->
+  <g id="pizza-peel" transform="translate(180, 180)">
+    <!-- Paddle blade -->
+    <ellipse cx="60" cy="30" rx="55" ry="25" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Handle -->
+    <rect x="57" y="55" width="6" height="60" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Handle grip -->
+    <rect x="55" y="110" width="10" height="15" rx="5" ry="5" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Beveled edge (engraving line) -->
+    <ellipse cx="60" cy="30" rx="52" ry="22" fill="none" stroke="#000" stroke-width="0.05" opacity="0.7"/>
+    
+    <!-- Flour dusting holes -->
+    <circle cx="30" cy="30" r="1" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="50" cy="20" r="1" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="70" cy="20" r="1" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="90" cy="30" r="1" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="50" cy="40" r="1" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="70" cy="40" r="1" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Handle hang hole -->
+    <circle cx="60" cy="120" r="3" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Label -->
+    <text x="60" y="145" font-family="Arial" font-size="8" text-anchor="middle" fill="#666">Pizza Peel - 14" x 16"</text>
+  </g>
+  
+  <!-- Taco Holder -->
+  <g id="taco-holder" transform="translate(300, 180)">
+    <!-- Base -->
+    <rect x="0" y="0" width="120" height="40" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Taco slots (angled cuts) -->
+    <g stroke="#000" stroke-width="0.1" fill="none">
+      <path d="M15,0 L20,40"/>
+      <path d="M35,0 L40,40"/>
+      <path d="M55,0 L60,40"/>
+      <path d="M75,0 L80,40"/>
+      <path d="M95,0 L100,40"/>
+    </g>
+    
+    <!-- Drainage/sauce holes -->
+    <circle cx="27" cy="35" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="47" cy="35" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="67" cy="35" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="87" cy="35" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Side support pieces -->
+    <rect x="130" y="0" width="20" height="40" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="130" y="50" width="20" height="40" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Assembly slots -->
+    <rect x="0" y="35" width="15" height="5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="105" y="35" width="15" height="5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="135" y="0" width="5" height="15" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="135" y="50" width="5" height="15" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Label -->
+    <text x="75" y="110" font-family="Arial" font-size="8" text-anchor="middle" fill="#666">Taco Holder - Holds 4 tacos</text>
+  </g>
+  
+  <!-- Spice Rack Inserts -->
+  <g id="spice-rack" transform="translate(10, 320)">
+    <!-- Main rack base -->
+    <rect x="0" y="0" width="180" height="60" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Spice jar holes (standard 2" jars) -->
+    <circle cx="20" cy="20" r="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="50" cy="20" r="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="80" cy="20" r="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="110" cy="20" r="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="140" cy="20" r="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="170" cy="20" r="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Second row -->
+    <circle cx="20" cy="45" r="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="50" cy="45" r="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="80" cy="45" r="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="110" cy="45" r="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="140" cy="45" r="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="170" cy="45" r="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Angled insert (for drawer) -->
+    <rect x="0" y="80" width="180" height="80" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Angled jar positions -->
+    <ellipse cx="20" cy="100" rx="10" ry="8" fill="none" stroke="#000" stroke-width="0.1"/>
+    <ellipse cx="50" cy="100" rx="10" ry="8" fill="none" stroke="#000" stroke-width="0.1"/>
+    <ellipse cx="80" cy="100" rx="10" ry="8" fill="none" stroke="#000" stroke-width="0.1"/>
+    <ellipse cx="110" cy="100" rx="10" ry="8" fill="none" stroke="#000" stroke-width="0.1"/>
+    <ellipse cx="140" cy="100" rx="10" ry="8" fill="none" stroke="#000" stroke-width="0.1"/>
+    <ellipse cx="170" cy="100" rx="10" ry="8" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <ellipse cx="35" cy="130" rx="10" ry="8" fill="none" stroke="#000" stroke-width="0.1"/>
+    <ellipse cx="65" cy="130" rx="10" ry="8" fill="none" stroke="#000" stroke-width="0.1"/>
+    <ellipse cx="95" cy="130" rx="10" ry="8" fill="none" stroke="#000" stroke-width="0.1"/>
+    <ellipse cx="125" cy="130" rx="10" ry="8" fill="none" stroke="#000" stroke-width="0.1"/>
+    <ellipse cx="155" cy="130" rx="10" ry="8" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Labels -->
+    <text x="90" y="75" font-family="Arial" font-size="8" text-anchor="middle" fill="#666">Flat Spice Rack - 12 jars</text>
+    <text x="90" y="180" font-family="Arial" font-size="8" text-anchor="middle" fill="#666">Angled Drawer Insert - 11 jars</text>
+  </g>
+  
+  <!-- Utensil Holder -->
+  <g id="utensil-holder" transform="translate(200, 320)">
+    <!-- Cylindrical holder base -->
+    <circle cx="40" cy="40" r="35" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Divider slots -->
+    <line x1="40" y1="5" x2="40" y2="75" stroke="#000" stroke-width="0.1"/>
+    <line x1="5" y1="40" x2="75" y2="40" stroke="#000" stroke-width="0.1"/>
+    <line x1="15" y1="15" x2="65" y2="65" stroke="#000" stroke-width="0.1"/>
+    <line x1="65" y1="15" x2="15" y2="65" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Base -->
+    <circle cx="40" cy="40" r="38" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Side panel (unfolded) -->
+    <rect x="90" y="0" width="110" height="60" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Fold lines for octagon -->
+    <line x1="90" y1="0" x2="90" y2="60" stroke="#000" stroke-width="0.05" stroke-dasharray="2,2"/>
+    <line x1="104" y1="0" x2="104" y2="60" stroke="#000" stroke-width="0.05" stroke-dasharray="2,2"/>
+    <line x1="118" y1="0" x2="118" y2="60" stroke="#000" stroke-width="0.05" stroke-dasharray="2,2"/>
+    <line x1="132" y1="0" x2="132" y2="60" stroke="#000" stroke-width="0.05" stroke-dasharray="2,2"/>
+    <line x1="146" y1="0" x2="146" y2="60" stroke="#000" stroke-width="0.05" stroke-dasharray="2,2"/>
+    <line x1="160" y1="0" x2="160" y2="60" stroke="#000" stroke-width="0.05" stroke-dasharray="2,2"/>
+    <line x1="174" y1="0" x2="174" y2="60" stroke="#000" stroke-width="0.05" stroke-dasharray="2,2"/>
+    <line x1="188" y1="0" x2="188" y2="60" stroke="#000" stroke-width="0.05" stroke-dasharray="2,2"/>
+    
+    <!-- Assembly tabs -->
+    <rect x="200" y="20" width="10" height="20" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="80" y="20" width="10" height="20" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Drainage holes -->
+    <circle cx="25" cy="55" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="55" cy="55" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="40" cy="65" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Label -->
+    <text x="125" y="85" font-family="Arial" font-size="8" text-anchor="middle" fill="#666">Utensil Holder - 6" diameter</text>
+  </g>
+  
+  <!-- Knife Block Insert -->
+  <g id="knife-block" transform="translate(330, 320)">
+    <!-- Block base -->
+    <rect x="0" y="0" width="100" height="60" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Knife slots - various angles and sizes -->
+    <line x1="15" y1="0" x2="10" y2="60" stroke="#000" stroke-width="0.1"/>
+    <line x1="25" y1="0" x2="22" y2="60" stroke="#000" stroke-width="0.1"/>
+    <line x1="35" y1="0" x2="34" y2="60" stroke="#000" stroke-width="0.1"/>
+    <line x1="45" y1="0" x2="46" y2="60" stroke="#000" stroke-width="0.1"/>
+    <line x1="55" y1="0" x2="58" y2="60" stroke="#000" stroke-width="0.1"/>
+    <line x1="65" y1="0" x2="70" y2="60" stroke="#000" stroke-width="0.1"/>
+    <line x1="75" y1="0" x2="82" y2="60" stroke="#000" stroke-width="0.1"/>
+    <line x1="85" y1="0" x2="90" y2="60" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Scissor slot -->
+    <ellipse cx="95" cy="30" rx="3" ry="15" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Side panels -->
+    <rect x="110" y="0" width="60" height="15" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="110" y="20" width="60" height="15" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Assembly tabs -->
+    <rect x="0" y="25" width="5" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="95" y="25" width="5" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Label -->
+    <text x="70" y="85" font-family="Arial" font-size="8" text-anchor="middle" fill="#666">Knife Block Insert</text>
+  </g>
+  
+  <!-- Assembly Instructions -->
+  <text x="10" y="450" font-family="Arial" font-size="8" fill="#666">Material: Food-safe hardwood (maple, cherry, walnut) or bamboo | Minimum 3/4" thickness</text>
+  <text x="10" y="465" font-family="Arial" font-size="8" fill="#666">Finish: Food-safe mineral oil and beeswax blend | Sand to 220 grit before finishing</text>
+  <text x="10" y="480" font-family="Arial" font-size="8" fill="#666">Safety: All cutting surfaces must be smooth, no splinters | Round over all edges</text>
+  <text x="10" y="495" font-family="Arial" font-size="8" fill="#666">Maintenance: Regular oiling, hand wash only, air dry completely</text>
+  <text x="10" y="510" font-family="Arial" font-size="8" fill="#666">Juice grooves: Route 1/8" deep, 1/4" wide | Feet: Non-slip rubber pads</text>
+</svg>

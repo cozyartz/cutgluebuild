@@ -3,6 +3,11 @@ import Layout from '../../../layouts/Layout.astro';
 import Header from '../../../components/Header.astro';
 import { supabase } from '../../../lib/supabase';
 
+export async function getStaticPaths() {
+  // Return empty array for static build - these pages will be generated server-side
+  return [];
+}
+
 const { projectId } = Astro.params;
 
 if (!projectId) {

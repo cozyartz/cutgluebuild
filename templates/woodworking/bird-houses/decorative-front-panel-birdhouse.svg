@@ -1,0 +1,125 @@
+<svg width="400" height="450" viewBox="0 0 400 450" xmlns="http://www.w3.org/2000/svg">
+  <!-- Decorative Front Panel Bird House with Laser Engraving -->
+  
+  <!-- Front Panel with Decorative Pattern -->
+  <g id="front-panel-decorative" transform="translate(10, 10)">
+    <rect x="0" y="0" width="80" height="100" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Main entrance hole -->
+    <circle cx="40" cy="35" r="12" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Decorative floral pattern (engraving layer) -->
+    <g stroke="#000" stroke-width="0.05" fill="none" opacity="0.7">
+      <!-- Vine pattern around entrance -->
+      <path d="M15,20 Q25,15 35,20 Q30,25 25,30 Q20,25 15,20"/>
+      <path d="M65,20 Q55,15 45,20 Q50,25 55,30 Q60,25 65,20"/>
+      <path d="M15,50 Q25,55 35,50 Q30,45 25,40 Q20,45 15,50"/>
+      <path d="M65,50 Q55,55 45,50 Q50,45 55,40 Q60,45 65,50"/>
+      
+      <!-- Small leaf details -->
+      <ellipse cx="20" cy="25" rx="3" ry="6" transform="rotate(45 20 25)"/>
+      <ellipse cx="60" cy="25" rx="3" ry="6" transform="rotate(-45 60 25)"/>
+      <ellipse cx="20" cy="45" rx="3" ry="6" transform="rotate(-45 20 45)"/>
+      <ellipse cx="60" cy="45" rx="3" ry="6" transform="rotate(45 60 45)"/>
+      
+      <!-- Border pattern -->
+      <rect x="5" y="5" width="70" height="90" fill="none" stroke="#000" stroke-width="0.05"/>
+      <rect x="8" y="8" width="64" height="84" fill="none" stroke="#000" stroke-width="0.05"/>
+    </g>
+    
+    <!-- Perch hole -->
+    <circle cx="40" cy="55" r="2" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Assembly holes -->
+    <circle cx="8" cy="12" r="1" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="72" cy="12" r="1" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="8" cy="88" r="1" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="72" cy="88" r="1" fill="none" stroke="#000" stroke-width="0.1"/>
+  </g>
+  
+  <!-- Plain Back Panel -->
+  <g id="back-panel" transform="translate(100, 10)">
+    <rect x="0" y="0" width="80" height="100" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Mounting holes -->
+    <circle cx="40" cy="20" r="3" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="40" cy="80" r="3" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Assembly holes -->
+    <circle cx="8" cy="12" r="1" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="72" cy="12" r="1" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="8" cy="88" r="1" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="72" cy="88" r="1" fill="none" stroke="#000" stroke-width="0.1"/>
+  </g>
+  
+  <!-- Side Panels with Decorative Top -->
+  <g id="side-panel-1" transform="translate(10, 120)">
+    <polygon points="0,0 60,0 60,100 30,110 0,100" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Small decorative pattern -->
+    <g stroke="#000" stroke-width="0.05" fill="none" opacity="0.7">
+      <circle cx="30" cy="20" r="8" fill="none"/>
+      <path d="M22,20 L38,20 M30,12 L30,28"/>
+    </g>
+    <!-- Assembly holes -->
+    <circle cx="8" cy="12" r="1" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="8" cy="88" r="1" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="52" cy="12" r="1" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="52" cy="88" r="1" fill="none" stroke="#000" stroke-width="0.1"/>
+  </g>
+  
+  <g id="side-panel-2" transform="translate(80, 120)">
+    <polygon points="0,0 60,0 60,100 30,110 0,100" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Small decorative pattern -->
+    <g stroke="#000" stroke-width="0.05" fill="none" opacity="0.7">
+      <circle cx="30" cy="20" r="8" fill="none"/>
+      <path d="M22,20 L38,20 M30,12 L30,28"/>
+    </g>
+    <!-- Assembly holes -->
+    <circle cx="8" cy="12" r="1" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="8" cy="88" r="1" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="52" cy="12" r="1" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="52" cy="88" r="1" fill="none" stroke="#000" stroke-width="0.1"/>
+  </g>
+  
+  <!-- Bottom Panel -->
+  <g id="bottom-panel" transform="translate(10, 240)">
+    <rect x="0" y="0" width="76" height="56" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Drainage holes -->
+    <circle cx="19" cy="14" r="2.5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="57" cy="14" r="2.5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="38" cy="28" r="2.5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="19" cy="42" r="2.5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="57" cy="42" r="2.5" fill="none" stroke="#000" stroke-width="0.1"/>
+  </g>
+  
+  <!-- Roof Panels -->
+  <g id="roof-panel-1" transform="translate(100, 240)">
+    <polygon points="0,0 85,0 75,40 10,40" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Optional decorative edge -->
+    <path d="M5,40 Q15,35 25,40 Q35,35 45,40 Q55,35 65,40 Q75,35 80,40" stroke="#000" stroke-width="0.05" fill="none" opacity="0.7"/>
+  </g>
+  
+  <g id="roof-panel-2" transform="translate(195, 240)">
+    <polygon points="0,0 85,0 75,40 10,40" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Optional decorative edge -->
+    <path d="M5,40 Q15,35 25,40 Q35,35 45,40 Q55,35 65,40 Q75,35 80,40" stroke="#000" stroke-width="0.05" fill="none" opacity="0.7"/>
+  </g>
+  
+  <!-- Decorative Perch -->
+  <g id="decorative-perch" transform="translate(10, 310)">
+    <rect x="0" y="0" width="50" height="6" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- End caps -->
+    <circle cx="0" cy="3" r="3" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="50" cy="3" r="3" fill="none" stroke="#000" stroke-width="0.1"/>
+  </g>
+  
+  <!-- Optional name plate -->
+  <g id="name-plate" transform="translate(70, 310)">
+    <rect x="0" y="0" width="60" height="15" fill="none" stroke="#000" stroke-width="0.1"/>
+    <text x="30" y="10" font-family="Arial" font-size="6" text-anchor="middle" fill="none" stroke="#000" stroke-width="0.05">Welcome</text>
+  </g>
+  
+  <!-- Assembly Guide -->
+  <text x="10" y="350" font-family="Arial" font-size="8" fill="#666">Material: 3mm plywood | Features decorative laser engraving</text>
+  <text x="10" y="365" font-family="Arial" font-size="8" fill="#666">Two-layer design: Cut lines (0.1mm) + Engrave patterns (0.05mm)</text>
+  <text x="10" y="380" font-family="Arial" font-size="8" fill="#666">Entrance: 24mm diameter for medium songbirds</text>
+  <text x="10" y="395" font-family="Arial" font-size="8" fill="#666">Finish: Clear coat to preserve natural wood + engravings</text>
+</svg>

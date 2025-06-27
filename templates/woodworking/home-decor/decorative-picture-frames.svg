@@ -1,0 +1,265 @@
+<svg width="500" height="600" viewBox="0 0 500 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Decorative Picture Frames - Laser Cut Designs -->
+  
+  <!-- Classic Rectangular Frame (8x10) -->
+  <g id="classic-frame-8x10" transform="translate(10, 10)">
+    <!-- Outer frame -->
+    <rect x="0" y="0" width="120" height="150" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Inner opening (8x10 photo) -->
+    <rect x="20" y="25" width="80" height="100" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Decorative corner elements -->
+    <g stroke="#000" stroke-width="0.05" fill="none" opacity="0.7">
+      <!-- Top left corner -->
+      <path d="M5,5 Q15,5 15,15 M5,15 Q5,5 15,5"/>
+      <circle cx="10" cy="10" r="2"/>
+      
+      <!-- Top right corner -->
+      <path d="M115,5 Q105,5 105,15 M115,15 Q115,5 105,5"/>
+      <circle cx="110" cy="10" r="2"/>
+      
+      <!-- Bottom left corner -->
+      <path d="M5,145 Q15,145 15,135 M5,135 Q5,145 15,145"/>
+      <circle cx="10" cy="140" r="2"/>
+      
+      <!-- Bottom right corner -->
+      <path d="M115,145 Q105,145 105,135 M115,135 Q115,145 105,145"/>
+      <circle cx="110" cy="140" r="2"/>
+    </g>
+    
+    <!-- Rabbet for glass/photo (engraving line) -->
+    <rect x="18" y="23" width="84" height="104" fill="none" stroke="#000" stroke-width="0.03" opacity="0.5"/>
+    
+    <!-- Hanger cutout -->
+    <rect x="55" y="2" width="10" height="6" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Label -->
+    <text x="60" y="170" font-family="Arial" font-size="6" text-anchor="middle" fill="#666">Classic Frame 8"x10"</text>
+  </g>
+  
+  <!-- Modern Geometric Frame (5x7) -->
+  <g id="modern-frame-5x7" transform="translate(150, 10)">
+    <!-- Outer hexagonal frame -->
+    <polygon points="40,0 80,0 100,35 80,70 40,70 20,35" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Inner rectangular opening (5x7) -->
+    <rect x="35" y="15" width="50" height="40" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Geometric pattern around frame -->
+    <g stroke="#000" stroke-width="0.05" fill="none" opacity="0.7">
+      <!-- Triangle patterns -->
+      <polygon points="60,5 65,0 70,5"/>
+      <polygon points="50,5 55,0 60,5"/>
+      <polygon points="60,65 65,70 70,65"/>
+      <polygon points="50,65 55,70 60,65"/>
+      
+      <!-- Side patterns -->
+      <polygon points="95,30 100,25 100,35"/>
+      <polygon points="95,40 100,35 100,45"/>
+      <polygon points="25,30 20,25 20,35"/>
+      <polygon points="25,40 20,35 20,45"/>
+    </g>
+    
+    <!-- Rabbet groove -->
+    <rect x="33" y="13" width="54" height="44" fill="none" stroke="#000" stroke-width="0.03" opacity="0.5"/>
+    
+    <!-- Modern hanging slot -->
+    <rect x="55" y="0" width="10" height="3" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Label -->
+    <text x="60" y="90" font-family="Arial" font-size="6" text-anchor="middle" fill="#666">Modern Geometric 5"x7"</text>
+  </g>
+  
+  <!-- Ornate Victorian Style Frame (4x6) -->
+  <g id="ornate-frame-4x6" transform="translate(270, 10)">
+    <!-- Outer ornate border -->
+    <rect x="0" y="0" width="80" height="100" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Inner opening -->
+    <rect x="20" y="25" width="40" height="50" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Ornate decorative elements -->
+    <g stroke="#000" stroke-width="0.05" fill="none" opacity="0.7">
+      <!-- Top ornament -->
+      <path d="M30,10 Q40,5 50,10 Q40,15 30,10"/>
+      <circle cx="35" cy="10" r="1"/>
+      <circle cx="45" cy="10" r="1"/>
+      
+      <!-- Side scrollwork -->
+      <path d="M10,30 Q5,35 10,40 Q15,35 10,30"/>
+      <path d="M10,45 Q5,50 10,55 Q15,50 10,45"/>
+      <path d="M70,30 Q75,35 70,40 Q65,35 70,30"/>
+      <path d="M70,45 Q75,50 70,55 Q65,50 70,45"/>
+      
+      <!-- Bottom ornament -->
+      <path d="M30,85 Q40,90 50,85 Q40,80 30,85"/>
+      <circle cx="35" cy="85" r="1"/>
+      <circle cx="45" cy="85" r="1"/>
+      
+      <!-- Corner flourishes -->
+      <path d="M15,15 Q20,10 25,15 Q20,20 15,15"/>
+      <path d="M55,15 Q60,10 65,15 Q60,20 55,15"/>
+      <path d="M15,80 Q20,85 25,80 Q20,75 15,80"/>
+      <path d="M55,80 Q60,85 65,80 Q60,75 55,80"/>
+    </g>
+    
+    <!-- Rabbet -->
+    <rect x="18" y="23" width="44" height="54" fill="none" stroke="#000" stroke-width="0.03" opacity="0.5"/>
+    
+    <!-- Ornate hanger -->
+    <path d="M35,0 Q40,0 45,0 Q40,5 35,0" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Label -->
+    <text x="40" y="115" font-family="Arial" font-size="6" text-anchor="middle" fill="#666">Ornate Victorian 4"x6"</text>
+  </g>
+  
+  <!-- Multi-Photo Collage Frame -->
+  <g id="collage-frame" transform="translate(10, 200)">
+    <!-- Outer frame -->
+    <rect x="0" y="0" width="180" height="120" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Photo openings -->
+    <rect x="10" y="10" width="50" height="40" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="70" y="10" width="40" height="50" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="120" y="10" width="50" height="40" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="10" y="60" width="60" height="50" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="80" y="70" width="40" height="40" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="130" y="60" width="40" height="50" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Connecting design elements -->
+    <g stroke="#000" stroke-width="0.05" fill="none" opacity="0.7">
+      <path d="M65,30 Q68,25 72,30"/>
+      <path d="M115,30 Q118,25 122,30"/>
+      <path d="M75,65 Q80,62 85,65"/>
+      <path d="M125,85 Q128,80 132,85"/>
+    </g>
+    
+    <!-- Rabbets for each opening -->
+    <rect x="8" y="8" width="54" height="44" fill="none" stroke="#000" stroke-width="0.03" opacity="0.5"/>
+    <rect x="68" y="8" width="44" height="54" fill="none" stroke="#000" stroke-width="0.03" opacity="0.5"/>
+    <rect x="118" y="8" width="54" height="44" fill="none" stroke="#000" stroke-width="0.03" opacity="0.5"/>
+    <rect x="8" y="58" width="64" height="54" fill="none" stroke="#000" stroke-width="0.03" opacity="0.5"/>
+    <rect x="78" y="68" width="44" height="44" fill="none" stroke="#000" stroke-width="0.03" opacity="0.5"/>
+    <rect x="128" y="58" width="44" height="54" fill="none" stroke="#000" stroke-width="0.03" opacity="0.5"/>
+    
+    <!-- Hangers -->
+    <rect x="40" y="0" width="8" height="4" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="130" y="0" width="8" height="4" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Label -->
+    <text x="90" y="140" font-family="Arial" font-size="6" text-anchor="middle" fill="#666">Multi-Photo Collage Frame</text>
+  </g>
+  
+  <!-- Circle/Oval Frames -->
+  <g id="circle-frames" transform="translate(200, 200)">
+    <!-- Large circle frame -->
+    <circle cx="50" cy="50" r="45" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="50" cy="50" r="30" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Decorative ring pattern -->
+    <g stroke="#000" stroke-width="0.05" fill="none" opacity="0.7">
+      <circle cx="50" cy="50" r="37"/>
+      <circle cx="50" cy="50" r="38"/>
+      <!-- Radial pattern -->
+      <line x1="50" y1="12" x2="50" y2="18"/>
+      <line x1="68" y1="18" x2="65" y2="23"/>
+      <line x1="82" y1="32" x2="77" y2="35"/>
+      <line x1="88" y1="50" x2="82" y2="50"/>
+      <line x1="82" y1="68" x2="77" y2="65"/>
+      <line x1="68" y1="82" x2="65" y2="77"/>
+      <line x1="50" y1="88" x2="50" y2="82"/>
+      <line x1="32" y1="82" x2="35" y2="77"/>
+      <line x1="18" y1="68" x2="23" y2="65"/>
+      <line x1="12" y1="50" x2="18" y2="50"/>
+      <line x1="18" y1="32" x2="23" y2="35"/>
+      <line x1="32" y1="18" x2="35" y2="23"/>
+    </g>
+    
+    <!-- Rabbet -->
+    <circle cx="50" cy="50" r="32" fill="none" stroke="#000" stroke-width="0.03" opacity="0.5"/>
+    
+    <!-- Oval frame -->
+    <ellipse cx="150" cy="50" rx="40" ry="30" fill="none" stroke="#000" stroke-width="0.1"/>
+    <ellipse cx="150" cy="50" rx="25" ry="18" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Oval decorative elements -->
+    <g stroke="#000" stroke-width="0.05" fill="none" opacity="0.7">
+      <ellipse cx="150" cy="50" rx="32" ry="24"/>
+      <path d="M150,26 Q155,20 160,26"/>
+      <path d="M150,74 Q155,80 160,74"/>
+      <path d="M118,50 Q110,45 118,40"/>
+      <path d="M182,50 Q190,55 182,60"/>
+    </g>
+    
+    <!-- Oval rabbet -->
+    <ellipse cx="150" cy="50" rx="27" ry="20" fill="none" stroke="#000" stroke-width="0.03" opacity="0.5"/>
+    
+    <!-- Hangers -->
+    <rect x="47" y="5" width="6" height="3" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="147" y="20" width="6" height="3" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Labels -->
+    <text x="50" y="120" font-family="Arial" font-size="6" text-anchor="middle" fill="#666">Circle Frame</text>
+    <text x="150" y="120" font-family="Arial" font-size="6" text-anchor="middle" fill="#666">Oval Frame</text>
+  </g>
+  
+  <!-- Frame Stand/Easel System -->
+  <g id="frame-stands" transform="translate(10, 350)">
+    <!-- Adjustable easel stand -->
+    <rect x="0" y="0" width="60" height="80" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Stand legs -->
+    <line x1="15" y1="80" x2="15" y2="120" stroke="#000" stroke-width="0.1"/>
+    <line x1="45" y1="80" x2="45" y2="120" stroke="#000" stroke-width="0.1"/>
+    <!-- Cross brace -->
+    <line x1="15" y1="110" x2="45" y2="110" stroke="#000" stroke-width="0.1"/>
+    <!-- Adjustment slots -->
+    <rect x="12" y="85" width="6" height="20" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="42" y="85" width="6" height="20" fill="none" stroke="#000" stroke-width="0.1"/>
+    
+    <!-- Simple L-bracket stand -->
+    <rect x="80" y="0" width="40" height="60" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="80" y="55" width="20" height="25" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Fold line -->
+    <line x1="80" y1="60" x2="100" y2="60" stroke="#000" stroke-width="0.05" stroke-dasharray="2,2"/>
+    
+    <!-- Prop stand (triangular) -->
+    <polygon points="130,60 170,60 150,80" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Fold lines -->
+    <line x1="140" y1="60" x2="150" y2="80" stroke="#000" stroke-width="0.05" stroke-dasharray="2,2"/>
+    <line x1="160" y1="60" x2="150" y2="80" stroke="#000" stroke-width="0.05" stroke-dasharray="2,2"/>
+    
+    <!-- Labels -->
+    <text x="30" y="140" font-family="Arial" font-size="5" text-anchor="middle" fill="#666">Adjustable Easel</text>
+    <text x="90" y="90" font-family="Arial" font-size="5" text-anchor="middle" fill="#666">L-Bracket</text>
+    <text x="150" y="95" font-family="Arial" font-size="5" text-anchor="middle" fill="#666">Prop Stand</text>
+  </g>
+  
+  <!-- Frame Corner Joints -->
+  <g id="corner-joints" transform="translate(200, 350)">
+    <!-- Miter joint template -->
+    <polygon points="0,0 40,0 40,40 0,40" fill="none" stroke="#000" stroke-width="0.1"/>
+    <line x1="0" y1="0" x2="40" y2="40" stroke="#000" stroke-width="0.1"/>
+    <text x="20" y="55" font-family="Arial" font-size="5" text-anchor="middle" fill="#666">45° Miter</text>
+    
+    <!-- Box joint template -->
+    <rect x="60" y="0" width="40" height="40" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="60" y="0" width="5" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="60" y="15" width="5" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="60" y="30" width="5" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="95" y="5" width="5" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="95" y="20" width="5" height="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="95" y="35" width="5" height="5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <text x="80" y="55" font-family="Arial" font-size="5" text-anchor="middle" fill="#666">Box Joint</text>
+    
+    <!-- Rabbet joint -->
+    <rect x="120" y="0" width="40" height="40" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="120" y="0" width="35" height="5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <rect x="155" y="0" width="5" height="35" fill="none" stroke="#000" stroke-width="0.1"/>
+    <text x="140" y="55" font-family="Arial" font-size="5" text-anchor="middle" fill="#666">Rabbet Joint</text>
+  </g>
+  
+  <!-- Assembly Instructions -->
+  <text x="10" y="490" font-family="Arial" font-size="8" fill="#666">Material: 1/4" hardwood plywood or 1/2" solid wood | Include glass/acrylic and backing board</text>
+  <text x="10" y="505" font-family="Arial" font-size="8" fill="#666">Assembly: Cut rabbet for glass, sand smooth, apply finish before assembly</text>
+  <text x="10" y="520" font-family="Arial" font-size="8" fill="#666">Hardware: Picture frame clips, hanging wire, or sawtooth hangers</text>
+  <text x="10" y="535" font-family="Arial" font-size="8" fill="#666">Finishing: Multiple thin coats, sand between coats for smooth finish</text>
+  <text x="10" y="550" font-family="Arial" font-size="8" fill="#666">Glass: Standard picture frame glass or acrylic sheet, cut 1/8" smaller than rabbet</text>
+</svg>

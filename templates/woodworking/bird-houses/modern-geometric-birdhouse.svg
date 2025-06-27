@@ -1,0 +1,109 @@
+<svg width="350" height="450" viewBox="0 0 350 450" xmlns="http://www.w3.org/2000/svg">
+  <!-- Modern Geometric Bird House - Hexagonal Design -->
+  
+  <!-- Front Panel (Hexagonal with entrance) -->
+  <g id="front-panel" transform="translate(10, 10)">
+    <polygon points="30,0 60,17.5 60,52.5 30,70 0,52.5 0,17.5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Entrance hole -->
+    <circle cx="30" cy="25" r="10" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Modern perch line -->
+    <line x1="15" y1="45" x2="45" y2="45" stroke="#000" stroke-width="0.1"/>
+    <!-- Assembly notches -->
+    <polygon points="29,0 31,0 31,5 29,5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <polygon points="59,17 61,17 61,22 59,22" fill="none" stroke="#000" stroke-width="0.1"/>
+    <polygon points="59,48 61,48 61,53 59,53" fill="none" stroke="#000" stroke-width="0.1"/>
+  </g>
+  
+  <!-- Back Panel (Hexagonal) -->
+  <g id="back-panel" transform="translate(80, 10)">
+    <polygon points="30,0 60,17.5 60,52.5 30,70 0,52.5 0,17.5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Mounting slot -->
+    <rect x="28" y="15" width="4" height="15" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Assembly notches -->
+    <polygon points="29,0 31,0 31,5 29,5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <polygon points="59,17 61,17 61,22 59,22" fill="none" stroke="#000" stroke-width="0.1"/>
+    <polygon points="59,48 61,48 61,53 59,53" fill="none" stroke="#000" stroke-width="0.1"/>
+  </g>
+  
+  <!-- Side Panels (4 identical trapezoids) -->
+  <g id="side-panel-1" transform="translate(10, 90)">
+    <polygon points="0,0 30,0 35,70 -5,70" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Tab for assembly -->
+    <polygon points="14,0 16,0 16,-5 14,-5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <polygon points="14,70 16,70 16,75 14,75" fill="none" stroke="#000" stroke-width="0.1"/>
+  </g>
+  
+  <g id="side-panel-2" transform="translate(50, 90)">
+    <polygon points="0,0 30,0 35,70 -5,70" fill="none" stroke="#000" stroke-width="0.1"/>
+    <polygon points="14,0 16,0 16,-5 14,-5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <polygon points="14,70 16,70 16,75 14,75" fill="none" stroke="#000" stroke-width="0.1"/>
+  </g>
+  
+  <g id="side-panel-3" transform="translate(90, 90)">
+    <polygon points="0,0 30,0 35,70 -5,70" fill="none" stroke="#000" stroke-width="0.1"/>
+    <polygon points="14,0 16,0 16,-5 14,-5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <polygon points="14,70 16,70 16,75 14,75" fill="none" stroke="#000" stroke-width="0.1"/>
+  </g>
+  
+  <g id="side-panel-4" transform="translate(130, 90)">
+    <polygon points="0,0 30,0 35,70 -5,70" fill="none" stroke="#000" stroke-width="0.1"/>
+    <polygon points="14,0 16,0 16,-5 14,-5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <polygon points="14,70 16,70 16,75 14,75" fill="none" stroke="#000" stroke-width="0.1"/>
+  </g>
+  
+  <!-- Bottom Panel (Hexagonal) -->
+  <g id="bottom-panel" transform="translate(10, 180)">
+    <polygon points="25,0 50,14.5 50,43.5 25,58 0,43.5 0,14.5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Drainage holes -->
+    <circle cx="15" cy="18" r="1.5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="35" cy="18" r="1.5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <circle cx="25" cy="40" r="1.5" fill="none" stroke="#000" stroke-width="0.1"/>
+    <!-- Slot tabs for assembly -->
+    <polygon points="24,0 26,0 26,-3 24,-3" fill="none" stroke="#000" stroke-width="0.1"/>
+    <polygon points="49,14 51,14 51,17 49,17" fill="none" stroke="#000" stroke-width="0.1"/>
+    <polygon points="49,41 51,41 51,44 49,44" fill="none" stroke="#000" stroke-width="0.1"/>
+    <polygon points="24,58 26,58 26,61 24,61" fill="none" stroke="#000" stroke-width="0.1"/>
+  </g>
+  
+  <!-- Roof Panels (6 triangular sections) -->
+  <g id="roof-panel-1" transform="translate(80, 180)">
+    <polygon points="0,0 35,0 17.5,30" fill="none" stroke="#000" stroke-width="0.1"/>
+    <polygon points="16.5,0 18.5,0 18.5,-3 16.5,-3" fill="none" stroke="#000" stroke-width="0.1"/>
+  </g>
+  
+  <g id="roof-panel-2" transform="translate(120, 180)">
+    <polygon points="0,0 35,0 17.5,30" fill="none" stroke="#000" stroke-width="0.1"/>
+    <polygon points="16.5,0 18.5,0 18.5,-3 16.5,-3" fill="none" stroke="#000" stroke-width="0.1"/>
+  </g>
+  
+  <g id="roof-panel-3" transform="translate(160, 180)">
+    <polygon points="0,0 35,0 17.5,30" fill="none" stroke="#000" stroke-width="0.1"/>
+    <polygon points="16.5,0 18.5,0 18.5,-3 16.5,-3" fill="none" stroke="#000" stroke-width="0.1"/>
+  </g>
+  
+  <g id="roof-panel-4" transform="translate(80, 220)">
+    <polygon points="0,0 35,0 17.5,30" fill="none" stroke="#000" stroke-width="0.1"/>
+    <polygon points="16.5,0 18.5,0 18.5,-3 16.5,-3" fill="none" stroke="#000" stroke-width="0.1"/>
+  </g>
+  
+  <g id="roof-panel-5" transform="translate(120, 220)">
+    <polygon points="0,0 35,0 17.5,30" fill="none" stroke="#000" stroke-width="0.1"/>
+    <polygon points="16.5,0 18.5,0 18.5,-3 16.5,-3" fill="none" stroke="#000" stroke-width="0.1"/>
+  </g>
+  
+  <g id="roof-panel-6" transform="translate(160, 220)">
+    <polygon points="0,0 35,0 17.5,30" fill="none" stroke="#000" stroke-width="0.1"/>
+    <polygon points="16.5,0 18.5,0 18.5,-3 16.5,-3" fill="none" stroke="#000" stroke-width="0.1"/>
+  </g>
+  
+  <!-- Perch Rod -->
+  <g id="perch-rod" transform="translate(10, 260)">
+    <rect x="0" y="0" width="40" height="3" fill="none" stroke="#000" stroke-width="0.1"/>
+  </g>
+  
+  <!-- Assembly Guide -->
+  <text x="10" y="290" font-family="Arial" font-size="8" fill="#666">Material: 3mm plywood or acrylic | Modern hexagonal design</text>
+  <text x="10" y="305" font-family="Arial" font-size="8" fill="#666">Assembly: Slot-together design with minimal glue</text>
+  <text x="10" y="320" font-family="Arial" font-size="8" fill="#666">Entrance: 20mm diameter for various bird species</text>
+  <text x="10" y="335" font-family="Arial" font-size="8" fill="#666">Finish: Natural wood or painted accent colors</text>
+</svg>

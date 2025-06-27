@@ -8,7 +8,7 @@ tags: ["design", "tutorial", "laser-cutting"]
 readingTime: 8
 ---
 
-![Laser cut layered artwork with geometric patterns](../assets/design-principles-showcase.jpg)
+![Laser cut layered artwork with geometric patterns](/images/blog/design-principles-hero.jpg)
 
 ## Introduction
 
