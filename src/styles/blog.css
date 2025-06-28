@@ -333,7 +333,7 @@
 
 /* Table of contents */
 .table-of-contents {
-  @apply bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-750 rounded-xl p-6 mb-8 border border-gray-200 dark:border-gray-700;
+  @apply bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 rounded-xl p-6 mb-8 border border-gray-200 dark:border-gray-700;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
