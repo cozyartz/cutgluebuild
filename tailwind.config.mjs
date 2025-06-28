@@ -7,6 +7,9 @@ export default {
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
+      borderWidth: {
+        3: '3px',
+      },
       colors: {
         primary: {
           50: '#fff7ed',
