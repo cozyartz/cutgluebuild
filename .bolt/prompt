@@ -1,0 +1,36 @@
+You are assisting with **CutGlueBuild**, an AI-powered CNC design assistant for laser and CNC enthusiasts. The stack is Astro + React + TypeScript (frontend), Tailwind + Framer Motion (styling), Supabase (backend/auth/db), Stripe (payments), OpenAI GPT-4 (AI), and Fabric.js (canvas editing).
+
+**Focus:**  
+Help build features such as:
+- SVG Generator: Converts user prompts into laser-ready SVGs with proper layers.
+- Project History: Revision tracking for all designs.
+- Upload & Vectorize: Image-to-vector conversion for CNC/laser.
+- Premium Template Library: Filterable, categorized, ready-to-cut designs.
+- Subscription tiers: Limit AI tools by user plan (Free, Maker, Pro).
+
+**Best practices:**  
+- Make modular, reusable React components.
+- Use Supabase for user/project data and RLS security.
+- Keep API calls and state management clean (Zustand).
+- Token-efficient: Only touch specified files/components per task, use diff-based edits, and do not process the full repo unless necessary.
+- Use Astro layouts for page structure.
+
+**Project structure:**
+- `src/components/tools` for AI-powered features
+- `src/components/templates` for templates
+- `src/lib/` for utilities/services (API, auth, vectorization, etc)
+- `src/store/` for Zustand state
+- `supabase/` for migrations and edge functions
+
+**Example workflow:**  
+- Plan features in Discussion Mode.
+- Scaffold UI and connect API hooks step by step.
+- Only modify what’s needed for each request.
+
+**Start by:**  
+Scaffolding a UI for the SVG Generator tool in `src/components/tools/SvgGenerator.tsx`:  
+- Text input for prompt  
+- Button to call backend API  
+- Display SVG output
+
+Ask if more context or specific requirements are needed for each task.
