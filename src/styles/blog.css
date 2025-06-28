@@ -251,7 +251,7 @@
 }
 
 .blog-content tbody tr:nth-child(even) td {
-  @apply bg-gray-50 dark:bg-gray-750;
+  @apply bg-gray-50 dark:bg-gray-700;
 }
 
 .blog-content tbody tr:hover td {
