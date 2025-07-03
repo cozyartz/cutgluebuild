@@ -12,7 +12,7 @@ interface TemplateDownloadButtonProps {
 
 export default function TemplateDownloadButton({ 
   templateId, 
-  templateTitle, 
+  templateTitle,
   isPremium, 
   className = '' 
 }: TemplateDownloadButtonProps) {
@@ -64,13 +64,8 @@ export default function TemplateDownloadButton({
             template_id: templateId
           });
 
-        // Increment download count
-        await supabase
-          .from('templates')
-          .update({ 
-            download_count: supabase.sql`download_count + 1` 
-          })
-          .eq('id', templateId);
+        // Increment download count (using rpc call for atomic increment)
+        await supabase.rpc('increment_download_count', { template_id: templateId });
       }
 
       // Create and download file

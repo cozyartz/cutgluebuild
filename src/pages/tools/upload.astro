@@ -168,14 +168,14 @@ import Header from '../../components/Header.astro';
 </Layout>
 
 <script>
-  const uploadArea = document.getElementById('upload-area');
-  const fileInput = document.getElementById('file-input');
-  const settingsPanel = document.getElementById('settings-panel');
-  const vectorizeBtn = document.getElementById('vectorize-btn');
-  const editBtn = document.getElementById('edit-btn');
-  const downloadBtn = document.getElementById('download-btn');
-  const previewContent = document.getElementById('preview-content');
-  const toggleViewBtn = document.getElementById('toggle-view');
+  const uploadArea = document.getElementById('upload-area') as HTMLElement;
+  const fileInput = document.getElementById('file-input') as HTMLInputElement;
+  const settingsPanel = document.getElementById('settings-panel') as HTMLElement;
+  const vectorizeBtn = document.getElementById('vectorize-btn') as HTMLButtonElement;
+  const editBtn = document.getElementById('edit-btn') as HTMLButtonElement;
+  const downloadBtn = document.getElementById('download-btn') as HTMLButtonElement;
+  const previewContent = document.getElementById('preview-content') as HTMLElement;
+  const toggleViewBtn = document.getElementById('toggle-view') as HTMLButtonElement;
   
   let currentImage = null;
   let currentVector = null;
@@ -211,13 +211,14 @@ import Header from '../../components/Header.astro';
   // File input handler
   if (fileInput) {
     fileInput.addEventListener('change', (e) => {
-      if (e.target.files.length > 0) {
-        handleFileUpload(e.target.files[0]);
+      const target = e.target as HTMLInputElement;
+      if (target.files && target.files.length > 0) {
+        handleFileUpload(target.files[0]);
       }
     });
   }
 
-  function handleFileUpload(file) {
+  function handleFileUpload(file: File) {
     if (!file.type.startsWith('image/')) {
       alert('Please upload an image file');
       return;
@@ -232,7 +233,7 @@ import Header from '../../components/Header.astro';
     reader.readAsDataURL(file);
   }
 
-  function displayImage(imageSrc) {
+  function displayImage(imageSrc: string) {
     previewContent.innerHTML = `
       <div class="grid ${splitView ? 'grid-cols-2 gap-4' : 'grid-cols-1'}">
         <div class="text-center">

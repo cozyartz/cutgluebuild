@@ -1,4 +1,4 @@
-import type { CollectionEntry, z } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 import { defineCollection, z as zod } from 'astro:content';
 
 const blogCollection = defineCollection({

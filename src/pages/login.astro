@@ -139,8 +139,7 @@ import Footer from '../components/Footer.astro';
 </Layout>
 
 <script>
-  import { authService } from '../lib/auth';
-  import toast from 'react-hot-toast';
+  import { supabase } from '../lib/supabase';
 
   const loginForm = document.getElementById('login-form') as HTMLFormElement;
   const googleSignin = document.getElementById('google-signin');
@@ -151,11 +150,17 @@ import Footer from '../components/Footer.astro';
       e.preventDefault();
       
       const formData = new FormData(loginForm);
-      const email = formData.get('email') as string;
-      const password = formData.get('password') as string;
+      const email = formData.get('email');
+      const password = formData.get('password');
 
       try {
-        await authService.signIn(email, password);
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (error) throw error;
+        
         window.location.href = '/tools';
       } catch (error) {
         console.error('Login error:', error);
@@ -167,7 +172,14 @@ import Footer from '../components/Footer.astro';
   if (googleSignin) {
     googleSignin.addEventListener('click', async () => {
       try {
-        await authService.signInWithProvider('google');
+        const { error } = await supabase.auth.signInWithOAuth({
+          provider: 'google',
+          options: {
+            redirectTo: `${window.location.origin}/auth/callback`,
+          },
+        });
+
+        if (error) throw error;
       } catch (error) {
         console.error('Google signin error:', error);
         alert('Failed to sign in with Google.');
@@ -178,7 +190,14 @@ import Footer from '../components/Footer.astro';
   if (githubSignin) {
     githubSignin.addEventListener('click', async () => {
       try {
-        await authService.signInWithProvider('github');
+        const { error } = await supabase.auth.signInWithOAuth({
+          provider: 'github',
+          options: {
+            redirectTo: `${window.location.origin}/auth/callback`,
+          },
+        });
+
+        if (error) throw error;
       } catch (error) {
         console.error('GitHub signin error:', error);
         alert('Failed to sign in with GitHub.');

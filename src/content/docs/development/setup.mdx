@@ -1,0 +1,394 @@
+---
+title: Development Setup Guide
+description: Complete guide to setting up your local development environment for CutGlueBuild
+---
+
+import { Card, CardGrid, Badge, Aside } from '@astrojs/starlight/components';
+
+# Development Setup Guide
+
+Get your CutGlueBuild development environment up and running quickly with this comprehensive setup guide.
+
+## Prerequisites
+
+Before you begin, ensure you have these tools installed:
+
+<CardGrid>
+  <Card title="Node.js 18+" icon="laptop">
+    **Required for Astro and package management**
+    
+    Download from [nodejs.org](https://nodejs.org/) or use a version manager like nvm.
+    
+    ```bash
+    node --version  # Should be 18.0.0 or higher
+    npm --version   # Should be included with Node.js
+    ```
+  </Card>
+  
+  <Card title="Git" icon="github">
+    **Version control and repository management**
+    
+    Download from [git-scm.com](https://git-scm.com/) or install via your package manager.
+    
+    ```bash
+    git --version
+    ```
+  </Card>
+  
+  <Card title="Code Editor" icon="pencil">
+    **VS Code recommended with extensions:**
+    
+    - Astro
+    - TypeScript and JavaScript
+    - Tailwind CSS IntelliSense
+    - Prettier
+  </Card>
+  
+  <Card title="Terminal" icon="terminal">
+    **Command line interface**
+    
+    Use your system's default terminal or install a modern alternative like:
+    - iTerm2 (macOS)
+    - Windows Terminal
+    - Hyper (cross-platform)
+  </Card>
+</CardGrid>
+
+## Environment Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/cozyartz/cutgluebuild.git
+cd cutgluebuild
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+This will install all required packages including:
+- Astro 4.x
+- React and TypeScript
+- Tailwind CSS
+- Supabase client
+- Fabric.js for canvas editing
+
+### 3. Environment Variables
+
+Create your environment file:
+
+```bash
+cp .env.example .env
+```
+
+Configure the following variables in `.env`:
+
+<Aside type="tip">
+  **Development Tip**: The app gracefully handles missing environment variables. OpenAI features fall back to mock data, and Supabase uses a mock client during builds.
+</Aside>
+
+#### Required for Full Functionality
+
+```bash
+# Supabase Configuration
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+
+# Stripe Configuration  
+VITE_STRIPE_PUBLISHABLE_KEY=pk_test_...
+STRIPE_SECRET_KEY=sk_test_...
+
+# Site Configuration
+VITE_SITE_URL=http://localhost:4321
+```
+
+#### Optional Enhancements
+
+```bash
+# OpenAI Integration (falls back to mock data)
+OPENAI_API_KEY=sk-...
+
+# Affiliate Program
+VITE_AMAZON_ASSOCIATE_TAG=your-associate-tag
+```
+
+### 4. Database Setup (Optional)
+
+For full functionality, set up a Supabase project:
+
+1. **Create Supabase Project**
+   - Go to [supabase.com](https://supabase.com)
+   - Create a new project
+   - Note your project URL and anon key
+
+2. **Run Migrations**
+   ```bash
+   # Install Supabase CLI
+   npm install -g supabase
+   
+   # Link to your project
+   supabase link --project-ref your-project-ref
+   
+   # Push database schema
+   supabase db push
+   ```
+
+3. **Populate Sample Data**
+   ```bash
+   # Run the template population script
+   supabase db reset
+   ```
+
+## Development Commands
+
+<CardGrid>
+  <Card title="Development Server" icon="rocket">
+    ```bash
+    npm run dev
+    ```
+    
+    Starts Astro dev server at `http://localhost:4321` with:
+    - Hot module reloading
+    - TypeScript checking
+    - Tailwind CSS compilation
+  </Card>
+  
+  <Card title="Production Build" icon="puzzle">
+    ```bash
+    npm run build
+    ```
+    
+    Builds for production with:
+    - TypeScript compilation
+    - Astro static site generation
+    - Asset optimization
+  </Card>
+  
+  <Card title="Preview Build" icon="magnifier">
+    ```bash
+    npm run preview
+    ```
+    
+    Preview production build locally to test:
+    - Static generation
+    - Routing
+    - Asset loading
+  </Card>
+  
+  <Card title="Type Checking" icon="approve">
+    ```bash
+    astro check
+    ```
+    
+    Validates TypeScript and Astro components:
+    - Type errors
+    - Component props
+    - Missing imports
+  </Card>
+</CardGrid>
+
+## Project Structure Overview
+
+```
+cutgluebuild/
+├── public/                 # Static assets
+├── src/
+│   ├── components/        # React components
+│   │   ├── home/         # Homepage sections  
+│   │   ├── tools/        # AI tool components
+│   │   └── templates/    # Template components
+│   ├── content/          # Content collections
+│   │   ├── blog/        # Blog posts (MDX)
+│   │   └── docs/        # Documentation (MDX)  
+│   ├── layouts/          # Astro layouts
+│   ├── lib/              # Utilities and services
+│   │   ├── auth.ts      # Authentication service
+│   │   ├── supabase.ts  # Database client
+│   │   ├── openai.ts    # AI integration  
+│   │   └── affiliates.ts # Affiliate management
+│   ├── pages/            # Astro pages and routes
+│   ├── store/            # Zustand state management
+│   └── styles/           # Global CSS and Tailwind
+├── supabase/
+│   ├── functions/        # Edge functions
+│   └── migrations/       # Database migrations
+└── templates/            # SVG template files
+```
+
+## Key Development Patterns
+
+### Astro Islands Architecture
+
+CutGlueBuild uses Astro's islands architecture:
+
+- **Static by default**: Pages are server-rendered HTML
+- **Interactive islands**: React components with `client:load` directive
+- **Shared state**: Zustand for cross-component state management
+
+```astro
+---
+// Astro component (server-rendered)
+import InteractiveComponent from '../components/InteractiveComponent.tsx';
+---
+
+<div>
+  <h1>Static Content</h1>
+  <!-- Interactive React component -->
+  <InteractiveComponent client:load />
+</div>
+```
+
+### Authentication Flow
+
+1. **Server-side checks** in Astro pages for protected routes
+2. **Client-side state** managed by Zustand with persistence
+3. **Automatic session refresh** and auth state synchronization
+
+```typescript
+// In Astro pages
+const user = await authService.getCurrentUser();
+if (!user) {
+  return Astro.redirect('/login');
+}
+
+// In React components  
+const { user, isLoading } = useAuthStore();
+```
+
+### Database Integration
+
+- **Direct Supabase calls** in Astro pages for data fetching
+- **React Query patterns** for client-side data management
+- **Row Level Security** ensures data access control
+
+### Content Management
+
+- **Blog posts**: MDX files in `src/content/blog/`
+- **Documentation**: MDX files in `src/content/docs/`
+- **Type-safe**: Defined schemas in `src/content.config.ts`
+
+## Development Workflow
+
+### 1. Feature Development
+
+```bash
+# Create feature branch
+git checkout -b feature/your-feature-name
+
+# Start development server
+npm run dev
+
+# Make changes and test
+# ... development work ...
+
+# Type check and build
+npm run build
+
+# Commit changes
+git add .
+git commit -m "feat: your feature description"
+```
+
+### 2. Database Changes
+
+For schema modifications:
+
+```bash
+# Create migration
+supabase migration new your_migration_name
+
+# Edit migration file in supabase/migrations/
+
+# Test migration
+supabase db reset
+
+# Push to remote
+supabase db push
+```
+
+### 3. Component Development
+
+When creating new components:
+
+1. **Follow TypeScript patterns** from existing components
+2. **Use Tailwind classes** consistently with the design system
+3. **Add proper types** for props and state
+4. **Test both light and dark modes**
+
+### 4. Content Creation
+
+For blog posts and documentation:
+
+1. **Create MDX file** in appropriate content directory
+2. **Follow frontmatter schema** defined in `content.config.ts`
+3. **Use components** from Starlight for documentation
+4. **Test responsive design** and reading experience
+
+## Troubleshooting
+
+### Common Issues
+
+<Aside type="caution">
+  **Build Errors**: If you encounter build errors, ensure all environment variables are properly configured or use the mock fallbacks.
+</Aside>
+
+**Port Already in Use**
+```bash
+# Kill process on port 4321
+lsof -ti:4321 | xargs kill -9
+
+# Or use different port
+npm run dev -- --port 3000
+```
+
+**TypeScript Errors**
+```bash
+# Clear TypeScript cache
+rm -rf node_modules/.cache
+npm run build
+
+# Check specific errors
+astro check
+```
+
+**Supabase Connection Issues**
+- Verify environment variables are correct
+- Check Supabase project status
+- Ensure RLS policies allow your operations
+
+**Missing Dependencies**
+```bash
+# Clean install
+rm -rf node_modules package-lock.json
+npm install
+```
+
+### Development Tools
+
+**Recommended VS Code Extensions:**
+- Astro (official)
+- TypeScript and JavaScript Language Features
+- Tailwind CSS IntelliSense
+- Prettier - Code formatter
+- ES7+ React/Redux/React-Native snippets
+
+**Browser Extensions:**
+- React Developer Tools
+- Supabase Devtools (if available)
+
+## Next Steps
+
+Once your environment is set up:
+
+1. **Explore the codebase** - Start with `src/pages/index.astro`
+2. **Read the documentation** - Check out our [blog writing guide](/docs/guides/blog-writing-guide/)
+3. **Make a test change** - Try modifying a component
+4. **Contribute** - See our [contributing guidelines](/docs/development/contributing/)
+
+---
+
+*Need help? Check our [troubleshooting guide](/docs/development/troubleshooting/) or reach out to the team.*

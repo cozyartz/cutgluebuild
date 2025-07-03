@@ -1,0 +1,22 @@
+---
+import { supabase } from '../../lib/supabase';
+
+// Handle OAuth callback and redirect
+const url = new URL(Astro.request.url);
+const code = url.searchParams.get('code');
+
+if (code) {
+  const { error } = await supabase.auth.exchangeCodeForSession(code);
+  
+  if (error) {
+    console.error('OAuth callback error:', error);
+    return Astro.redirect('/login?error=auth_failed');
+  }
+  
+  // Successful authentication - redirect to tools page
+  return Astro.redirect('/tools');
+}
+
+// If no code parameter, redirect back to login
+return Astro.redirect('/login');
+---

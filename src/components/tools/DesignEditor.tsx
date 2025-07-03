@@ -3,9 +3,10 @@ import {
   Canvas,
   Rect,
   Circle,
-  Text,
+  Textbox,
   loadSVGFromString,
   util as fabricUtil,
+  FabricObject,
 } from 'fabric';
 import toast from 'react-hot-toast';
 
@@ -53,9 +54,15 @@ export default function DesignEditor({
 
   const loadSvgData = (fabricCanvas: Canvas, svgData: string) => {
     loadSVGFromString(svgData, (objects, options) => {
-      const obj = fabricUtil.groupSVGElements(objects, options);
-      fabricCanvas.add(obj);
-      fabricCanvas.centerObject(obj);
+      if (Array.isArray(objects)) {
+        const obj = fabricUtil.groupSVGElements(objects as FabricObject[], options);
+        fabricCanvas.add(obj);
+        fabricCanvas.centerObject(obj);
+      } else {
+        // Handle single object case
+        fabricCanvas.add(objects as unknown as FabricObject);
+        fabricCanvas.centerObject(objects as unknown as FabricObject);
+      }
       fabricCanvas.renderAll();
     });
   };
@@ -63,7 +70,7 @@ export default function DesignEditor({
   const addShape = (shape: 'rect' | 'circle' | 'text') => {
     if (!canvas) return;
 
-    let obj;
+    let obj: FabricObject;
     if (shape === 'rect') {
       obj = new Rect({
         left: 100,
@@ -84,12 +91,13 @@ export default function DesignEditor({
         strokeWidth: 2,
       });
     } else {
-      obj = new Text('Sample Text', {
+      obj = new Textbox('Sample Text', {
         left: 100,
         top: 100,
         fontFamily: 'Arial',
         fontSize: 20,
         fill: '#000000',
+        width: 200,
       });
     }
 

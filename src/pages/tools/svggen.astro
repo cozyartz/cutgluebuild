@@ -179,11 +179,11 @@ import Header from '../../components/Header.astro';
 </Layout>
 
 <script>
-  const form = document.getElementById('svg-generator-form');
-  const generateBtn = document.getElementById('generate-btn');
-  const editBtn = document.getElementById('edit-btn');
-  const downloadBtn = document.getElementById('download-btn');
-  const svgPreview = document.getElementById('svg-preview');
+  const form = document.getElementById('svg-generator-form') as HTMLFormElement;
+  const generateBtn = document.getElementById('generate-btn') as HTMLButtonElement;
+  const editBtn = document.getElementById('edit-btn') as HTMLButtonElement;
+  const downloadBtn = document.getElementById('download-btn') as HTMLButtonElement;
+  const svgPreview = document.getElementById('svg-preview') as HTMLElement;
   
   let currentSvgData = null;
 
@@ -192,11 +192,11 @@ import Header from '../../components/Header.astro';
       e.preventDefault();
       
       const formData = new FormData(form);
-      const description = formData.get('description');
-      const material = formData.get('material');
-      const width = formData.get('width');
-      const height = formData.get('height');
-      const style = formData.get('style');
+      const description = formData.get('description') as string;
+      const material = formData.get('material') as string;
+      const width = parseInt(formData.get('width') as string) || 400;
+      const height = parseInt(formData.get('height') as string) || 300;
+      const style = formData.get('style') as string;
 
       // Update button state
       generateBtn.textContent = 'Generating...';
@@ -212,7 +212,7 @@ import Header from '../../components/Header.astro';
             <rect x="10" y="10" width="${width-20}" height="${height-20}" fill="none" stroke="#000" stroke-width="1"/>
             <circle cx="${width/2}" cy="${height/2}" r="${Math.min(width, height)/4}" fill="none" stroke="#000" stroke-width="1"/>
             <text x="${width/2}" y="${height/2}" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">
-              ${description.substring(0, 20)}...
+              ${description ? description.substring(0, 20) + '...' : 'Generated SVG'}
             </text>
           </svg>
         `;

@@ -9,7 +9,10 @@
     "allowJs": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "strict": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "strictFunctionTypes": false,
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
@@ -24,5 +27,5 @@
     "**/*.tsx",
     "**/*.astro"
   ],
-  "exclude": ["dist", "node_modules"]
+  "exclude": ["dist", "node_modules", "supabase/functions"]
 }

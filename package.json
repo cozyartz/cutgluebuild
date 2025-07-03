@@ -11,17 +11,20 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.4",
     "@astrojs/cloudflare": "^11.1.0",
     "@astrojs/mdx": "^3.1.7",
     "@astrojs/react": "^3.6.2",
     "@astrojs/starlight": "^0.28.2",
     "@astrojs/tailwind": "^5.1.1",
     "@heroicons/react": "^2.1.5",
+    "@stripe/stripe-js": "^7.4.0",
     "@supabase/supabase-js": "^2.45.4",
     "astro": "^4.15.11",
     "date-fns": "^4.1.0",
     "fabric": "^6.4.3",
     "framer-motion": "^11.11.7",
+    "openai": "^5.8.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-dropzone": "^14.2.9",
@@ -36,6 +39,6 @@
     "@types/react-dom": "^18.3.1",
     "@types/react-dropzone": "^5.1.0",
     "stripe": "^17.2.1",
-    "typescript": "^5.6.3"
+    "typescript": "^5.8.3"
   }
 }

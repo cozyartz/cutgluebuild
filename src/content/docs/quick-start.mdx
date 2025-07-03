@@ -1,0 +1,80 @@
+---
+title: Quick Start Guide
+description: Get CutGlueBuild running in 5 minutes
+---
+
+import { Badge } from '@astrojs/starlight/components';
+
+# Quick Start Guide
+
+Get CutGlueBuild running locally in just a few minutes.
+
+## 5-Minute Setup
+
+### 1. Clone and Install
+
+```bash
+git clone https://github.com/cozyartz/cutgluebuild.git
+cd cutgluebuild
+npm install
+```
+
+### 2. Start Development Server
+
+```bash
+npm run dev
+```
+
+<Badge text="Success!" variant="success" /> Your site is now running at `http://localhost:4321`
+
+### 3. Optional: Add Environment Variables
+
+Create `.env` file for full functionality:
+
+```bash
+# Minimal setup - add only what you need
+VITE_SITE_URL=http://localhost:4321
+
+# For AI features (optional)
+OPENAI_API_KEY=your_openai_key
+
+# For database features (optional)  
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_key
+```
+
+## What You Get
+
+✅ **Full website** with blog, templates, and tools  
+✅ **Mock data** for development without external services  
+✅ **Hot reloading** for instant feedback  
+✅ **TypeScript** support with error checking  
+✅ **Tailwind CSS** for rapid styling  
+
+## Common First Tasks
+
+### View the Site
+- Homepage: `http://localhost:4321`
+- Blog: `http://localhost:4321/blog`
+- Templates: `http://localhost:4321/templates`
+- Documentation: `http://localhost:4321/docs`
+
+### Make Your First Change
+1. Edit `src/pages/index.astro`
+2. Change the hero title text
+3. Save and see instant updates
+
+### Add a Blog Post
+1. Create `src/content/blog/my-first-post.md`
+2. Add frontmatter and content
+3. View at `http://localhost:4321/blog/my-first-post`
+
+## Need More?
+
+- **Full setup guide**: [Development Setup](/docs/development/setup/)
+- **Content creation**: [Blog Writing Guide](/docs/guides/blog-writing-guide/)
+- **Architecture overview**: [Database Schema](/docs/reference/database-schema/)
+
+---
+
+*Ready to build something amazing? Start exploring the codebase!*

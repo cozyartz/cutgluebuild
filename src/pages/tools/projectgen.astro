@@ -172,9 +172,9 @@ import Header from '../../components/Header.astro';
 </Layout>
 
 <script>
-  const form = document.getElementById('project-generator-form');
-  const generateBtn = document.getElementById('generate-btn');
-  const resultsContainer = document.getElementById('results-container');
+  const form = document.getElementById('project-generator-form') as HTMLFormElement;
+  const generateBtn = document.getElementById('generate-btn') as HTMLButtonElement;
+  const resultsContainer = document.getElementById('results-container') as HTMLElement;
 
   const mockProjects = [
     {
@@ -242,7 +242,7 @@ import Header from '../../components/Header.astro';
     });
   }
 
-  function displayResults(projects) {
+  function displayResults(projects: any[]) {
     resultsContainer.innerHTML = `
       <div class="space-y-6">
         ${projects.map(project => `

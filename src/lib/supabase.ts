@@ -8,20 +8,21 @@ const createMockClient = () => {
   const mockQuery = {
     data: [],
     error: null,
-    select: function() { return this; },
-    insert: function() { return this; },
-    update: function() { return this; },
-    upsert: function() { return this; },
-    delete: function() { return this; },
-    single: function() { return this; },
+    select: function() { return Promise.resolve({ data: [], error: null }); },
+    insert: function() { return Promise.resolve({ data: [], error: null }); },
+    update: function() { return Promise.resolve({ data: [], error: null }); },
+    upsert: function() { return Promise.resolve({ data: [], error: null }); },
+    delete: function() { return Promise.resolve({ data: [], error: null }); },
+    single: function() { return Promise.resolve({ data: null, error: null }); },
     eq: function() { return this; },
     order: function() { return this; },
-    limit: function() { return this; },
-    then: function(resolve) { resolve({ data: [], error: null }); return this; }
+    limit: function() { return this; }
   };
 
   return {
     from: () => mockQuery,
+    rpc: () => Promise.resolve({ data: null, error: null }),
+    sql: (template: TemplateStringsArray, ...values: any[]) => template.join(''),
     auth: {
       getSession: () => Promise.resolve({ data: { session: null }, error: null }),
       getUser: () => Promise.resolve({ data: { user: null }, error: null }),
@@ -34,7 +35,7 @@ const createMockClient = () => {
 };
 
 export const supabase = (!supabaseUrl || !supabaseAnonKey) 
-  ? createMockClient()
+  ? createMockClient() as any
   : createClient(supabaseUrl, supabaseAnonKey, {
       auth: {
         autoRefreshToken: true,

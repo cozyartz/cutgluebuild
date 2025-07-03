@@ -1,0 +1,120 @@
+/* Custom Starlight styles to match CutGlueBuild design */
+
+:root {
+  /* Match main site colors */
+  --sl-color-accent: theme('colors.primary.500');
+  --sl-color-accent-high: theme('colors.primary.600');
+  --sl-color-accent-low: theme('colors.primary.100');
+  
+  /* Secondary colors */
+  --sl-color-text-accent: theme('colors.secondary.500');
+  
+  /* Font family */
+  --sl-font: 'Inter', sans-serif;
+  --sl-font-system: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Dark mode colors */
+:root[data-theme='dark'] {
+  --sl-color-accent: theme('colors.primary.400');
+  --sl-color-accent-high: theme('colors.primary.300');
+  --sl-color-accent-low: theme('colors.primary.900');
+  --sl-color-text-accent: theme('colors.secondary.400');
+}
+
+/* Header customization */
+.header {
+  border-bottom: 1px solid theme('colors.gray.200');
+}
+
+[data-theme='dark'] .header {
+  border-bottom-color: theme('colors.gray.700');
+}
+
+/* Sidebar styling */
+.sidebar {
+  border-right: 1px solid theme('colors.gray.200');
+}
+
+[data-theme='dark'] .sidebar {
+  border-right-color: theme('colors.gray.700');
+}
+
+/* Code blocks */
+.expressive-code {
+  border-radius: theme('borderRadius.lg');
+  border: 1px solid theme('colors.gray.200');
+}
+
+[data-theme='dark'] .expressive-code {
+  border-color: theme('colors.gray.700');
+}
+
+/* Links */
+a {
+  transition: all 0.2s ease;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+/* Custom components */
+.callout {
+  @apply rounded-lg border-l-4 p-4 my-4;
+}
+
+.callout--note {
+  @apply border-blue-500 bg-blue-50 dark:bg-blue-900/20;
+}
+
+.callout--tip {
+  @apply border-green-500 bg-green-50 dark:bg-green-900/20;
+}
+
+.callout--warning {
+  @apply border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20;
+}
+
+.callout--danger {
+  @apply border-red-500 bg-red-50 dark:bg-red-900/20;
+}
+
+/* Table styling */
+table {
+  @apply w-full border-collapse border border-gray-200 dark:border-gray-700;
+}
+
+th, td {
+  @apply border border-gray-200 dark:border-gray-700 px-4 py-2 text-left;
+}
+
+th {
+  @apply bg-gray-50 dark:bg-gray-800 font-semibold;
+}
+
+/* Badge styling for affiliate links, premium content, etc. */
+.badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.badge--free {
+  @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
+}
+
+.badge--premium {
+  @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200;
+}
+
+.badge--affiliate {
+  @apply bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200;
+}
+
+/* Content type indicators */
+.content-type {
+  @apply inline-flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400 mb-2;
+}
+
+.content-type svg {
+  @apply w-4 h-4;
+}

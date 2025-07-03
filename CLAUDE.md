@@ -85,3 +85,82 @@ Feature gates use `useCanAccessFeature()` hook.
 - Fabric.js integration for canvas editing
 - OpenAI integration with graceful fallbacks
 - Subscription-based feature gating throughout UI
+
+## Templates System
+
+### Template Structure
+Templates are stored in `templates/` directory with SVG files and organized by category:
+- `templates/woodworking/` - Categorized by type (bird-houses, home-decor, etc.)
+- Database-driven with free/premium tiers
+- Download tracking and subscription validation via `TemplateDownloadButton`
+
+### Template Categories & Pricing
+- **Free**: Basic templates for lead generation (Classic Bird House, Pegboard Tools, Picture Frames, Plant Markers)
+- **Premium**: Advanced designs requiring Maker/Pro subscriptions (Modern designs, Traditional build plans)
+
+## Build System Considerations
+
+### Static Build Compatibility
+- Mock Supabase client for build-time when environment variables unavailable
+- Dynamic routes require `getStaticPaths()` returning empty arrays for server-side generation
+- Database queries wrapped in try-catch for graceful build failures
+
+### Environment Handling
+The app gracefully handles missing environment variables during build:
+- Supabase client auto-detects environment and provides mock responses
+- OpenAI integration falls back to MockAIService when API key missing
+- All external service integrations designed to fail gracefully
+
+## Authentication & Subscription Flow
+
+### Auth State Management
+- Zustand store (`authStore.ts`) with persistence handles auth state
+- Automatic session refresh and auth state change listeners
+- Server-side auth checks in Astro pages using `authService.getCurrentUser()`
+
+### Feature Access Control
+Use `useCanAccessFeature(feature)` hook for subscription gating:
+- `premium_templates` - Maker/Pro tiers
+- `unlimited_ai` - Pro tier only  
+- `priority_support` - Maker/Pro tiers
+- `api_access` - Pro tier only
+- `white_label` - Pro tier only
+
+## AI Integration Architecture
+
+### Service Layer Pattern
+- `OpenAIService` class for production AI features
+- `MockAIService` for development/fallback with realistic test data
+- Automatic service selection based on API key availability
+- Client-side usage with `dangerouslyAllowBrowser: true` for development
+
+### AI Tool Types
+- SVG Generation: Text-to-SVG with material and style parameters
+- Project Ideas: Personalized suggestions based on user skills/tools
+- Image Vectorization: Photo-to-vector conversion for laser cutting
+
+## Database Integration
+
+### Edge Functions
+Supabase edge functions handle complex operations:
+- `save-project-revision/` - Automatic versioning with incremental numbering
+- `restore-project-revision/` - Project rollback functionality
+
+### RLS Implementation
+All tables use Row Level Security:
+- User-scoped access for projects and downloads
+- Public read access for templates
+- Admin-only write access for templates and system data
+
+## Development Workflow
+
+### Testing Database Changes
+1. Create migration in `supabase/migrations/`
+2. Test locally with Supabase CLI
+3. Deploy to staging environment first
+4. Templates require both schema and data population scripts
+
+### Component Development
+- React components use TypeScript interfaces from `src/lib/supabase.ts`
+- Astro pages handle server-side data fetching and authentication
+- Client-side interactivity added via `client:load` directive
