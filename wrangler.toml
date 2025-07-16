@@ -2,7 +2,7 @@ name = "cutgluebuild"
 compatibility_date = "2025-06-22"
 type = "javascript"
 
-account_id = "51826042d6e31c694331efeb1be34123"
+account_id = "51826042d6e31c694331efeb1be341"
 workers_dev = true
 
 [build]
