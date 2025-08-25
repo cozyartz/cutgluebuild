@@ -139,8 +139,6 @@ import Footer from '../components/Footer.astro';
 </Layout>
 
 <script>
-  import { supabase } from '../lib/supabase';
-
   const loginForm = document.getElementById('login-form') as HTMLFormElement;
   const googleSignin = document.getElementById('google-signin');
   const githubSignin = document.getElementById('github-signin');
@@ -150,17 +148,25 @@ import Footer from '../components/Footer.astro';
       e.preventDefault();
       
       const formData = new FormData(loginForm);
-      const email = formData.get('email');
-      const password = formData.get('password');
+      const email = formData.get('email') as string;
+      const password = formData.get('password') as string;
 
       try {
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
+        const response = await fetch('/api/auth/signin', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
         });
 
-        if (error) throw error;
-        
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.error || 'Sign in failed');
+        }
+
+        // Redirect to tools page after successful login
         window.location.href = '/tools';
       } catch (error) {
         console.error('Login error:', error);
@@ -172,14 +178,9 @@ import Footer from '../components/Footer.astro';
   if (googleSignin) {
     googleSignin.addEventListener('click', async () => {
       try {
-        const { error } = await supabase.auth.signInWithOAuth({
-          provider: 'google',
-          options: {
-            redirectTo: `${window.location.origin}/auth/callback`,
-          },
-        });
-
-        if (error) throw error;
+        // OAuth with Google would need to be implemented with a proper OAuth flow
+        // For now, we'll redirect to a signup page or show a message
+        alert('OAuth providers will be implemented in a future update. Please use email/password for now.');
       } catch (error) {
         console.error('Google signin error:', error);
         alert('Failed to sign in with Google.');
@@ -190,14 +191,9 @@ import Footer from '../components/Footer.astro';
   if (githubSignin) {
     githubSignin.addEventListener('click', async () => {
       try {
-        const { error } = await supabase.auth.signInWithOAuth({
-          provider: 'github',
-          options: {
-            redirectTo: `${window.location.origin}/auth/callback`,
-          },
-        });
-
-        if (error) throw error;
+        // OAuth with GitHub would need to be implemented with a proper OAuth flow
+        // For now, we'll redirect to a signup page or show a message
+        alert('OAuth providers will be implemented in a future update. Please use email/password for now.');
       } catch (error) {
         console.error('GitHub signin error:', error);
         alert('Failed to sign in with GitHub.');

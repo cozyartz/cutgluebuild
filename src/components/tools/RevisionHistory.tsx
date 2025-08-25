@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabase';
+import { useUser } from '../../store/authStore';
 import toast from 'react-hot-toast';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -25,6 +25,7 @@ export default function RevisionHistory({
   const [revisions, setRevisions] = useState<Revision[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRestoring, setIsRestoring] = useState<string | null>(null);
+  const user = useUser();
 
   useEffect(() => {
     loadRevisions();
@@ -34,16 +35,21 @@ export default function RevisionHistory({
     try {
       setIsLoading(true);
       
-      const { data, error } = await supabase
-        .from('project_revisions')
-        .select('*')
-        .eq('project_id', projectId)
-        .order('revision_number', { ascending: false });
-
-      if (error) {
-        throw error;
+      if (!user) {
+        toast.error('Please sign in to view revision history');
+        return;
       }
 
+      const response = await fetch(`/api/projects/${projectId}/revisions`, {
+        method: 'GET',
+        credentials: 'include'
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to load revisions');
+      }
+
+      const data = await response.json();
       setRevisions(data || []);
     } catch (error) {
       console.error('Error loading revisions:', error);
@@ -57,13 +63,18 @@ export default function RevisionHistory({
     try {
       setIsRestoring(revisionId);
 
-      const response = await fetch('/api/projects/restore-revision', {
+      if (!user) {
+        toast.error('Please sign in to restore revisions');
+        return;
+      }
+
+      const response = await fetch(`/api/projects/${projectId}/restore-revision`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({
-          projectId,
           revisionId,
         }),
       });
@@ -90,14 +101,24 @@ export default function RevisionHistory({
 
   const previewRevision = async (revisionId: string) => {
     try {
-      const { data, error } = await supabase
-        .from('project_revisions')
-        .select('svg_data')
-        .eq('id', revisionId)
-        .single();
+      if (!user) {
+        toast.error('Please sign in to preview revisions');
+        return;
+      }
 
-      if (error) {
-        throw error;
+      const response = await fetch(`/api/projects/revisions/${revisionId}`, {
+        method: 'GET',
+        credentials: 'include'
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to load revision data');
+      }
+
+      const data = await response.json();
+
+      if (!data.svg_data) {
+        throw new Error('No SVG data found for this revision');
       }
 
       // Open preview in new window

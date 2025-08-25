@@ -124,10 +124,10 @@ The `template-database-insertion.sql` file contains:
 - Premium/free designation
 - Performance indexes
 
-To integrate with your Supabase database:
-```sql
--- Run the insertion script
-\i templates/woodworking/template-database-insertion.sql
+To integrate with your Cloudflare D1 database:
+```bash
+# Run the insertion script via Wrangler CLI
+wrangler d1 execute cutgluebuild-db --file templates/woodworking/template-database-insertion.sql
 ```
 
 ## Template Features

@@ -44,13 +44,15 @@ Before you begin, ensure you have these tools installed:
     - Prettier
   </Card>
   
-  <Card title="Terminal" icon="terminal">
-    **Command line interface**
+  <Card title="Wrangler CLI" icon="terminal">
+    **Cloudflare's command line tool**
     
-    Use your system's default terminal or install a modern alternative like:
-    - iTerm2 (macOS)
-    - Windows Terminal
-    - Hyper (cross-platform)
+    ```bash
+    npm install -g wrangler
+    wrangler --version
+    ```
+    
+    Required for D1 database management and Cloudflare deployments.
   </Card>
 </CardGrid>
 
@@ -70,11 +72,11 @@ npm install
 ```
 
 This will install all required packages including:
-- Astro 4.x
+- Astro 4.x with Cloudflare adapter
 - React and TypeScript
 - Tailwind CSS
-- Supabase client
 - Fabric.js for canvas editing
+- Zustand for state management
 
 ### 3. Environment Variables
 
@@ -87,16 +89,15 @@ cp .env.example .env
 Configure the following variables in `.env`:
 
 <Aside type="tip">
-  **Development Tip**: The app gracefully handles missing environment variables. OpenAI features fall back to mock data, and Supabase uses a mock client during builds.
+  **Development Tip**: The app gracefully handles missing environment variables. OpenAI features fall back to mock data, and database operations use mock clients during local development.
 </Aside>
 
 #### Required for Full Functionality
 
 ```bash
-# Supabase Configuration
-VITE_SUPABASE_URL=your_supabase_project_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+# Cloudflare Configuration
+CLOUDFLARE_ACCOUNT_ID=your_cloudflare_account_id
+CLOUDFLARE_API_TOKEN=your_api_token_with_d1_permissions
 
 # Stripe Configuration  
 VITE_STRIPE_PUBLISHABLE_KEY=pk_test_...
@@ -118,29 +119,32 @@ VITE_AMAZON_ASSOCIATE_TAG=your-associate-tag
 
 ### 4. Database Setup (Optional)
 
-For full functionality, set up a Supabase project:
+For full database functionality, set up a Cloudflare D1 database:
 
-1. **Create Supabase Project**
-   - Go to [supabase.com](https://supabase.com)
-   - Create a new project
-   - Note your project URL and anon key
-
-2. **Run Migrations**
+1. **Create D1 Database**
    ```bash
-   # Install Supabase CLI
-   npm install -g supabase
+   # Create database
+   wrangler d1 create cutgluebuild-db
    
-   # Link to your project
-   supabase link --project-ref your-project-ref
-   
-   # Push database schema
-   supabase db push
+   # Note the database ID returned and update wrangler.toml
    ```
 
-3. **Populate Sample Data**
+2. **Update Configuration**
+   Edit `wrangler.toml` and replace `your-database-id-here` with your actual database ID:
+   ```toml
+   [[d1_databases]]
+   binding = "DB"
+   database_name = "cutgluebuild-db"
+   database_id = "your-actual-database-id"
+   ```
+
+3. **Run Migrations**
    ```bash
-   # Run the template population script
-   supabase db reset
+   # Run initial schema
+   wrangler d1 execute cutgluebuild-db --file migrations/0001_initial_schema.sql
+   
+   # Populate sample templates
+   wrangler d1 execute cutgluebuild-db --file migrations/0002_populate_templates.sql
    ```
 
 ## Development Commands
@@ -191,6 +195,42 @@ For full functionality, set up a Supabase project:
   </Card>
 </CardGrid>
 
+## Database Commands
+
+<CardGrid>
+  <Card title="Local Database Query" icon="database">
+    ```bash
+    wrangler d1 execute cutgluebuild-db --command "SELECT * FROM profiles LIMIT 10"
+    ```
+    
+    Query your local D1 database for testing and debugging.
+  </Card>
+  
+  <Card title="Run Migration" icon="arrow-up">
+    ```bash
+    wrangler d1 execute cutgluebuild-db --file migrations/new_migration.sql
+    ```
+    
+    Execute a new migration file against your database.
+  </Card>
+  
+  <Card title="Database Shell" icon="terminal">
+    ```bash
+    wrangler d1 execute cutgluebuild-db --command ".schema"
+    ```
+    
+    Explore your database schema and structure.
+  </Card>
+  
+  <Card title="Production Deploy" icon="rocket">
+    ```bash
+    wrangler d1 migrations apply cutgluebuild-db
+    ```
+    
+    Apply migrations to production database.
+  </Card>
+</CardGrid>
+
 ## Project Structure Overview
 
 ```
@@ -206,17 +246,17 @@ cutgluebuild/
 │   │   └── docs/        # Documentation (MDX)  
 │   ├── layouts/          # Astro layouts
 │   ├── lib/              # Utilities and services
-│   │   ├── auth.ts      # Authentication service
-│   │   ├── supabase.ts  # Database client
+│   │   ├── auth.ts      # Session-based authentication
+│   │   ├── database.ts  # D1 database client
 │   │   ├── openai.ts    # AI integration  
 │   │   └── affiliates.ts # Affiliate management
 │   ├── pages/            # Astro pages and routes
+│   │   └── api/         # Cloudflare Workers API endpoints
 │   ├── store/            # Zustand state management
 │   └── styles/           # Global CSS and Tailwind
-├── supabase/
-│   ├── functions/        # Edge functions
-│   └── migrations/       # Database migrations
-└── templates/            # SVG template files
+├── migrations/           # D1 database migrations
+├── templates/            # SVG template files
+└── wrangler.toml        # Cloudflare configuration
 ```
 
 ## Key Development Patterns
@@ -244,13 +284,14 @@ import InteractiveComponent from '../components/InteractiveComponent.tsx';
 
 ### Authentication Flow
 
-1. **Server-side checks** in Astro pages for protected routes
-2. **Client-side state** managed by Zustand with persistence
-3. **Automatic session refresh** and auth state synchronization
+1. **Session-based authentication** using httpOnly cookies
+2. **Server-side validation** in Astro pages for protected routes
+3. **Client-side state** managed by Zustand with persistence
 
 ```typescript
 // In Astro pages
-const user = await authService.getCurrentUser();
+const sessionId = getSessionFromRequest(Astro.request);
+const user = await authService.getCurrentUser(sessionId);
 if (!user) {
   return Astro.redirect('/login');
 }
@@ -261,9 +302,9 @@ const { user, isLoading } = useAuthStore();
 
 ### Database Integration
 
-- **Direct Supabase calls** in Astro pages for data fetching
-- **React Query patterns** for client-side data management
-- **Row Level Security** ensures data access control
+- **API endpoints** in `src/pages/api/` for database operations
+- **D1 database service** for type-safe database queries  
+- **Session-based authorization** ensures data access control
 
 ### Content Management
 
@@ -298,16 +339,16 @@ git commit -m "feat: your feature description"
 For schema modifications:
 
 ```bash
-# Create migration
-supabase migration new your_migration_name
+# Create migration file
+touch migrations/0003_your_migration_name.sql
 
-# Edit migration file in supabase/migrations/
+# Edit migration file with SQL changes
 
-# Test migration
-supabase db reset
+# Test migration locally
+wrangler d1 execute cutgluebuild-db --file migrations/0003_your_migration_name.sql
 
-# Push to remote
-supabase db push
+# Deploy to production when ready
+wrangler d1 migrations apply cutgluebuild-db
 ```
 
 ### 3. Component Development
@@ -355,10 +396,10 @@ npm run build
 astro check
 ```
 
-**Supabase Connection Issues**
-- Verify environment variables are correct
-- Check Supabase project status
-- Ensure RLS policies allow your operations
+**D1 Database Connection Issues**
+- Verify `wrangler.toml` has correct database ID
+- Check Cloudflare account ID and API token
+- Ensure database exists: `wrangler d1 list`
 
 **Missing Dependencies**
 ```bash
@@ -378,16 +419,40 @@ npm install
 
 **Browser Extensions:**
 - React Developer Tools
-- Supabase Devtools (if available)
+- Cloudflare Workers Developer Tools
+
+## Deployment
+
+### Cloudflare Pages Deployment
+
+1. **Build the project**
+   ```bash
+   npm run build
+   ```
+
+2. **Deploy to Cloudflare Pages**
+   ```bash
+   wrangler pages deploy dist
+   ```
+
+3. **Set up environment variables** in Cloudflare dashboard
+4. **Apply database migrations** to production D1 database
+
+### Environment Variables for Production
+
+In your Cloudflare dashboard, set:
+- `OPENAI_API_KEY` (if using AI features)
+- `STRIPE_SECRET_KEY` (for payments)
+- All other production environment variables
 
 ## Next Steps
 
 Once your environment is set up:
 
 1. **Explore the codebase** - Start with `src/pages/index.astro`
-2. **Read the documentation** - Check out our [blog writing guide](/docs/guides/blog-writing-guide/)
+2. **Read the documentation** - Check out our [database schema reference](/docs/reference/database-schema/)
 3. **Make a test change** - Try modifying a component
-4. **Contribute** - See our [contributing guidelines](/docs/development/contributing/)
+4. **Deploy to Cloudflare** - Test the full production workflow
 
 ---
 

@@ -3,33 +3,33 @@ import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import TemplateDownloadButton from '../../components/templates/TemplateDownloadButton.tsx';
-import { supabase } from '../../lib/supabase';
+import { getDatabase, type Template } from '../../lib/database';
+import type { Env } from '../../lib/database';
+
+// Get database service (with fallback for build)
+const database = getDatabase(Astro.locals.runtime?.env as Env);
 
 // Fetch templates from database (with fallback for build)
-let templates = null;
+let templates: Template[] = [];
 let error = null;
 
 try {
-  const result = await supabase
-    .from('templates')
-    .select('*')
-    .order('created_at', { ascending: false });
-  
-  templates = result.data;
-  error = result.error;
+  templates = await database.getTemplates();
 } catch (e) {
   console.log('Templates fetch failed (build mode):', e.message);
   // Fallback data for build process
   templates = [];
 }
 
-if (error) {
-  console.error('Error fetching templates:', error);
-}
-
 // Group templates by category for filtering
-const categories = [...new Set(templates?.map((t: any) => t.category) || [])];
-const materials = [...new Set(templates?.flatMap((t: any) => t.materials || []) || [])];
+const categories = [...new Set(templates.map((t) => t.category))];
+const materials = [...new Set(templates.flatMap((t) => {
+  try {
+    return typeof t.materials === 'string' ? JSON.parse(t.materials) : [];
+  } catch {
+    return [];
+  }
+}))];
 ---
 
 <Layout title="Templates - CutGlueBuild.com" description="Browse our collection of laser-cut and Cricut-ready SVG templates. Perfect for makers and creators.">
@@ -87,7 +87,7 @@ const materials = [...new Set(templates?.flatMap((t: any) => t.materials || []) 
 
       <!-- Templates Grid -->
       <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
-        {templates && templates.map((template) => {
+        {templates.map((template) => {
           const difficultyColors = {
             'beginner': 'from-green-100 to-green-200 dark:from-green-900 dark:to-green-800',
             'intermediate': 'from-orange-100 to-orange-200 dark:from-orange-900 dark:to-orange-800',
@@ -99,6 +99,14 @@ const materials = [...new Set(templates?.flatMap((t: any) => t.materials || []) 
             'intermediate': 'text-orange-500',
             'advanced': 'text-red-500'
           };
+
+          // Parse materials from JSON string
+          let templateMaterials: string[] = [];
+          try {
+            templateMaterials = typeof template.materials === 'string' ? JSON.parse(template.materials) : [];
+          } catch {
+            templateMaterials = [];
+          }
 
           return (
             <div class="card card-hover group cursor-pointer">
@@ -124,11 +132,11 @@ const materials = [...new Set(templates?.flatMap((t: any) => t.materials || []) 
                 <p class="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">{template.description}</p>
                 <div class="flex items-center justify-between mb-3">
                   <div class="flex flex-wrap gap-1">
-                    {template.materials && template.materials.slice(0, 2).map((material) => (
+                    {templateMaterials.slice(0, 2).map((material) => (
                       <span class="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">{material}</span>
                     ))}
-                    {template.materials && template.materials.length > 2 && (
-                      <span class="text-xs text-gray-500">+{template.materials.length - 2}</span>
+                    {templateMaterials.length > 2 && (
+                      <span class="text-xs text-gray-500">+{templateMaterials.length - 2}</span>
                     )}
                   </div>
                   <div class="text-xs text-gray-500">

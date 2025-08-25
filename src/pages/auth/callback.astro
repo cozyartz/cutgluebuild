@@ -1,22 +1,37 @@
 ---
-import { supabase } from '../../lib/supabase';
+import { getAuthService, getSessionFromRequest, setSessionCookie } from '../../lib/auth';
+import type { Env } from '../../lib/database';
 
 // Handle OAuth callback and redirect
 const url = new URL(Astro.request.url);
 const code = url.searchParams.get('code');
+const state = url.searchParams.get('state');
+const error = url.searchParams.get('error');
 
-if (code) {
-  const { error } = await supabase.auth.exchangeCodeForSession(code);
-  
-  if (error) {
-    console.error('OAuth callback error:', error);
+// Check for OAuth errors first
+if (error) {
+  console.error('OAuth error:', error);
+  return Astro.redirect('/login?error=oauth_failed');
+}
+
+if (code && state) {
+  try {
+    // In a full OAuth implementation, you would:
+    // 1. Verify the state parameter matches what was sent
+    // 2. Exchange the code for an access token with the OAuth provider
+    // 3. Use the access token to get user information
+    // 4. Create or update the user in your database
+    // 5. Create a session for the user
+    
+    // For now, we'll redirect back to login with a message
+    console.log('OAuth callback received, but full OAuth flow not yet implemented');
+    return Astro.redirect('/login?message=oauth_not_implemented');
+  } catch (oauthError) {
+    console.error('OAuth callback error:', oauthError);
     return Astro.redirect('/login?error=auth_failed');
   }
-  
-  // Successful authentication - redirect to tools page
-  return Astro.redirect('/tools');
 }
 
 // If no code parameter, redirect back to login
-return Astro.redirect('/login');
+return Astro.redirect('/login?error=missing_code');
 ---

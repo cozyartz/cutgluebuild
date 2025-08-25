@@ -1,38 +1,36 @@
 ---
 title: Database Schema Reference
-description: Complete documentation of Supabase tables, relationships, and data structures
+description: Complete documentation of Cloudflare D1 tables, relationships, and data structures
 ---
 
 import { Card, CardGrid, Badge, Aside } from '@astrojs/starlight/components';
 
 # Database Schema Reference
 
-CutGlueBuild uses Supabase PostgreSQL with Row Level Security (RLS) enabled on all tables. This document covers the complete database schema, relationships, and key patterns.
+CutGlueBuild uses Cloudflare D1 (SQLite) with session-based authentication and server-side authorization. This document covers the complete database schema, relationships, and key patterns.
 
 ## Core Tables Overview
 
 <CardGrid>
   <Card title="User Management" icon="user">
     - `profiles` - User profiles and subscription info
-    - `user_credits` - Credit tracking and usage
-    - `credit_transactions` - Credit transaction history
+    - `user_sessions` - Session-based authentication
   </Card>
   
   <Card title="Project System" icon="document">
     - `user_projects` - User-created designs
     - `project_revisions` - Version history
-    - Edge functions for revision management
+    - API endpoints for revision management
   </Card>
   
   <Card title="Templates" icon="open-book">
     - `templates` - Template library
-    - `template_downloads` - Download tracking
+    - Download tracking via API calls
     - Free vs premium tier access
   </Card>
   
   <Card title="Content" icon="pencil">
     - `blog_posts` - CMS content
-    - `billing_plans` - Subscription tiers
     - Future: comments, favorites
   </Card>
 </CardGrid>
@@ -41,63 +39,49 @@ CutGlueBuild uses Supabase PostgreSQL with Row Level Security (RLS) enabled on a
 
 ### profiles
 
-Core user profile information linked to Supabase Auth.
+Core user profile information with subscription tiers.
 
 ```sql
-CREATE TABLE profiles (
-  id uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-  email text,
-  full_name text,
-  avatar_url text,
-  subscription_tier subscription_tier DEFAULT 'free',
-  stripe_customer_id text,
-  created_at timestamptz DEFAULT now(),
-  updated_at timestamptz DEFAULT now()
+CREATE TABLE IF NOT EXISTS profiles (
+  id TEXT PRIMARY KEY,
+  email TEXT UNIQUE NOT NULL,
+  full_name TEXT,
+  avatar_url TEXT,
+  subscription_tier TEXT CHECK (subscription_tier IN ('free', 'starter', 'maker', 'pro')) DEFAULT 'free',
+  stripe_customer_id TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
 **Key Fields:**
-- `id` - References `auth.users(id)` from Supabase Auth
+- `id` - UUID for user identification
 - `subscription_tier` - Enum: `'free' | 'starter' | 'maker' | 'pro'`
 - `stripe_customer_id` - Links to Stripe customer for billing
 
-**RLS Policy:**
-- Users can only read/update their own profile
-- Public read access for display names only
+**Authorization:**
+- Users can only read/update their own profile via API endpoints
+- Server-side session validation enforces access control
 
-### user_credits
+### user_sessions
 
-Tracks monthly and rollover credits for each user.
+Session-based authentication storage.
 
 ```sql
-CREATE TABLE user_credits (
-  user_id uuid PRIMARY KEY REFERENCES profiles(id) ON DELETE CASCADE,
-  monthly_credits integer DEFAULT 0,
-  rollover_credits integer DEFAULT 0,
-  used_credits integer DEFAULT 0,
-  updated_at timestamptz DEFAULT now()
+CREATE TABLE IF NOT EXISTS user_sessions (
+  id TEXT PRIMARY KEY,
+  user_id TEXT NOT NULL,
+  expires_at INTEGER NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES profiles (id) ON DELETE CASCADE
 );
 ```
 
-**Credit Logic:**
-1. Monthly credits reset on billing cycle
-2. Unused credits roll over (up to tier limit)
-3. Used credits consume monthly first, then rollover
-
-### credit_transactions
-
-Audit log for all credit changes.
-
-```sql
-CREATE TABLE credit_transactions (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id uuid REFERENCES profiles(id) ON DELETE CASCADE,
-  amount integer NOT NULL,
-  source text NOT NULL, -- 'monthly_reset', 'topup', 'admin', 'ai_usage'
-  description text,
-  created_at timestamptz DEFAULT now()
-);
-```
+**Session Logic:**
+1. Sessions created on login with 30-day expiration
+2. Stored as httpOnly cookies (`cutglue_session`)
+3. Server-side validation on each request
+4. Automatic cleanup of expired sessions
 
 ## Project System
 
@@ -106,50 +90,50 @@ CREATE TABLE credit_transactions (
 Main table for user-created designs and projects.
 
 ```sql
-CREATE TABLE user_projects (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id uuid REFERENCES profiles(id) ON DELETE CASCADE,
-  title text NOT NULL,
-  description text,
-  svg_data text,
-  project_type text CHECK (project_type IN ('svg_generated', 'upload_vectorized', 'project_idea')),
-  metadata jsonb DEFAULT '{}',
-  current_revision_id uuid,
-  canvas_settings jsonb DEFAULT '{}',
-  created_at timestamptz DEFAULT now(),
-  updated_at timestamptz DEFAULT now()
+CREATE TABLE IF NOT EXISTS user_projects (
+  id TEXT PRIMARY KEY,
+  user_id TEXT NOT NULL,
+  title TEXT NOT NULL,
+  description TEXT,
+  svg_data TEXT,
+  project_type TEXT CHECK (project_type IN ('svg_generated', 'upload_vectorized', 'project_idea')) NOT NULL,
+  metadata TEXT, -- JSON as text
+  current_revision_id TEXT,
+  canvas_settings TEXT, -- JSON as text
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES profiles (id) ON DELETE CASCADE
 );
 ```
 
 **Key Features:**
 - `current_revision_id` - Points to latest saved revision
 - `project_type` - Tracks how project was created
-- `metadata` - Flexible JSON for project-specific data
-- `canvas_settings` - Fabric.js canvas configuration
+- `metadata` - Flexible JSON for project-specific data (stored as TEXT)
+- `canvas_settings` - Fabric.js canvas configuration (stored as TEXT)
 
 ### project_revisions
 
 Version history system with automatic incremental numbering.
 
 ```sql
-CREATE TABLE project_revisions (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  project_id uuid REFERENCES user_projects(id) ON DELETE CASCADE,
-  revision_number integer NOT NULL,
-  svg_data text NOT NULL,
-  changes_description text,
-  metadata jsonb DEFAULT '{}',
-  created_at timestamptz DEFAULT now(),
-  UNIQUE(project_id, revision_number)
+CREATE TABLE IF NOT EXISTS project_revisions (
+  id TEXT PRIMARY KEY,
+  project_id TEXT NOT NULL,
+  revision_number INTEGER NOT NULL,
+  svg_data TEXT NOT NULL,
+  changes_description TEXT,
+  metadata TEXT, -- JSON as text
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (project_id) REFERENCES user_projects (id) ON DELETE CASCADE
 );
 ```
 
-**Managed by Edge Functions:**
-- `save-project-revision/` - Creates new revision, updates project
-- `restore-project-revision/` - Rollback to previous version
+**Managed by API Endpoints:**
+- `/api/projects/[projectId]/revisions` - Get revision history
+- `/api/projects/[projectId]/restore-revision` - Rollback to previous version
 
 <Aside type="note">
-  **Edge Function Pattern**: Complex operations that require atomic transactions use Supabase Edge Functions instead of client-side logic.
+  **API Pattern**: Complex operations that require atomic transactions use Cloudflare Workers API endpoints with D1 database access.
 </Aside>
 
 ## Templates System
@@ -159,117 +143,96 @@ CREATE TABLE project_revisions (
 Template library with premium/free tiers and metadata.
 
 ```sql
-CREATE TABLE templates (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  title text NOT NULL,
-  description text,
-  category text,
-  tags text[] DEFAULT '{}',
-  materials text[] DEFAULT '{}',
-  difficulty text CHECK (difficulty IN ('beginner', 'intermediate', 'advanced')),
-  svg_data text,
-  preview_url text,
-  is_premium boolean DEFAULT false,
-  download_count integer DEFAULT 0,
-  created_at timestamptz DEFAULT now(),
-  updated_at timestamptz DEFAULT now()
+CREATE TABLE IF NOT EXISTS templates (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  description TEXT,
+  category TEXT NOT NULL,
+  tags TEXT, -- JSON array as text
+  materials TEXT, -- JSON array as text
+  difficulty TEXT CHECK (difficulty IN ('beginner', 'intermediate', 'advanced')) DEFAULT 'beginner',
+  svg_data TEXT NOT NULL,
+  preview_url TEXT,
+  is_premium BOOLEAN DEFAULT 0,
+  download_count INTEGER DEFAULT 0,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
 **Categories:**
-- Home & Garden
-- Tools & Organization  
-- Home Decor
-- Kitchen & Dining
-- Furniture & Storage
-- Outdoor Furniture
-- Workshop Furniture
+- bird-houses
+- home-decor  
+- kitchen-items
+- organizational-tools
+- garden-projects
 
 **Access Control:**
 - Free templates: Available to all users
 - Premium templates: Require `maker` or `pro` subscription tier
+- Download tracking via `/api/templates/track-download` endpoint
 
-### template_downloads
+## Blog System
 
-Download tracking with unique constraint per user/template.
+### blog_posts
+
+CMS content for blog and documentation.
 
 ```sql
-CREATE TABLE template_downloads (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id uuid REFERENCES profiles(id) ON DELETE CASCADE,
-  template_id uuid REFERENCES templates(id) ON DELETE CASCADE,
-  downloaded_at timestamptz DEFAULT now(),
-  UNIQUE(user_id, template_id)
+CREATE TABLE IF NOT EXISTS blog_posts (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  slug TEXT UNIQUE NOT NULL,
+  excerpt TEXT,
+  content TEXT NOT NULL,
+  author TEXT NOT NULL,
+  tags TEXT, -- JSON array as text
+  published BOOLEAN DEFAULT 0,
+  featured_image TEXT,
+  reading_time INTEGER DEFAULT 0,
+  published_at DATETIME,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
-**Usage:**
-- Prevents duplicate download counting
-- Enables user download history
-- Analytics for popular templates
+## Authorization Model
 
-## Subscription System
-
-### billing_plans
-
-Available subscription plans and their features.
-
-```sql
-CREATE TABLE billing_plans (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  name text NOT NULL,
-  tier subscription_tier NOT NULL,
-  price_monthly numeric NOT NULL,
-  price_yearly numeric NOT NULL,
-  monthly_credits integer NOT NULL,
-  perks jsonb DEFAULT '{}',
-  created_at timestamptz DEFAULT now()
-);
-```
-
-**Current Tiers:**
-
-| Tier | Monthly Price | Credits | Features |
-|------|---------------|---------|----------|
-| Free | $0 | 5 | Basic templates, community support |
-| Maker | $19 | 100 | Premium templates, priority support |
-| Pro | $49 | Unlimited | API access, white-label options |
-
-## Row Level Security (RLS)
-
-All tables use RLS for security. Key patterns:
+All database access is controlled through API endpoints with session-based authentication:
 
 ### User-Scoped Access
-```sql
--- Users can only access their own data
-CREATE POLICY "Users can view own projects" ON user_projects
-  FOR SELECT USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can modify own projects" ON user_projects
-  FOR ALL USING (auth.uid() = user_id);
+```typescript
+// Example API endpoint pattern
+export async function GET(context) {
+  const sessionId = getSessionFromRequest(context.request);
+  const user = await authService.getCurrentUser(sessionId);
+  
+  if (!user) {
+    return new Response('Unauthorized', { status: 401 });
+  }
+  
+  // Only return user's own projects
+  const projects = await database.getUserProjects(user.id);
+  return Response.json(projects);
+}
 ```
 
 ### Public Read Access
-```sql
--- Templates are publicly readable
-CREATE POLICY "Templates are publicly readable" ON templates
-  FOR SELECT TO public USING (true);
-
--- Only admins can modify templates  
-CREATE POLICY "Only admins can modify templates" ON templates
-  FOR ALL TO authenticated USING (auth.jwt() ->> 'role' = 'admin');
+```typescript
+// Templates are publicly readable
+export async function GET(context) {
+  const templates = await database.getTemplates();
+  return Response.json(templates);
+}
 ```
 
 ### Subscription-Based Access
-Template downloads check subscription tier in application logic:
+Template downloads check subscription tier in API logic:
 
 ```typescript
-// In TemplateDownloadButton component
+// In /api/templates/track-download endpoint
 if (template.is_premium) {
-  const user = await authService.getCurrentUser();
+  const user = await getCurrentUser(sessionId);
   if (user.profile?.subscription_tier === 'free') {
-    // Redirect to pricing page
-    return;
+    return new Response('Premium subscription required', { status: 403 });
   }
 }
 ```
@@ -280,69 +243,94 @@ Key indexes for common queries:
 
 ```sql
 -- Templates
-CREATE INDEX idx_templates_category ON templates(category);
-CREATE INDEX idx_templates_difficulty ON templates(difficulty);
-CREATE INDEX idx_templates_is_premium ON templates(is_premium);
-CREATE INDEX idx_templates_tags ON templates USING GIN(tags);
-CREATE INDEX idx_templates_created_at ON templates(created_at);
+CREATE INDEX IF NOT EXISTS idx_templates_category ON templates(category);
+CREATE INDEX IF NOT EXISTS idx_templates_is_premium ON templates(is_premium);
 
 -- Projects
-CREATE INDEX idx_user_projects_user_id ON user_projects(user_id);
-CREATE INDEX idx_user_projects_created_at ON user_projects(created_at);
+CREATE INDEX IF NOT EXISTS idx_user_projects_user_id ON user_projects(user_id);
 
 -- Revisions
-CREATE INDEX idx_project_revisions_project_id ON project_revisions(project_id);
-CREATE INDEX idx_project_revisions_created_at ON project_revisions(created_at);
+CREATE INDEX IF NOT EXISTS idx_project_revisions_project_id ON project_revisions(project_id);
+
+-- Blog
+CREATE INDEX IF NOT EXISTS idx_blog_posts_published ON blog_posts(published);
+CREATE INDEX IF NOT EXISTS idx_blog_posts_slug ON blog_posts(slug);
+
+-- Sessions
+CREATE INDEX IF NOT EXISTS idx_user_sessions_user_id ON user_sessions(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_sessions_expires_at ON user_sessions(expires_at);
 ```
 
 ## Common Query Patterns
 
-### Fetch User's Projects with Latest Revision
-```sql
-SELECT 
-  p.*,
-  pr.svg_data as current_svg,
-  pr.revision_number as current_revision
-FROM user_projects p
-LEFT JOIN project_revisions pr ON p.current_revision_id = pr.id
-WHERE p.user_id = $1
-ORDER BY p.updated_at DESC;
+### Fetch User's Projects
+```typescript
+const projects = await database.getUserProjects(userId);
+// Returns projects with parsed JSON metadata and canvas_settings
 ```
 
-### Get Templates by Category with Download Count
-```sql
-SELECT *
-FROM templates
-WHERE category = $1 
-  AND (is_premium = false OR $2 != 'free')  -- Check user tier
-ORDER BY download_count DESC, created_at DESC;
+### Get Templates by Category
+```typescript
+const templates = await database.getTemplates(category, isPremium);
+// Filters by category and premium status
 ```
 
-### Credit Balance Check
-```sql
-SELECT 
-  monthly_credits - used_credits as available_monthly,
-  rollover_credits
-FROM user_credits 
-WHERE user_id = $1;
+### Session Management
+```typescript
+// Create session
+const session = await database.createSession({
+  id: generateSessionId(),
+  user_id: userId,
+  expires_at: Date.now() / 1000 + (30 * 24 * 60 * 60) // 30 days
+});
+
+// Validate session
+const user = await authService.getCurrentUser(sessionId);
 ```
 
 ## Migration Strategy
 
-Migrations are stored in `supabase/migrations/` with timestamp prefixes:
+Migrations are stored in `migrations/` with numbered prefixes:
 
 ```
-supabase/migrations/
-├── 20250613190635_pink_river.sql          # Initial billing system
-├── 20250628000000_create_templates_table.sql  # Templates system
-└── 20250628000001_populate_templates.sql      # Sample data
+migrations/
+├── 0001_initial_schema.sql     # Complete D1 schema
+└── 0002_populate_templates.sql # Sample template data
+```
+
+**D1 Deployment Commands:**
+```bash
+# Create database
+wrangler d1 create cutgluebuild-db
+
+# Run migrations
+wrangler d1 execute cutgluebuild-db --file migrations/0001_initial_schema.sql
+wrangler d1 execute cutgluebuild-db --file migrations/0002_populate_templates.sql
+
+# Production deployment
+wrangler d1 migrations apply cutgluebuild-db
 ```
 
 **Best Practices:**
 - Always use transactions for multi-table changes
-- Include both schema and data migrations when needed
-- Test migrations on staging before production
-- Include rollback instructions in comments
+- Test migrations locally with `wrangler d1 execute`
+- Deploy to staging database first
+- JSON fields stored as TEXT and parsed in application layer
+
+## API Endpoints
+
+Database operations are handled through Cloudflare Workers API:
+
+- `/api/auth/signin` - User authentication
+- `/api/auth/signup` - User registration
+- `/api/templates/[id]` - Get template data
+- `/api/templates/track-download` - Download tracking
+- `/api/projects/[projectId]/revisions` - Project revision history
+- `/api/projects/[projectId]/restore-revision` - Project rollback
+
+<Aside type="tip">
+  **Performance**: D1 databases are distributed globally on Cloudflare's edge network, providing sub-100ms response times worldwide.
+</Aside>
 
 ---
 

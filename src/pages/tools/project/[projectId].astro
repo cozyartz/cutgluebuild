@@ -1,7 +1,9 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import Header from '../../../components/Header.astro';
-import { supabase } from '../../../lib/supabase';
+import { getDatabase, getAuthService, getSessionFromRequest } from '../../../lib/database';
+import { SESSION_COOKIE_NAME } from '../../../lib/auth';
+import type { Env, UserProject } from '../../../lib/database';
 
 export async function getStaticPaths() {
   // Return empty array for static build - these pages will be generated server-side
@@ -14,35 +16,51 @@ if (!projectId) {
   return Astro.redirect('/tools');
 }
 
-// In a real app, you'd fetch the project from the database and verify ownership
-// For now, we'll use mock data
-const mockProject = {
-  id: projectId,
-  title: 'Geometric Shield Design',
-  description: 'A beautiful geometric pattern perfect for wall art or decorative panels',
-  svg_data: `
-    <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-      <rect x="10" y="10" width="180" height="180" fill="none" stroke="#000" stroke-width="2"/>
-      <circle cx="100" cy="100" r="70" fill="none" stroke="#000" stroke-width="2"/>
-      <polygon points="100,40 140,80 140,120 100,160 60,120 60,80" fill="none" stroke="#000" stroke-width="2"/>
-      <circle cx="100" cy="100" r="20" fill="none" stroke="#000" stroke-width="1"/>
-    </svg>
-  `,
-  project_type: 'svg_generated',
-  metadata: {
-    material: 'wood',
-    dimensions: { width: 200, height: 200 },
-    style: 'geometric'
-  },
-  canvas_settings: {
-    width: 800,
-    height: 600,
-    backgroundColor: '#ffffff'
-  },
-  created_at: '2024-12-15T10:00:00Z'
-};
+// Get session from cookies
+const sessionId = getSessionFromRequest(Astro.request);
+if (!sessionId) {
+  return Astro.redirect('/login');
+}
 
-const project = mockProject;
+// Get services
+const env = Astro.locals.runtime?.env as Env;
+const authService = getAuthService(env);
+const database = getDatabase(env);
+
+// Verify user is authenticated
+const currentUser = sessionId ? await authService.getCurrentUser(sessionId) : null;
+if (!currentUser) {
+  return Astro.redirect('/login');
+}
+
+// Fetch project from database
+let project: UserProject | null = null;
+try {
+  project = await database.getUserProject(projectId, currentUser.id);
+} catch (error) {
+  console.error('Error fetching project:', error);
+}
+
+// If project not found or doesn't belong to user, redirect
+if (!project) {
+  return Astro.redirect('/tools');
+}
+
+// Parse metadata and canvas settings
+let parsedMetadata: any = {};
+let parsedCanvasSettings: any = {};
+
+try {
+  parsedMetadata = project.metadata ? JSON.parse(project.metadata) : {};
+} catch {
+  parsedMetadata = {};
+}
+
+try {
+  parsedCanvasSettings = project.canvas_settings ? JSON.parse(project.canvas_settings) : { width: 800, height: 600, backgroundColor: '#ffffff' };
+} catch {
+  parsedCanvasSettings = { width: 800, height: 600, backgroundColor: '#ffffff' };
+}
 ---
 
 <Layout title={`${project.title} - CutGlueBuild.com`} description={project.description}>
@@ -71,24 +89,24 @@ const project = mockProject;
                 </span>
               </div>
               
-              {project.metadata?.material && (
+              {parsedMetadata?.material && (
                 <div class="flex items-center space-x-2">
                   <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
                   </svg>
                   <span class="text-sm text-gray-600 dark:text-gray-400">
-                    Material: {project.metadata.material}
+                    Material: {parsedMetadata.material}
                   </span>
                 </div>
               )}
               
-              {project.metadata?.dimensions && (
+              {parsedMetadata?.dimensions && (
                 <div class="flex items-center space-x-2">
                   <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" view-box="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
                   </svg>
                   <span class="text-sm text-gray-600 dark:text-gray-400">
-                    Size: {project.metadata.dimensions.width}×{project.metadata.dimensions.height}mm
+                    Size: {parsedMetadata.dimensions.width}×{parsedMetadata.dimensions.height}mm
                   </span>
                 </div>
               )}
@@ -137,7 +155,16 @@ const project = mockProject;
             
             <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 flex items-center justify-center min-h-96">
               <div class="bg-white rounded-lg shadow-lg p-8">
-                <div set:html={project.svg_data} />
+                {project.svg_data ? (
+                  <div set:html={project.svg_data} />
+                ) : (
+                  <div class="text-gray-500 text-center">
+                    <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v6a2 2 0 002 2h4a2 2 0 002-2V5z"></path>
+                    </svg>
+                    <p>No SVG data available for this project</p>
+                  </div>
+                )}
               </div>
             </div>
             
@@ -266,7 +293,7 @@ const project = mockProject;
 <script define:vars={{ project }}>
   // Download functionality
   const downloadBtn = document.getElementById('download-btn');
-  if (downloadBtn) {
+  if (downloadBtn && project.svg_data) {
     downloadBtn.addEventListener('click', () => {
       const blob = new Blob([project.svg_data], { type: 'image/svg+xml' });
       const url = URL.createObjectURL(blob);
@@ -277,6 +304,10 @@ const project = mockProject;
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+    });
+  } else if (downloadBtn) {
+    downloadBtn.addEventListener('click', () => {
+      alert('No SVG data available for download');
     });
   }
 

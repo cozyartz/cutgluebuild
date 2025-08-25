@@ -1,9 +1,25 @@
 name = "cutgluebuild"
 compatibility_date = "2025-06-22"
-type = "javascript"
+pages_build_output_dir = "dist"
 
 account_id = "51826042d6e31c694331efeb1be341"
 workers_dev = true
 
-[build]
-command = ""
+[ai]
+binding = "AI"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "cutgluebuild-db"
+database_id = "your-database-id-here"
+
+[env.production.d1_databases]
+binding = "DB"
+database_name = "cutgluebuild-db-prod"
+database_id = "your-production-database-id-here"
+
+[vars]
+ENVIRONMENT = "development"
+
+[env.production.vars]
+ENVIRONMENT = "production"

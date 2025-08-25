@@ -1,7 +1,9 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import Header from '../../../components/Header.astro';
-import { supabase } from '../../../lib/supabase';
+import { getDatabase, getAuthService, getSessionFromRequest } from '../../../lib/database';
+import { SESSION_COOKIE_NAME } from '../../../lib/auth';
+import type { Env, UserProject } from '../../../lib/database';
 
 export async function getStaticPaths() {
   // Return empty array for static build - these pages will be generated server-side
@@ -14,8 +16,35 @@ if (!projectId) {
   return Astro.redirect('/tools');
 }
 
-// In a real app, you'd verify the user owns this project
-// For now, we'll just pass the projectId to the component
+// Get session from cookies
+const sessionId = getSessionFromRequest(Astro.request);
+if (!sessionId) {
+  return Astro.redirect('/login');
+}
+
+// Get services
+const env = Astro.locals.runtime?.env as Env;
+const authService = getAuthService(env);
+const database = getDatabase(env);
+
+// Verify user is authenticated
+const currentUser = sessionId ? await authService.getCurrentUser(sessionId) : null;
+if (!currentUser) {
+  return Astro.redirect('/login');
+}
+
+// Fetch project from database to verify ownership
+let project: UserProject | null = null;
+try {
+  project = await database.getUserProject(projectId, currentUser.id);
+} catch (error) {
+  console.error('Error fetching project:', error);
+}
+
+// If project not found or doesn't belong to user, redirect
+if (!project) {
+  return Astro.redirect('/tools');
+}
 ---
 
 <Layout title="Design Editor - CutGlueBuild.com" description="Edit and refine your designs with our powerful in-app editor.">
@@ -28,23 +57,35 @@ if (!projectId) {
   </main>
 </Layout>
 
-<script>
+<script define:vars={{ project }}>
   import DesignEditor from '../../../components/tools/DesignEditor.tsx';
   import RevisionHistory from '../../../components/tools/RevisionHistory.tsx';
   import { createRoot } from 'react-dom/client';
   import React from 'react';
   import { Toaster } from 'react-hot-toast';
 
-  const projectId = window.location.pathname.split('/').pop();
+  const projectId = project.id;
   
   function EditorApp() {
     const [showHistory, setShowHistory] = React.useState(false);
     const [currentProject, setCurrentProject] = React.useState(null);
 
     React.useEffect(() => {
-      // Fetch project data
-      // This would normally be done server-side or with proper auth
-      console.log('Loading project:', projectId);
+      // Set the project data from server-side props
+      // Parse the canvas settings and metadata
+      let parsedCanvasSettings = {};
+      try {
+        parsedCanvasSettings = project.canvas_settings ? JSON.parse(project.canvas_settings) : { width: 800, height: 600, backgroundColor: '#ffffff' };
+      } catch {
+        parsedCanvasSettings = { width: 800, height: 600, backgroundColor: '#ffffff' };
+      }
+
+      setCurrentProject({
+        ...project,
+        canvas_settings: parsedCanvasSettings
+      });
+
+      console.log('Loading project:', projectId, project);
     }, []);
 
     return React.createElement('div', { className: 'h-full flex' }, [

@@ -8,13 +8,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run build` - Build for production (runs astro check && astro build)
 - `npm run preview` - Preview production build
 - `astro check` - Type check and validate Astro files
+- `wrangler d1 execute cutgluebuild-db --file migrations/0001_initial_schema.sql` - Initialize D1 database
+- `wrangler d1 migrations apply cutgluebuild-db` - Apply database migrations
 
 ## Project Architecture
 
 ### Tech Stack
 - **Frontend**: Astro 4.x with React components and TypeScript
 - **Styling**: Tailwind CSS with dark mode support + Framer Motion animations
-- **Backend**: Supabase (auth, database, edge functions)
+- **Backend**: Cloudflare D1 (database), Cloudflare Workers (API endpoints)
 - **State Management**: Zustand with persistence
 - **Payments**: Stripe integration
 - **AI**: OpenAI GPT-4 for SVG generation and project ideas
@@ -23,8 +25,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Key Services & Libraries
 
 **Authentication & Database** (`src/lib/`):
-- `supabase.ts` - Database client with TypeScript interfaces
-- `auth.ts` - AuthService class wrapping Supabase auth operations
+- `database.ts` - Cloudflare D1 database client with TypeScript interfaces
+- `auth.ts` - AuthService class for session-based authentication
 - `authStore.ts` - Zustand store for auth state with persistence and subscription tier logic
 
 **AI Integration** (`src/lib/openai.ts`):
@@ -37,7 +39,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Theme toggle with dark mode support
 - Subscription tier-based feature access controls
 
-### Database Schema (Supabase)
+### Database Schema (Cloudflare D1)
 
 Key tables and relationships:
 - `profiles` - User profiles with subscription tiers (free/starter/maker/pro)
@@ -45,8 +47,9 @@ Key tables and relationships:
 - `project_revisions` - Version history with automatic incremental numbering
 - `templates` - Premium/free templates with download tracking
 - `blog_posts` - CMS content
+- `user_sessions` - Session-based authentication storage
 
-Row Level Security (RLS) enabled on all tables.
+Database schema defined in `migrations/0001_initial_schema.sql`.
 
 ### Subscription Tiers & Feature Access
 
@@ -60,8 +63,8 @@ Feature gates use `useCanAccessFeature()` hook.
 ### Environment Variables
 
 **Required**:
-- `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` - Database connection
-- `SUPABASE_SERVICE_ROLE_KEY` - Server-side operations
+- `CLOUDFLARE_ACCOUNT_ID` / `CLOUDFLARE_API_TOKEN` - Cloudflare API access
+- Database automatically bound via wrangler.toml D1 configuration
 - `VITE_STRIPE_PUBLISHABLE_KEY` / `STRIPE_SECRET_KEY` - Payments
 
 **Optional**:
@@ -73,18 +76,20 @@ Feature gates use `useCanAccessFeature()` hook.
 - `src/components/home/` - Landing page sections
 - `src/components/tools/` - AI tool components (SVG gen, editor, etc.)
 - `src/pages/tools/` - Tool pages with authentication
+- `src/pages/api/` - Cloudflare Workers API endpoints
 - `src/store/` - Zustand state management
-- `supabase/functions/` - Edge functions for project revisions
-- `supabase/migrations/` - Database schema
+- `migrations/` - D1 database schema and migrations
+- `src/lib/` - Database service and authentication
 
 ### Key Patterns
 
 - Astro pages with React islands for interactivity
-- Server-side authentication checks in Astro pages
+- Server-side authentication checks using session validation
 - Client-side state management with Zustand
 - Fabric.js integration for canvas editing
 - OpenAI integration with graceful fallbacks
 - Subscription-based feature gating throughout UI
+- API-first architecture with Cloudflare Workers endpoints
 
 ## Templates System
 
@@ -101,13 +106,13 @@ Templates are stored in `templates/` directory with SVG files and organized by c
 ## Build System Considerations
 
 ### Static Build Compatibility
-- Mock Supabase client for build-time when environment variables unavailable
+- Mock database client for build-time when D1 binding unavailable
 - Dynamic routes require `getStaticPaths()` returning empty arrays for server-side generation
 - Database queries wrapped in try-catch for graceful build failures
 
 ### Environment Handling
 The app gracefully handles missing environment variables during build:
-- Supabase client auto-detects environment and provides mock responses
+- Database client auto-detects environment and provides mock responses
 - OpenAI integration falls back to MockAIService when API key missing
 - All external service integrations designed to fail gracefully
 
@@ -115,8 +120,9 @@ The app gracefully handles missing environment variables during build:
 
 ### Auth State Management
 - Zustand store (`authStore.ts`) with persistence handles auth state
-- Automatic session refresh and auth state change listeners
-- Server-side auth checks in Astro pages using `authService.getCurrentUser()`
+- Session-based authentication using httpOnly cookies (`cutglue_session`)
+- Server-side auth checks in Astro pages using session validation
+- Client-side auth state synchronized with server sessions
 
 ### Feature Access Control
 Use `useCanAccessFeature(feature)` hook for subscription gating:
@@ -141,26 +147,70 @@ Use `useCanAccessFeature(feature)` hook for subscription gating:
 
 ## Database Integration
 
-### Edge Functions
-Supabase edge functions handle complex operations:
-- `save-project-revision/` - Automatic versioning with incremental numbering
-- `restore-project-revision/` - Project rollback functionality
+### API Endpoints
+Cloudflare Workers API endpoints handle database operations:
+- `/api/projects/[projectId]/revisions` - Project revision history
+- `/api/projects/[projectId]/restore-revision` - Project rollback functionality
+- `/api/templates/[id]` - Template data retrieval
+- `/api/templates/track-download` - Download tracking
+- `/api/auth/signin` - User authentication
+- `/api/auth/signup` - User registration
 
-### RLS Implementation
-All tables use Row Level Security:
-- User-scoped access for projects and downloads
-- Public read access for templates
-- Admin-only write access for templates and system data
+### Security Implementation
+Database access controlled through:
+- Session-based authentication with user ownership verification
+- Server-side authorization checks on all API endpoints
+- User-scoped data access enforced in database service methods
 
 ## Development Workflow
 
 ### Testing Database Changes
-1. Create migration in `supabase/migrations/`
-2. Test locally with Supabase CLI
-3. Deploy to staging environment first
+1. Create migration in `migrations/` directory
+2. Test locally with `wrangler d1 execute` command
+3. Deploy to staging D1 database first
 4. Templates require both schema and data population scripts
+5. Use `wrangler d1 migrations apply` for production deployment
 
 ### Component Development
-- React components use TypeScript interfaces from `src/lib/supabase.ts`
+- React components use TypeScript interfaces from `src/lib/database.ts`
 - Astro pages handle server-side data fetching and authentication
 - Client-side interactivity added via `client:load` directive
+- Components make API calls to Cloudflare Workers endpoints for database operations
+
+## Cloudflare Deployment
+
+### D1 Database Setup
+```bash
+# Create D1 database
+wrangler d1 create cutgluebuild-db
+
+# Update wrangler.toml with database ID
+# Run migrations
+wrangler d1 execute cutgluebuild-db --file migrations/0001_initial_schema.sql
+wrangler d1 execute cutgluebuild-db --file migrations/0002_populate_templates.sql
+
+# Deploy to Cloudflare Pages
+npm run build
+wrangler pages deploy dist
+```
+
+### Environment Setup
+1. Set up D1 database bindings in wrangler.toml
+2. Configure environment variables in Cloudflare dashboard
+3. Deploy Astro app to Cloudflare Pages with Workers integration
+4. Test authentication and database operations
+
+## Migration Notes
+
+This project has been migrated from Supabase to Cloudflare D1:
+- **Authentication**: Now uses session-based auth with httpOnly cookies
+- **Database**: Migrated from PostgreSQL (Supabase) to SQLite (D1)
+- **API**: Server-side operations moved to Cloudflare Workers endpoints
+- **Build**: Optimized for Cloudflare Pages deployment
+- **Security**: Maintains same security model with new architecture
+
+All functionality has been preserved while gaining:
+- Better performance with edge computing
+- Lower costs with Cloudflare's pricing model
+- Simplified deployment pipeline
+- Enhanced security with session-based authentication

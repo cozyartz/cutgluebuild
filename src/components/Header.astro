@@ -1,18 +1,18 @@
 ---
 ---
 
-<header class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200/20 dark:border-gray-800/20">
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-200/10 dark:border-gray-800/10">
   <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16">
       <!-- Logo -->
       <div class="flex items-center">
-        <a href="/" class="flex items-center space-x-2 group">
-          <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center transform group-hover:scale-110 transition-transform duration-200">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <a href="/" class="flex items-center space-x-3 group">
+          <div class="w-8 h-8 bg-gray-900 dark:bg-gray-100 rounded-lg flex items-center justify-center transform group-hover:scale-110 transition-transform duration-200">
+            <svg class="w-5 h-5 text-white dark:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v6a2 2 0 002 2h4a2 2 0 002-2V5z"></path>
             </svg>
           </div>
-          <span class="text-xl font-bold bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">CutGlueBuild</span>
+          <span class="text-xl font-semibold text-gray-900 dark:text-gray-100">CutGlueBuild</span>
         </a>
       </div>
 
@@ -38,7 +38,7 @@
 
         <!-- Auth Buttons -->
         <div class="hidden md:flex items-center space-x-3">
-          <a href="/login" class="text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors duration-200">Sign In</a>
+          <a href="/login" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors duration-200">Sign In</a>
           <a href="/signup" class="btn btn-primary">Get Started</a>
         </div>
 
@@ -54,13 +54,13 @@
     <!-- Mobile Menu -->
     <div id="mobile-menu" class="hidden md:hidden pb-4">
       <div class="space-y-2">
-        <a href="/tools" class="block px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors duration-200">Tools</a>
-        <a href="/templates" class="block px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors duration-200">Templates</a>
-        <a href="/blog" class="block px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors duration-200">Blog</a>
-        <a href="/pricing" class="block px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors duration-200">Pricing</a>
+        <a href="/tools" class="block px-3 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors duration-200">Tools</a>
+        <a href="/templates" class="block px-3 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors duration-200">Templates</a>
+        <a href="/blog" class="block px-3 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors duration-200">Blog</a>
+        <a href="/pricing" class="block px-3 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors duration-200">Pricing</a>
         <div class="border-t border-gray-200 dark:border-gray-800 pt-2 mt-2">
-          <a href="/login" class="block px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors duration-200">Sign In</a>
-          <a href="/signup" class="block px-3 py-2 text-primary-500 font-medium">Get Started</a>
+          <a href="/login" class="block px-3 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors duration-200">Sign In</a>
+          <a href="/signup" class="block px-3 py-2 text-gray-900 dark:text-gray-100 font-medium">Get Started</a>
         </div>
       </div>
     </div>
@@ -111,7 +111,7 @@
 
 <style>
   .nav-link {
-    @apply text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 font-medium transition-colors duration-200 relative;
+    @apply text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 font-medium transition-colors duration-200 relative;
   }
 
   .nav-link::after {
@@ -121,12 +121,20 @@
     height: 2px;
     bottom: -4px;
     left: 50%;
-    background: linear-gradient(to right, theme('colors.primary.500'), theme('colors.secondary.500'));
+    background: theme('colors.gray.900');
     transition: all 0.3s ease;
     transform: translateX(-50%);
   }
 
+  .dark .nav-link::after {
+    background: theme('colors.gray.100');
+  }
+
   .nav-link:hover::after {
     width: 100%;
+  }
+
+  .btn-primary {
+    @apply bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 px-4 py-2 rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors duration-200;
   }
 </style>

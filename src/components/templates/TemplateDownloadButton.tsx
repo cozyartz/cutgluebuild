@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '../../lib/supabase';
-import { authService } from '../../lib/auth';
+import { useAuthStore, useUser, useCanAccessFeature } from '../../store/authStore';
 import toast from 'react-hot-toast';
 
 interface TemplateDownloadButtonProps {
@@ -17,6 +16,8 @@ export default function TemplateDownloadButton({
   className = '' 
 }: TemplateDownloadButtonProps) {
   const [isDownloading, setIsDownloading] = useState(false);
+  const user = useUser();
+  const canAccessPremium = useCanAccessFeature('premium_templates');
 
   const handleDownload = async () => {
     try {
@@ -24,7 +25,6 @@ export default function TemplateDownloadButton({
 
       // Check if user is authenticated for premium templates
       if (isPremium) {
-        const user = await authService.getCurrentUser();
         if (!user) {
           toast.error('Please sign in to download premium templates');
           window.location.href = '/login';
@@ -32,40 +32,46 @@ export default function TemplateDownloadButton({
         }
 
         // Check subscription tier
-        if (user.profile?.subscription_tier === 'free') {
+        if (!canAccessPremium) {
           toast.error('Premium templates require a paid subscription');
           window.location.href = '/pricing';
           return;
         }
       }
 
-      // Get template data
-      const { data: template, error } = await supabase
-        .from('templates')
-        .select('svg_data, title')
-        .eq('id', templateId)
-        .single();
+      // Get template data via API
+      const response = await fetch(`/api/templates/${templateId}`, {
+        method: 'GET',
+        credentials: 'include'
+      });
 
-      if (error) {
-        throw error;
+      if (!response.ok) {
+        throw new Error('Failed to fetch template');
       }
 
-      if (!template) {
+      const template = await response.json();
+
+      if (!template || !template.svg_data) {
         throw new Error('Template not found');
       }
 
-      // Track download
-      const user = await authService.getCurrentUser();
+      // Track download via API if user is authenticated
       if (user) {
-        await supabase
-          .from('template_downloads')
-          .upsert({
-            user_id: user.id,
-            template_id: templateId
-          });
+        const trackResponse = await fetch('/api/templates/track-download', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify({
+            templateId,
+            userId: user.id
+          })
+        });
 
-        // Increment download count (using rpc call for atomic increment)
-        await supabase.rpc('increment_download_count', { template_id: templateId });
+        if (!trackResponse.ok) {
+          console.warn('Failed to track download, but continuing...');
+        }
       }
 
       // Create and download file

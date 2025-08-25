@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import toast from 'react-hot-toast';
+import { motion } from 'framer-motion';
+import { toast } from 'react-hot-toast';
+import { 
+  Wand2, 
+  Download, 
+  Loader2, 
+  Settings,
+  Image,
+  CheckCircle
+} from 'lucide-react';
+import { useUser } from '../../store/authStore';
 
 interface SVGGeneratorProps {
   onGenerate?: (svgData: string, metadata: any) => void;
@@ -16,6 +26,7 @@ interface GenerationSettings {
 }
 
 export default function SVGGenerator({ onGenerate }: SVGGeneratorProps) {
+  const user = useUser();
   const [settings, setSettings] = useState<GenerationSettings>({
     description: '',
     material: 'wood',
@@ -38,10 +49,24 @@ export default function SVGGenerator({ onGenerate }: SVGGeneratorProps) {
     setIsGenerating(true);
     
     try {
-      // Simulate AI generation with a more sophisticated mock
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
-      const svgData = createMockSVG(settings);
+      const response = await fetch('/api/ai/generate-svg', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          description: settings.description,
+          material: settings.material,
+          width: settings.width,
+          height: settings.height,
+          style: settings.style,
+          complexity: settings.complexity
+        })
+      });
+
+      if (!response.ok) throw new Error('Failed to generate SVG');
+
+      const result = await response.json();
+      const svgData = result.svgData;
       setGeneratedSvg(svgData);
       
       if (onGenerate) {
@@ -147,15 +172,64 @@ export default function SVGGenerator({ onGenerate }: SVGGeneratorProps) {
     URL.revokeObjectURL(url);
   };
 
+  if (!user) {
+    return (
+      <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
+        <div className="text-center">
+          <Wand2 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+            AI SVG Generator
+          </h3>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
+            Sign in to generate custom SVG designs with AI.
+          </p>
+          <a href="/login" className="btn-primary inline-flex items-center">
+            Sign In to Continue
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="grid lg:grid-cols-2 gap-8">
+    <div className="space-y-6">
+      {/* Header */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6"
+      >
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center space-x-3">
+            <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
+              <Wand2 className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                AI SVG Generator
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Create custom laser-ready designs with AI
+              </p>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      <div className="grid lg:grid-cols-2 gap-6">
         {/* Settings Panel */}
-        <div className="space-y-6">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-              AI SVG Generator
-            </h2>
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.1 }}
+          className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6"
+        >
+          <div className="flex items-center space-x-2 mb-6">
+            <Settings className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+            <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+              Generation Settings
+            </h4>
+          </div>
             
             {/* Description */}
             <div className="mb-6">

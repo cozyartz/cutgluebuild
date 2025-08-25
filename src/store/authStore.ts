@@ -1,18 +1,19 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { authService, type AuthUser } from '../lib/auth';
-import type { Session } from '@supabase/supabase-js';
+import { authService, type AuthUser, type AuthSession } from '../lib/auth';
 
 interface AuthState {
   user: AuthUser | null;
-  session: Session | null;
+  session: AuthSession | null;
+  sessionId: string | null;
   isLoading: boolean;
   isInitialized: boolean;
 }
 
 interface AuthActions {
   setUser: (user: AuthUser | null) => void;
-  setSession: (session: Session | null) => void;
+  setSession: (session: AuthSession | null) => void;
+  setSessionId: (sessionId: string | null) => void;
   setLoading: (loading: boolean) => void;
   setInitialized: (initialized: boolean) => void;
   signIn: (email: string, password: string) => Promise<void>;
@@ -30,12 +31,14 @@ export const useAuthStore = create<AuthStore>()(
       // State
       user: null,
       session: null,
+      sessionId: null,
       isLoading: false,
       isInitialized: false,
 
       // Actions
       setUser: (user) => set({ user }),
       setSession: (session) => set({ session }),
+      setSessionId: (sessionId) => set({ sessionId }),
       setLoading: (isLoading) => set({ isLoading }),
       setInitialized: (isInitialized) => set({ isInitialized }),
 
@@ -43,7 +46,16 @@ export const useAuthStore = create<AuthStore>()(
         set({ isLoading: true });
         try {
           const { user, session } = await authService.signIn(email, password);
-          set({ user: user as AuthUser, session });
+          if (user && session) {
+            set({ 
+              user,
+              session, 
+              sessionId: session.id 
+            });
+            
+            // Set session cookie
+            document.cookie = `cutglue_session=${session.id}; Path=/; Max-Age=${30 * 24 * 60 * 60}; Secure; SameSite=Strict`;
+          }
         } catch (error) {
           console.error('Sign in error:', error);
           throw error;
@@ -55,8 +67,17 @@ export const useAuthStore = create<AuthStore>()(
       signUp: async (email: string, password: string, fullName?: string) => {
         set({ isLoading: true });
         try {
-          await authService.signUp(email, password, fullName);
-          // Note: User will be set when email is confirmed
+          const { user, session } = await authService.signUp(email, password, fullName);
+          if (user && session) {
+            set({ 
+              user,
+              session, 
+              sessionId: session.id 
+            });
+            
+            // Set session cookie
+            document.cookie = `cutglue_session=${session.id}; Path=/; Max-Age=${30 * 24 * 60 * 60}; Secure; SameSite=Strict`;
+          }
         } catch (error) {
           console.error('Sign up error:', error);
           throw error;
@@ -68,8 +89,19 @@ export const useAuthStore = create<AuthStore>()(
       signOut: async () => {
         set({ isLoading: true });
         try {
-          await authService.signOut();
-          set({ user: null, session: null });
+          const { sessionId } = get();
+          if (sessionId) {
+            await authService.signOut(sessionId);
+          }
+          
+          // Clear session cookie
+          document.cookie = 'cutglue_session=; Path=/; Max-Age=0';
+          
+          set({ 
+            user: null, 
+            session: null, 
+            sessionId: null 
+          });
         } catch (error) {
           console.error('Sign out error:', error);
           throw error;
@@ -83,51 +115,93 @@ export const useAuthStore = create<AuthStore>()(
 
         set({ isLoading: true });
         try {
-          // Get current session
-          const session = await authService.getSession();
+          // Get session ID from cookie
+          let sessionId = get().sessionId;
           
-          if (session?.user) {
-            // Get full user profile
-            const user = await authService.getCurrentUser();
-            set({ user, session });
+          if (!sessionId && typeof document !== 'undefined') {
+            const cookies = document.cookie.split(';');
+            const sessionCookie = cookies.find(c => c.trim().startsWith('cutglue_session='));
+            if (sessionCookie) {
+              sessionId = sessionCookie.split('=')[1];
+              set({ sessionId });
+            }
           }
-
-          // Listen for auth changes
-          authService.onAuthStateChange(async (event, session) => {
-            console.log('Auth state changed:', event, session);
+          
+          if (sessionId) {
+            // Validate session and get user
+            const user = await authService.getCurrentUser(sessionId);
+            const session = await authService.getSession(sessionId);
             
-            if (session?.user) {
-              const user = await authService.getCurrentUser();
+            if (user && session) {
               set({ user, session });
             } else {
-              set({ user: null, session: null });
+              // Invalid session, clear it
+              set({ 
+                user: null, 
+                session: null, 
+                sessionId: null 
+              });
+              if (typeof document !== 'undefined') {
+                document.cookie = 'cutglue_session=; Path=/; Max-Age=0';
+              }
             }
-          });
-
+          }
         } catch (error) {
           console.error('Auth initialization error:', error);
+          // Clear any invalid state
+          set({ 
+            user: null, 
+            session: null, 
+            sessionId: null 
+          });
+          if (typeof document !== 'undefined') {
+            document.cookie = 'cutglue_session=; Path=/; Max-Age=0';
+          }
         } finally {
           set({ isLoading: false, isInitialized: true });
         }
       },
 
       refreshUser: async () => {
+        const { sessionId } = get();
+        if (!sessionId) return;
+
         try {
-          const user = await authService.getCurrentUser();
-          set({ user });
+          const user = await authService.getCurrentUser(sessionId);
+          if (user) {
+            set({ user });
+          } else {
+            // Session expired or invalid
+            set({ 
+              user: null, 
+              session: null, 
+              sessionId: null 
+            });
+            if (typeof document !== 'undefined') {
+              document.cookie = 'cutglue_session=; Path=/; Max-Age=0';
+            }
+          }
         } catch (error) {
           console.error('Refresh user error:', error);
           // If refresh fails, user might be signed out
-          set({ user: null, session: null });
+          set({ 
+            user: null, 
+            session: null, 
+            sessionId: null 
+          });
+          if (typeof document !== 'undefined') {
+            document.cookie = 'cutglue_session=; Path=/; Max-Age=0';
+          }
         }
       }
     }),
     {
       name: 'auth-store',
       partialize: (state) => ({
-        // Only persist user and session, not loading states
+        // Persist user, session, and sessionId
         user: state.user,
-        session: state.session
+        session: state.session,
+        sessionId: state.sessionId
       })
     }
   )
