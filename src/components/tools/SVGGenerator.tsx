@@ -379,9 +379,7 @@ export default function SVGGenerator({ onGenerate }: SVGGeneratorProps) {
               />
             ) : (
               <div className="text-center text-gray-400 dark:text-gray-600">
-                <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v6a2 2 0 002 2h4a2 2 0 002-2V5z" />
-                </svg>
+                <Image className="w-16 h-16 mx-auto mb-4" />
                 <p className="text-lg font-medium">No design generated yet</p>
                 <p className="text-sm">Fill out the form and click generate</p>
               </div>

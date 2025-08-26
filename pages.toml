@@ -1,0 +1,22 @@
+name = "cutgluebuild"
+compatibility_date = "2025-08-25"
+pages_build_output_dir = "dist"
+
+# Pages Functions configuration
+[env.production]
+compatibility_date = "2025-08-25"
+
+[env.production.vars]
+ENVIRONMENT = "production"
+DOMAIN = "cutgluebuild.com" 
+BASE_URL = "https://cutgluebuild.com"
+
+# D1 Database bindings for Pages
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "cutgluebuild-db-prod"
+database_id = "5413478b-b852-4a19-9dfb-0617c996c738"
+
+# AI binding for Pages
+[env.production.ai]
+binding = "AI"

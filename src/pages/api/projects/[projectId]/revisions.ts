@@ -3,6 +3,8 @@ import type { APIRoute } from 'astro';
 import { getDatabase, type Env } from '../../../../lib/database';
 import { getSessionFromRequest, getAuthService } from '../../../../lib/auth';
 
+export const prerender = false;
+
 export const GET: APIRoute = async ({ params, request }) => {
   try {
     const projectId = params.projectId;

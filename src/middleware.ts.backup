@@ -1,0 +1,92 @@
+// Cloudflare Pages middleware for multi-tenant subdomain routing
+// Handles tenant isolation and routing for {tenant-id}.cutgluebuild.com
+
+import { TenantService } from './lib/tenant';
+import type { Env } from './lib/database';
+
+export interface MiddlewareContext {
+  request: Request;
+  env: Env;
+  ctx: any; // Cloudflare Pages execution context
+}
+
+export async function onRequest(context: MiddlewareContext): Promise<Response> {
+  const { request, env } = context;
+  const url = new URL(request.url);
+  const hostname = url.hostname;
+  
+  const tenantService = new TenantService(env);
+  const { tenantId, isMainDomain } = tenantService.getTenantFromHostname(hostname);
+  
+  // Main domain - show marketing site
+  if (isMainDomain) {
+    return handleMainDomain(request, env);
+  }
+  
+  // Subdomain tenant access
+  if (tenantId) {
+    const tenant = await tenantService.getTenant(tenantId);
+    
+    if (!tenant) {
+      return new Response('Tenant not found', { 
+        status: 404,
+        headers: { 'Content-Type': 'text/plain' }
+      });
+    }
+    
+    return handleTenantDomain(request, env, tenant);
+  }
+  
+  // Invalid hostname
+  return new Response('Invalid domain', { 
+    status: 400,
+    headers: { 'Content-Type': 'text/plain' }
+  });
+}
+
+async function handleMainDomain(request: Request, env: Env): Promise<Response> {
+  // Continue to main site (marketing, docs, etc.)
+  // This allows the main cutgluebuild.com to function normally
+  
+  // Add tenant context to headers for downstream processing
+  const modifiedRequest = new Request(request, {
+    headers: {
+      ...request.headers,
+      'X-Tenant-Context': 'main',
+      'X-Is-Main-Domain': 'true'
+    }
+  });
+  
+  return fetch(modifiedRequest);
+}
+
+async function handleTenantDomain(request: Request, env: Env, tenant: any): Promise<Response> {
+  const url = new URL(request.url);
+  
+  // Security: Ensure tenant can only access their own data
+  // Add tenant context to all requests
+  const modifiedHeaders = new Headers(request.headers);
+  modifiedHeaders.set('X-Tenant-ID', tenant.id);
+  modifiedHeaders.set('X-Tenant-Plan', tenant.plan);
+  modifiedHeaders.set('X-Tenant-Features', JSON.stringify(tenant.settings ? JSON.parse(tenant.settings).features : []));
+  
+  // Rewrite URLs to tenant-specific paths if needed
+  let targetUrl = url.toString();
+  
+  // Handle tenant-specific routing
+  if (url.pathname === '/' || url.pathname === '') {
+    // Redirect to tenant dashboard
+    targetUrl = url.toString().replace(url.pathname, '/dashboard');
+  }
+  
+  const modifiedRequest = new Request(targetUrl, {
+    method: request.method,
+    headers: modifiedHeaders,
+    body: request.method !== 'GET' && request.method !== 'HEAD' ? request.body : null
+  });
+  
+  return fetch(modifiedRequest);
+}
+
+// Export for use in Pages Functions
+export { onRequest as default };

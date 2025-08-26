@@ -475,3 +475,15 @@ export function getDatabase(env?: Env): DatabaseService {
   // Return mock database for build time
   return createMockDatabase();
 }
+
+// Temporary auth service for backward compatibility
+export function getAuthService() {
+  return {
+    getCurrentUser: () => Promise.resolve(null)
+  };
+}
+
+// Temporary session function for backward compatibility
+export function getSessionFromRequest() {
+  return Promise.resolve(null);
+}

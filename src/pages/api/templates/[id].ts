@@ -2,6 +2,8 @@
 import type { APIRoute } from 'astro';
 import { getDatabase, type Env } from '../../../lib/database';
 
+export const prerender = false;
+
 export const GET: APIRoute = async ({ params, request }) => {
   try {
     const templateId = params.id;

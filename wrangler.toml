@@ -1,9 +1,16 @@
 name = "cutgluebuild"
-compatibility_date = "2025-06-22"
+main = "src/index.ts"
+compatibility_date = "2025-08-25"
 pages_build_output_dir = "dist"
 
-account_id = "51826042d6e31c694331efeb1be341"
+account_id = "51826042d6e31c694331efeb1be34123"
 workers_dev = true
+
+# Routes for multi-tenant subdomain handling
+routes = [
+  { pattern = "*.cutgluebuild.com/*", zone_name = "cutgluebuild.com" },
+  { pattern = "cutgluebuild.com/*", zone_name = "cutgluebuild.com" }
+]
 
 [ai]
 binding = "AI"
@@ -11,15 +18,31 @@ binding = "AI"
 [[d1_databases]]
 binding = "DB"
 database_name = "cutgluebuild-db"
-database_id = "your-database-id-here"
+database_id = "6b98a428-d670-4a6b-b24e-cf4ddf362736"
 
-[env.production.d1_databases]
+[[env.production.d1_databases]]
 binding = "DB"
 database_name = "cutgluebuild-db-prod"
-database_id = "your-production-database-id-here"
+database_id = "5413478b-b852-4a19-9dfb-0617c996c738"
 
 [vars]
 ENVIRONMENT = "development"
+DOMAIN = "cutgluebuild.com"
+BASE_URL = "https://cutgluebuild.com"
 
 [env.production.vars]
 ENVIRONMENT = "production"
+DOMAIN = "cutgluebuild.com" 
+BASE_URL = "https://cutgluebuild.com"
+
+[env.production.ai]
+binding = "AI"
+
+[[env.production.services]]
+binding = "CF_API"
+service = "cloudflare-api"
+
+# Cloudflare for SaaS configuration
+[[services]]
+binding = "CF_API"
+service = "cloudflare-api"
