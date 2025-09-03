@@ -7,11 +7,11 @@ import { getDatabase, type Template } from '../../lib/database';
 import type { Env } from '../../lib/database';
 
 // Get database service (with fallback for build)
-const database = getDatabase(Astro.locals.runtime?.env as Env);
+const database = getDatabase((Astro.locals as any)?.runtime?.env as Env);
 
 // Fetch templates from database (with fallback for build)
 let templates: Template[] = [];
-let error = null;
+// let error = null;
 
 try {
   templates = await database.getTemplates();

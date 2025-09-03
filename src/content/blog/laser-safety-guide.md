@@ -14,13 +14,13 @@ Laser cutting is powerful, precise, and endlessly fun—but like any tool, it co
 
 ---
 
-## 🔥 Fire Safety
+## Fire Safety
 
 **The #1 risk in laser cutting is fire.**
 
 Laser cutters are high-energy machines that can easily ignite flammable materials if settings are incorrect or the job is left unattended.
 
-### 🔥 Prevention Tips:
+### Prevention Tips:
 
 - **Never walk away** from the laser during a cut
 - Keep a **Class C fire extinguisher** nearby
@@ -46,7 +46,7 @@ Not all materials are laser-safe. Some release **toxic gases** or **corrosive fu
 - **Fiberglass** – toxic resin fumes
 - **Mirrored acrylic** – may reflect laser beam
 
-### ✅ Safe Materials:
+### Safe Materials:
 
 - Plywood (untreated)
 - MDF
@@ -84,7 +84,7 @@ Your eyes and lungs are the most vulnerable.
 
 ---
 
-## ⚙️ Routine Maintenance = Safer Operation
+## Routine Maintenance = Safer Operation
 
 A clean machine is a safe machine.
 
@@ -137,7 +137,7 @@ Safety isn’t about fear—it’s about respect. With the right precautions, la
 
 Treat every job like it’s your first. Be cautious, observant, and methodical.
 
-Then? Go make something amazing ✨
+Then? Go make something amazing!
 
 ---
 

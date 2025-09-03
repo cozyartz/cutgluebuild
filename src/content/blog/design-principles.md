@@ -65,7 +65,7 @@ Focus on **bold lines, consistent scale, and intentional spacing**. Keep these d
 | Shapes           | Avoid overlapping paths |
 | Layers           | Group cuts vs engraves cleanly |
 
-🎯 Keep SVGs clean. Use tools like **[SVGOMG](https://jakearchibald.github.io/svgomg/)** or Inkscape's simplify function.
+**Tip:** Keep SVGs clean. Use tools like **[SVGOMG](https://jakearchibald.github.io/svgomg/)** or Inkscape's simplify function.
 
 ---
 
@@ -98,7 +98,7 @@ Allows color variation (e.g., paint layers, stained wood, acrylic behind wood)
 
 Example: A sign with wood front, colored acrylic behind, and a plywood backing.
 
-💡 Use Proofgrade Wood Packs or cast acrylic sheets for this. They cut clean and stack beautifully.
+**Pro tip:** Use Proofgrade Wood Packs or cast acrylic sheets for this. They cut clean and stack beautifully.
 
 Bonus: Design Tools Worth Using
 Here’s what the pros use:
@@ -111,7 +111,7 @@ Fusion 360	3D modeling and exporting parts
 
 Also try: MakeSVG, [Tinkercad], or [Vectr] for quick mockups.
 
-Summary Checklist ✅
+Summary Checklist
 Before sending your design to the laser:
 
  Compensated for kerf?
@@ -124,7 +124,7 @@ Before sending your design to the laser:
 
  Tested on scrap?
 
-🎯 Consistent results come from repeatable systems. Save presets, document settings, and test smart.
+**Key insight:** Consistent results come from repeatable systems. Save presets, document settings, and test smart.
 
 Tools to Help You Succeed
 Honeycomb Cutting Bed – keeps airflow clean and improves cut quality.

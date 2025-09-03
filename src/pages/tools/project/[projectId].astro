@@ -1,8 +1,8 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import Header from '../../../components/Header.astro';
-import { getDatabase, getAuthService, getSessionFromRequest } from '../../../lib/database';
-import { SESSION_COOKIE_NAME } from '../../../lib/auth';
+import { getDatabase } from '../../../lib/database';
+import { getAuthService, getSessionFromRequest } from '../../../lib/auth';
 import type { Env, UserProject } from '../../../lib/database';
 
 export async function getStaticPaths() {
@@ -22,8 +22,8 @@ if (!sessionId) {
   return Astro.redirect('/login');
 }
 
-// Get services
-const env = Astro.locals.runtime?.env as Env;
+// Get services - during build, env is not available
+const env = (Astro.locals as any)?.runtime?.env as Env | undefined;
 const authService = getAuthService(env);
 const database = getDatabase(env);
 
@@ -46,24 +46,27 @@ if (!project) {
   return Astro.redirect('/tools');
 }
 
+// TypeScript assertion - project is guaranteed to exist here
+const currentProject = project as UserProject;
+
 // Parse metadata and canvas settings
 let parsedMetadata: any = {};
-let parsedCanvasSettings: any = {};
+// let parsedCanvasSettings: any = {};
 
 try {
-  parsedMetadata = project.metadata ? JSON.parse(project.metadata) : {};
+  parsedMetadata = currentProject.metadata ? JSON.parse(currentProject.metadata) : {};
 } catch {
   parsedMetadata = {};
 }
 
-try {
-  parsedCanvasSettings = project.canvas_settings ? JSON.parse(project.canvas_settings) : { width: 800, height: 600, backgroundColor: '#ffffff' };
-} catch {
-  parsedCanvasSettings = { width: 800, height: 600, backgroundColor: '#ffffff' };
-}
+// try {
+//   parsedCanvasSettings = currentProject.canvas_settings ? JSON.parse(currentProject.canvas_settings) : { width: 800, height: 600, backgroundColor: '#ffffff' };
+// } catch {
+//   parsedCanvasSettings = { width: 800, height: 600, backgroundColor: '#ffffff' };
+// }
 ---
 
-<Layout title={`${project.title} - CutGlueBuild.com`} description={project.description}>
+<Layout title={`${currentProject.title} - CutGlueBuild.com`} description={currentProject.description}>
   <Header />
   
   <main class="pt-20 min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -73,10 +76,10 @@ try {
         <div class="flex items-start justify-between">
           <div class="flex-1">
             <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-              {project.title}
+              {currentProject.title}
             </h1>
             <p class="text-gray-600 dark:text-gray-300 mb-6">
-              {project.description}
+              {currentProject.description}
             </p>
             
             <div class="flex flex-wrap gap-4 mb-6">
@@ -85,7 +88,7 @@ try {
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v6a2 2 0 002 2h4a2 2 0 002-2V5z"></path>
                 </svg>
                 <span class="text-sm text-gray-600 dark:text-gray-400">
-                  Type: {project.project_type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                  Type: {currentProject.project_type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                 </span>
               </div>
               
@@ -116,14 +119,14 @@ try {
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                 </svg>
                 <span class="text-sm text-gray-600 dark:text-gray-400">
-                  Created: {new Date(project.created_at).toLocaleDateString()}
+                  Created: {new Date(currentProject.created_at).toLocaleDateString()}
                 </span>
               </div>
             </div>
           </div>
           
           <div class="flex items-center space-x-3 ml-6">
-            <a href={`/tools/editor/${project.id}`} class="btn btn-primary">
+            <a href={`/tools/editor/${currentProject.id}`} class="btn btn-primary">
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
               </svg>
@@ -155,8 +158,8 @@ try {
             
             <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 flex items-center justify-center min-h-96">
               <div class="bg-white rounded-lg shadow-lg p-8">
-                {project.svg_data ? (
-                  <div set:html={project.svg_data} />
+                {currentProject.svg_data ? (
+                  <div set:html={currentProject.svg_data} />
                 ) : (
                   <div class="text-gray-500 text-center">
                     <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -236,7 +239,7 @@ try {
                 </label>
                 <input 
                   type="text" 
-                  value={project.title}
+                  value={currentProject.title}
                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white text-sm"
                 />
               </div>
@@ -248,7 +251,7 @@ try {
                 <textarea 
                   rows="3"
                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white text-sm resize-none"
-                >{project.description}</textarea>
+                >{currentProject.description}</textarea>
               </div>
               
               <button class="w-full btn btn-outline text-sm">
@@ -290,7 +293,7 @@ try {
   </main>
 </Layout>
 
-<script define:vars={{ project }}>
+<script define:vars={{ project: currentProject }}>
   // Download functionality
   const downloadBtn = document.getElementById('download-btn');
   if (downloadBtn && project.svg_data) {

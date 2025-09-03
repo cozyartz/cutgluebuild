@@ -267,7 +267,7 @@ const categories = [...new Set(posts.flatMap(post => post.data.tags || []))];
   
   filterTags.forEach(tag => {
     tag.addEventListener('click', () => {
-      const filter = tag.dataset.filter;
+      const filter = (tag as HTMLElement).dataset.filter;
       
       // Update active state
       filterTags.forEach(t => t.classList.remove('active'));
@@ -275,7 +275,7 @@ const categories = [...new Set(posts.flatMap(post => post.data.tags || []))];
       
       // Filter posts
       postCards.forEach(card => {
-        const cardTags = card.dataset.tags?.split(',') || [];
+        const cardTags = (card as HTMLElement).dataset.tags?.split(',') || [];
         const shouldShow = filter === 'all' || cardTags.includes(filter);
         
         if (shouldShow) {

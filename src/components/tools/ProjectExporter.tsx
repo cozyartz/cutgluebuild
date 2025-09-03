@@ -21,7 +21,7 @@ const exportFormats: ExportFormat[] = [
     name: 'SVG Vector',
     extension: 'svg',
     description: 'Scalable vector graphics for laser cutters',
-    icon: '📐'
+    icon: 'ruler'
   },
   {
     id: 'png',
@@ -42,7 +42,7 @@ const exportFormats: ExportFormat[] = [
     name: 'DXF CAD',
     extension: 'dxf',
     description: 'AutoCAD drawing exchange format',
-    icon: '🔧'
+    icon: 'wrench'
   }
 ];
 

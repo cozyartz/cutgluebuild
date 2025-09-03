@@ -55,8 +55,8 @@ Matching wood type to your specific use-case ensures your projects end up lookin
 
 | Type        | Easy to Cut | Engraving Detail | Strength       | Best Use                        |
 |-------------|-------------|------------------|----------------|---------------------------------|
-| Softwood    | ✅ Very Easy | ✅ Fine Lines     | 🌱 Moderate    | Models, signs, prototypes       |
-| Hardwood    | 🚧 Harder    | ✅ Great Detail   | 💪 Strong      | Functional parts, robust builds|
+| Softwood    | Very Easy | Fine Lines     | Moderate Strength    | Models, signs, prototypes       |
+| Hardwood    | Harder    | Great Detail   | Strong      | Functional parts, robust builds|
 
 ---
 

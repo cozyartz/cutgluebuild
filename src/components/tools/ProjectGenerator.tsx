@@ -48,7 +48,7 @@ export default function ProjectGenerator({ onProjectSelect }: ProjectGeneratorPr
         'Mount on wall',
       ],
       category: 'home-decor',
-      image: '🎨',
+      image: 'palette',
     },
     {
       id: '2',
@@ -67,7 +67,7 @@ export default function ProjectGenerator({ onProjectSelect }: ProjectGeneratorPr
         'Add felt backing',
       ],
       category: 'gifts',
-      image: '☕',
+      image: 'coffee',
     },
     {
       id: '3',
@@ -87,7 +87,7 @@ export default function ProjectGenerator({ onProjectSelect }: ProjectGeneratorPr
         'Sand and finish',
       ],
       category: 'functional',
-      image: '📝',
+      image: 'file-text',
     },
   ];
 

@@ -1,8 +1,8 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import Header from '../../../components/Header.astro';
-import { getDatabase, getAuthService, getSessionFromRequest } from '../../../lib/database';
-import { SESSION_COOKIE_NAME } from '../../../lib/auth';
+import { getDatabase } from '../../../lib/database';
+import { getAuthService, getSessionFromRequest } from '../../../lib/auth';
 import type { Env, UserProject } from '../../../lib/database';
 
 export async function getStaticPaths() {
@@ -22,8 +22,8 @@ if (!sessionId) {
   return Astro.redirect('/login');
 }
 
-// Get services
-const env = Astro.locals.runtime?.env as Env;
+// Get services - during build, env is not available
+const env = (Astro.locals as any)?.runtime?.env as Env | undefined;
 const authService = getAuthService(env);
 const database = getDatabase(env);
 
@@ -45,6 +45,9 @@ try {
 if (!project) {
   return Astro.redirect('/tools');
 }
+
+// TypeScript assertion - project is guaranteed to exist here
+// const currentProject = project as UserProject;
 ---
 
 <Layout title="Design Editor - CutGlueBuild.com" description="Edit and refine your designs with our powerful in-app editor.">
@@ -64,7 +67,8 @@ if (!project) {
   import React from 'react';
   import { Toaster } from 'react-hot-toast';
 
-  const projectId = project.id;
+  const projectData = project;
+  const projectId = projectData.id;
   
   function EditorApp() {
     const [showHistory, setShowHistory] = React.useState(false);
@@ -75,17 +79,17 @@ if (!project) {
       // Parse the canvas settings and metadata
       let parsedCanvasSettings = {};
       try {
-        parsedCanvasSettings = project.canvas_settings ? JSON.parse(project.canvas_settings) : { width: 800, height: 600, backgroundColor: '#ffffff' };
+        parsedCanvasSettings = projectData.canvas_settings ? JSON.parse(projectData.canvas_settings) : { width: 800, height: 600, backgroundColor: '#ffffff' };
       } catch {
         parsedCanvasSettings = { width: 800, height: 600, backgroundColor: '#ffffff' };
       }
 
       setCurrentProject({
-        ...project,
+        ...projectData,
         canvas_settings: parsedCanvasSettings
       });
 
-      console.log('Loading project:', projectId, project);
+      console.log('Loading project:', projectId, projectData);
     }, []);
 
     return React.createElement('div', { className: 'h-full flex' }, [

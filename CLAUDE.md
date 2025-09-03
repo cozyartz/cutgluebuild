@@ -1,6 +1,12 @@
 # CLAUDE.md
 
+🏆 **OpenAI Hackathon Project - Best Overall Category**
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Hackathon Context
+
+This project is a submission for the OpenAI Hackathon using gpt-oss-120b and gpt-oss-20b models via Cloudflare Workers AI. CutGlueBuild represents a novel application of gpt-oss models to physical fabrication and CNC/laser cutting assistance.
 
 ## Development Commands
 

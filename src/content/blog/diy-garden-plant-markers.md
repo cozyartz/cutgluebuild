@@ -29,7 +29,7 @@ Plant markers are the ideal starter project for new laser users:
 
 **Recommended materials:**
 
-- ⚙️ **Proofgrade Wood or Cast Acrylic**  
+- **Proofgrade Wood or Cast Acrylic**  
   → [Buy a Wood Variety Pack ($89)](https://shop.glowforge.com/collections/proofgrade-materials/products/wood-variety-pack?ref=cutgluebuild-20)
 
 - 🧤 **Laser Safety Glasses**  
@@ -60,7 +60,7 @@ Want to jump in? Here’s a **simple text-based template** to recreate:
 - Outer shape — RED stroke (RGB: 255,0,0), 0.01pt (cut)  
 - Text and icon — BLACK fill (engrave)
 
-💡 You can also prompt CutGlueBuild like:  
+**Pro tip:** You can also prompt CutGlueBuild like:  
 **“Make a modern plant label for tomatoes with leaf engraving and a stake shape.”**
 
 ---
