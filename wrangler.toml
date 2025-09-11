@@ -29,11 +29,15 @@ database_id = "5413478b-b852-4a19-9dfb-0617c996c738"
 ENVIRONMENT = "development"
 DOMAIN = "cutgluebuild.com"
 BASE_URL = "https://cutgluebuild.com"
+STRIPE_PUBLISHABLE_KEY = "pk_test_..."
+STRIPE_WEBHOOK_SECRET = "whsec_..."
 
 [env.production.vars]
 ENVIRONMENT = "production"
 DOMAIN = "cutgluebuild.com" 
 BASE_URL = "https://cutgluebuild.com"
+STRIPE_PUBLISHABLE_KEY = "pk_live_..."
+STRIPE_WEBHOOK_SECRET = "whsec_..."
 
 [env.production.ai]
 binding = "AI"

@@ -1,4 +1,6 @@
 ---
+import CookieConsent from '../components/CookieConsent.tsx';
+
 export interface Props {
   title: string;
   description?: string;
@@ -43,6 +45,9 @@ const { title, description = "Cut. Glue. Build. Repeat. - AI-powered tools and t
     <div id="app">
       <slot />
     </div>
+    
+    <!-- Cookie Consent Banner -->
+    <CookieConsent client:load />
     
     <script>
       // Theme initialization

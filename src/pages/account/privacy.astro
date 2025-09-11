@@ -1,0 +1,351 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getAuthService, getSessionFromRequest } from '../../lib/auth';
+
+// Check if user is authenticated
+const sessionId = getSessionFromRequest(Astro.request);
+if (!sessionId) {
+  return Astro.redirect('/login?redirect=/account/privacy');
+}
+
+const env = (Astro.locals as any)?.runtime?.env;
+if (!env) {
+  throw new Error('Environment not available');
+}
+
+const authService = getAuthService(env);
+const currentUser = await authService.getCurrentUser(sessionId);
+
+if (!currentUser) {
+  return Astro.redirect('/login?redirect=/account/privacy');
+}
+---
+
+<Layout title="Privacy Settings - CutGlueBuild" description="Manage your privacy settings and data rights">
+  <Header />
+
+  <main class="max-w-4xl mx-auto px-4 py-16">
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Privacy Settings</h1>
+      <p class="text-gray-600 dark:text-gray-300">Manage your personal data and privacy preferences</p>
+    </div>
+
+    <div class="grid gap-8">
+      
+      <!-- Data Export Section -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+        <div class="flex items-start gap-4">
+          <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-lg">
+            <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+            </svg>
+          </div>
+          <div class="flex-1">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Export Your Data</h2>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">
+              Download a complete copy of your personal data including account information, projects, and usage history.
+            </p>
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-md p-4 mb-4">
+              <h3 class="font-medium text-gray-900 dark:text-white mb-2">Your export will include:</h3>
+              <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                <li>• Account profile and settings</li>
+                <li>• All projects and their metadata</li>
+                <li>• Usage records and statistics</li>
+                <li>• Billing history (if applicable)</li>
+                <li>• Support interactions</li>
+              </ul>
+            </div>
+            <button 
+              id="export-data-btn"
+              class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition-colors"
+            >
+              Export My Data
+            </button>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+              Export will be provided as a JSON file. Processing may take a few moments.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cookie Preferences Section -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+        <div class="flex items-start gap-4">
+          <div class="bg-green-100 dark:bg-green-900 p-3 rounded-lg">
+            <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <div class="flex-1">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Cookie Preferences</h2>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">
+              Manage your cookie consent preferences for our website.
+            </p>
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <span class="font-medium text-gray-900 dark:text-white">Essential Cookies</span>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">Required for authentication and core functionality</p>
+                </div>
+                <input type="checkbox" checked disabled class="w-4 h-4 text-blue-600 rounded">
+              </div>
+              <div class="flex items-center justify-between">
+                <div>
+                  <span class="font-medium text-gray-900 dark:text-white">Functional Cookies</span>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">Remember your preferences and settings</p>
+                </div>
+                <input type="checkbox" id="functional-cookies" class="w-4 h-4 text-blue-600 rounded">
+              </div>
+              <div class="flex items-center justify-between">
+                <div>
+                  <span class="font-medium text-gray-900 dark:text-white">Analytics Cookies</span>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">Help us understand how you use our service</p>
+                </div>
+                <input type="checkbox" id="analytics-cookies" class="w-4 h-4 text-blue-600 rounded">
+              </div>
+            </div>
+            <button 
+              id="update-cookies-btn"
+              class="mt-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md font-medium transition-colors"
+            >
+              Update Cookie Preferences
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Account Deletion Section -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg border border-red-200 dark:border-red-800 p-6">
+        <div class="flex items-start gap-4">
+          <div class="bg-red-100 dark:bg-red-900 p-3 rounded-lg">
+            <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <div class="flex-1">
+            <h2 class="text-xl font-semibold text-red-600 dark:text-red-400 mb-2">Delete Account</h2>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">
+              Permanently delete your account and all associated data. This action cannot be undone.
+            </p>
+            <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4 mb-4">
+              <h3 class="font-medium text-red-800 dark:text-red-200 mb-2">This will permanently delete:</h3>
+              <ul class="text-sm text-red-700 dark:text-red-300 space-y-1">
+                <li>• Your user profile and account settings</li>
+                <li>• All projects, designs, and revision history</li>
+                <li>• Usage records and preferences</li>
+                <li>• Active subscriptions will be cancelled</li>
+                <li>• Access to any purchased templates or content</li>
+              </ul>
+              <p class="text-sm text-red-700 dark:text-red-300 mt-3 font-medium">
+                Billing records may be retained for legal compliance purposes.
+              </p>
+            </div>
+            <button 
+              id="delete-account-btn"
+              class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md font-medium transition-colors"
+            >
+              Delete My Account
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Information -->
+      <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Privacy Questions?</h2>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <h3 class="font-medium text-gray-900 dark:text-white mb-2">Privacy Officer</h3>
+            <p class="text-gray-600 dark:text-gray-300 text-sm">
+              For data privacy requests and questions
+            </p>
+            <a href="mailto:privacy@cutgluebuild.com" class="text-blue-600 dark:text-blue-400 hover:underline text-sm">
+              privacy@cutgluebuild.com
+            </a>
+          </div>
+          <div>
+            <h3 class="font-medium text-gray-900 dark:text-white mb-2">General Support</h3>
+            <p class="text-gray-600 dark:text-gray-300 text-sm">
+              For technical issues and account help
+            </p>
+            <a href="mailto:support@cutgluebuild.com" class="text-blue-600 dark:text-blue-400 hover:underline text-sm">
+              support@cutgluebuild.com
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+
+  <!-- Delete Account Modal -->
+  <div id="delete-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Confirm Account Deletion</h3>
+      <p class="text-gray-600 dark:text-gray-300 mb-4">
+        Please type your email address to confirm account deletion:
+      </p>
+      <input 
+        type="email" 
+        id="confirm-email" 
+        placeholder={currentUser.email}
+        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md mb-4"
+      />
+      <textarea 
+        id="deletion-reason" 
+        placeholder="Optional: Help us improve by telling us why you're leaving"
+        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md mb-4 h-20 resize-none"
+      ></textarea>
+      <div class="flex gap-2 justify-end">
+        <button id="cancel-delete" class="px-4 py-2 text-gray-600 hover:text-gray-800">
+          Cancel
+        </button>
+        <button id="confirm-delete" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md">
+          Delete Account
+        </button>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // Export data functionality
+  document.getElementById('export-data-btn')?.addEventListener('click', async () => {
+    const btn = document.getElementById('export-data-btn') as HTMLButtonElement;
+    if (!btn) return;
+    
+    const originalText = btn.textContent;
+    btn.textContent = 'Exporting...';
+    btn.disabled = true;
+    
+    try {
+      const response = await fetch('/api/user/export-data', {
+        method: 'POST',
+        credentials: 'include'
+      });
+      
+      if (response.ok) {
+        // Create download
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = response.headers.get('Content-Disposition')?.split('filename=')[1]?.replace(/"/g, '') || 'data-export.json';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+        alert('Your data has been downloaded successfully!');
+      } else {
+        const error = await response.json();
+        alert(`Export failed: ${error.error || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Export error:', error);
+      alert('Failed to export data. Please try again or contact support.');
+    } finally {
+      btn.textContent = originalText;
+      btn.disabled = false;
+    }
+  });
+
+  // Cookie preferences functionality
+  function loadCookiePreferences() {
+    const consent = localStorage.getItem('cutglue_cookie_consent');
+    if (consent) {
+      try {
+        const parsed = JSON.parse(consent);
+        const functionalCheckbox = document.getElementById('functional-cookies') as HTMLInputElement;
+        const analyticsCheckbox = document.getElementById('analytics-cookies') as HTMLInputElement;
+        
+        if (functionalCheckbox) functionalCheckbox.checked = parsed.functional || false;
+        if (analyticsCheckbox) analyticsCheckbox.checked = parsed.analytics || false;
+      } catch (error) {
+        console.error('Error loading cookie preferences:', error);
+      }
+    }
+  }
+
+  document.getElementById('update-cookies-btn')?.addEventListener('click', () => {
+    const functionalCheckbox = document.getElementById('functional-cookies') as HTMLInputElement;
+    const analyticsCheckbox = document.getElementById('analytics-cookies') as HTMLInputElement;
+    
+    const preferences = {
+      essential: true,
+      functional: functionalCheckbox?.checked || false,
+      analytics: analyticsCheckbox?.checked || false,
+      marketing: false,
+      timestamp: Date.now()
+    };
+    
+    localStorage.setItem('cutglue_cookie_consent', JSON.stringify(preferences));
+    alert('Cookie preferences updated successfully!');
+  });
+
+  // Account deletion functionality
+  document.getElementById('delete-account-btn')?.addEventListener('click', () => {
+    const modal = document.getElementById('delete-modal');
+    if (modal) {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+  });
+
+  document.getElementById('cancel-delete')?.addEventListener('click', () => {
+    const modal = document.getElementById('delete-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+  });
+
+  document.getElementById('confirm-delete')?.addEventListener('click', async () => {
+    const emailInput = document.getElementById('confirm-email') as HTMLInputElement;
+    const reasonInput = document.getElementById('deletion-reason') as HTMLTextAreaElement;
+    
+    if (!emailInput?.value) {
+      alert('Please enter your email address to confirm deletion.');
+      return;
+    }
+    
+    const btn = document.getElementById('confirm-delete') as HTMLButtonElement;
+    const originalText = btn.textContent;
+    btn.textContent = 'Deleting...';
+    btn.disabled = true;
+    
+    try {
+      const response = await fetch('/api/user/delete-account', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          confirmationEmail: emailInput.value,
+          reason: reasonInput?.value || ''
+        })
+      });
+      
+      if (response.ok) {
+        alert('Your account has been successfully deleted. You will be redirected to the homepage.');
+        window.location.href = '/';
+      } else {
+        const error = await response.json();
+        alert(`Deletion failed: ${error.error || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Deletion error:', error);
+      alert('Failed to delete account. Please try again or contact support.');
+    } finally {
+      btn.textContent = originalText;
+      btn.disabled = false;
+    }
+  });
+
+  // Load cookie preferences on page load
+  loadCookiePreferences();
+</script>

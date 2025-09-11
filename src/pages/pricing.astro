@@ -113,7 +113,7 @@ import Footer from '../components/Footer.astro';
             </li>
           </ul>
           
-          <button class="w-full btn btn-primary py-3">Start Free Trial</button>
+          <div id="maker-checkout-button"></div>
         </div>
 
         <!-- Pro Plan -->
@@ -160,7 +160,7 @@ import Footer from '../components/Footer.astro';
             </li>
           </ul>
           
-          <button class="w-full btn btn-outline py-3">Contact Sales</button>
+          <div id="pro-checkout-button"></div>
         </div>
       </div>
 
@@ -204,3 +204,35 @@ import Footer from '../components/Footer.astro';
 
   <Footer />
 </Layout>
+
+<script>
+  import CheckoutButton from '../components/billing/CheckoutButton.tsx';
+  import { createRoot } from 'react-dom/client';
+  import React from 'react';
+
+  // Mount Maker checkout button
+  const makerContainer = document.getElementById('maker-checkout-button');
+  if (makerContainer) {
+    const makerRoot = createRoot(makerContainer);
+    makerRoot.render(
+      React.createElement(CheckoutButton, {
+        tier: 'maker',
+        billingCycle: 'monthly',
+        className: 'w-full btn btn-primary py-3'
+      }, 'Start Free Trial')
+    );
+  }
+
+  // Mount Pro checkout button
+  const proContainer = document.getElementById('pro-checkout-button');
+  if (proContainer) {
+    const proRoot = createRoot(proContainer);
+    proRoot.render(
+      React.createElement(CheckoutButton, {
+        tier: 'pro',
+        billingCycle: 'monthly',
+        className: 'w-full btn btn-outline py-3'
+      }, 'Start Free Trial')
+    );
+  }
+</script>

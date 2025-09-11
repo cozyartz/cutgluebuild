@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import type { Env } from '../../../lib/database';
-import { createAIService } from '../../../lib/cloudflare-ai';
+import { createAgentsAIService } from '../../../lib/agents-ai';
 
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
@@ -31,7 +31,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     // Get AI service (will use mock in development)
     const env = locals.runtime?.env as Env;
-    const aiService = createAIService(env);
+    const aiService = createAgentsAIService(env);
 
     try {
       const gcode = await aiService.generateGCode(

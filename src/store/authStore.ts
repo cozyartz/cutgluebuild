@@ -235,5 +235,8 @@ export const useCanAccessFeature = (feature: string) => {
 
 // Initialize auth on app start
 if (typeof window !== 'undefined') {
-  useAuthStore.getState().initialize();
+  // Use setTimeout to avoid executing during React hydration
+  setTimeout(() => {
+    useAuthStore.getState().initialize();
+  }, 0);
 }

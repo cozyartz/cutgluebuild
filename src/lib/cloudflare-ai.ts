@@ -2,6 +2,7 @@
 // Replaces OpenAI SDK for hackathon submission
 
 import type { Env, UserProject } from './database';
+import { trackAICall, aiRateLimiter } from './ai-usage-tracker';
 
 export interface SVGGenerationRequest {
   description: string;
@@ -52,11 +53,64 @@ export class CloudflareAIService {
     this.ai = ai;
   }
 
-  async generateContextualSVG(request: SVGGenerationRequest): Promise<string> {
+  // Test AI binding connectivity
+  async testConnection(): Promise<boolean> {
     try {
-      const prompt = this.createContextualSVGPrompt(request);
+      const response = await this.ai.run('@cf/openai/gpt-oss-20b', {
+        reasoning: { effort: "low" },
+        messages: [{ role: "user", content: "Hello, respond with just 'OK'" }],
+        max_tokens: 10
+      });
+      return response && response.response;
+    } catch (error) {
+      console.error('AI binding test failed:', error);
+      return false;
+    }
+  }
+
+  // Select optimal model based on task complexity
+  private selectModel(taskType: 'simple' | 'complex' | 'balanced'): string {
+    switch (taskType) {
+      case 'complex': return '@cf/openai/gpt-oss-120b';  // Complex reasoning, analysis
+      case 'simple': return '@cf/openai/gpt-oss-20b';    // Fast SVG generation, guidance
+      case 'balanced': return '@cf/openai/gpt-oss-20b';   // Default to faster model
+      default: return '@cf/openai/gpt-oss-20b';
+    }
+  }
+
+  // Select reasoning effort based on task complexity and response time needs
+  private selectReasoningEffort(taskType: 'simple' | 'complex' | 'balanced'): 'low' | 'medium' | 'high' {
+    switch (taskType) {
+      case 'simple': return 'low';     // Fast responses
+      case 'complex': return 'high';   // Deep reasoning
+      case 'balanced': return 'medium'; // Good balance
+      default: return 'low';
+    }
+  }
+
+  // Log model usage for optimization tracking
+  private logModelUsage(model: string, taskType: string, tokens?: number) {
+    console.log(`AI Model Usage: ${model} for ${taskType}, tokens: ${tokens || 'unknown'}`);
+  }
+
+  async generateContextualSVG(request: SVGGenerationRequest): Promise<string> {
+    // Check rate limits
+    if (!aiRateLimiter.canMakeCall()) {
+      const waitTime = aiRateLimiter.getTimeUntilNextCall();
+      throw new Error(`Rate limit exceeded. Wait ${Math.ceil(waitTime / 1000)} seconds.`);
+    }
+    
+    const model = this.selectModel('simple'); // SVG generation is fast task
+    const reasoningEffort = this.selectReasoningEffort('simple');
+    
+    return trackAICall(model, 'SVG Generation', async () => {
+      aiRateLimiter.recordCall();
       
-      const response = await this.ai.run('@cf/openai/gpt-oss-120b', {
+      const prompt = this.createContextualSVGPrompt(request);
+      this.logModelUsage(model, 'SVG Generation');
+      
+      const response = await this.ai.run(model, {
+        reasoning: { effort: reasoningEffort },
         messages: [
           {
             role: "system",
@@ -80,15 +134,21 @@ export class CloudflareAIService {
       // Extract SVG from response if wrapped in markdown
       const svgMatch = svgContent.match(/<svg[\s\S]*?<\/svg>/i);
       return svgMatch ? svgMatch[0] : svgContent;
-      
-    } catch (error) {
-      console.error('Cloudflare AI SVG generation error:', error);
-      throw new Error('Failed to generate SVG with AI');
-    }
+    });
   }
 
   async generateGCode(svgData: string, material: string, machineType: string): Promise<GCodeOutput> {
-    try {
+    if (!aiRateLimiter.canMakeCall()) {
+      const waitTime = aiRateLimiter.getTimeUntilNextCall();
+      throw new Error(`Rate limit exceeded. Wait ${Math.ceil(waitTime / 1000)} seconds.`);
+    }
+    
+    const model = this.selectModel('complex'); // G-code requires complex reasoning
+    const reasoningEffort = this.selectReasoningEffort('complex');
+    
+    return trackAICall(model, 'G-code Generation', async () => {
+      aiRateLimiter.recordCall();
+      
       const prompt = `Convert this SVG design to optimized G-code for ${machineType}:
 
 SVG Data: ${svgData}
@@ -104,7 +164,10 @@ Generate G-code with:
 
 Return as JSON with: gcode, estimatedTime, materialUsage, cuttingPath, warnings`;
 
-      const response = await this.ai.run('@cf/openai/gpt-oss-120b', {
+      this.logModelUsage(model, 'G-code Generation');
+
+      const response = await this.ai.run(model, {
+        reasoning: { effort: reasoningEffort },
         messages: [
           {
             role: "system",
@@ -131,11 +194,7 @@ Return as JSON with: gcode, estimatedTime, materialUsage, cuttingPath, warnings`
           warnings: ["Test settings on scrap material first"]
         };
       }
-      
-    } catch (error) {
-      console.error('G-code generation error:', error);
-      throw new Error('Failed to generate G-code');
-    }
+    });
   }
 
   async analyzeQuality(svgData: string, material: string, settings: any): Promise<QualityPrediction> {
@@ -154,7 +213,12 @@ Predict:
 
 Return as JSON with: successProbability, potentialIssues, recommendations, materialOptimizations`;
 
-      const response = await this.ai.run('@cf/openai/gpt-oss-20b', {
+      const model = this.selectModel('balanced'); // Quality analysis - balanced approach
+      const reasoningEffort = this.selectReasoningEffort('balanced');
+      this.logModelUsage(model, 'Quality Analysis');
+
+      const response = await this.ai.run(model, {
+        reasoning: { effort: reasoningEffort },
         messages: [
           {
             role: "system",
@@ -206,7 +270,12 @@ Provide:
 
 Return as JSON.`;
 
-      const response = await this.ai.run('@cf/openai/gpt-oss-20b', {
+      const model = this.selectModel('simple'); // Workshop guidance is straightforward
+      const reasoningEffort = this.selectReasoningEffort('simple');
+      this.logModelUsage(model, 'Workshop Guidance');
+
+      const response = await this.ai.run(model, {
+        reasoning: { effort: reasoningEffort },
         messages: [
           {
             role: "system",
@@ -261,7 +330,12 @@ Calculate:
 
 Return as JSON with: layout, efficiency, wastePercentage, recommendations`;
 
-      const response = await this.ai.run('@cf/openai/gpt-oss-20b', {
+      const model = this.selectModel('complex'); // Material optimization requires complex calculations
+      const reasoningEffort = this.selectReasoningEffort('complex');
+      this.logModelUsage(model, 'Material Optimization');
+
+      const response = await this.ai.run(model, {
+        reasoning: { effort: reasoningEffort },
         messages: [
           {
             role: "system",
@@ -293,6 +367,214 @@ Return as JSON with: layout, efficiency, wastePercentage, recommendations`;
     }
   }
 
+  async generateShaperOriginSVG(svgData: string, toolDiameter: number = 3.175): Promise<string> {
+    if (!aiRateLimiter.canMakeCall()) {
+      const waitTime = aiRateLimiter.getTimeUntilNextCall();
+      throw new Error(`Rate limit exceeded. Wait ${Math.ceil(waitTime / 1000)} seconds.`);
+    }
+    
+    const model = this.selectModel('balanced');
+    const reasoningEffort = this.selectReasoningEffort('balanced');
+    
+    return trackAICall(model, 'Shaper Origin Conversion', async () => {
+      aiRateLimiter.recordCall();
+      
+      const prompt = `Convert this SVG for Shaper Origin CNC router compatibility:
+
+Input SVG: ${svgData}
+Tool Diameter: ${toolDiameter}mm
+
+Requirements for Shaper Origin:
+- Convert all shapes to single-stroke vectors (no fills)
+- Apply tool radius compensation (inset paths by ${toolDiameter/2}mm for interior cuts)
+- Use only stroke paths, no complex shapes
+- Add tool-change markers as comments: <!-- TOOL_CHANGE: 1/8_ROUTER_BIT -->
+- Ensure all paths are continuous and optimized for CNC routing
+- Remove any elements that can't be cut with a router bit
+- Maintain proper scaling and dimensions
+- Group related operations together
+
+Return optimized SVG for Shaper Origin.`;
+
+      this.logModelUsage(model, 'Shaper Origin Conversion');
+
+      const response = await this.ai.run(model, {
+        reasoning: { effort: reasoningEffort },
+        messages: [
+          {
+            role: "system",
+            content: "You are a CNC routing expert specializing in Shaper Origin. Convert SVG designs for optimal CNC router compatibility with proper tool compensation."
+          },
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+        max_tokens: 2500,
+        temperature: 0.3
+      });
+
+      const shaperSVG = response.response;
+      
+      if (!shaperSVG) {
+        throw new Error('No Shaper-compatible SVG generated');
+      }
+
+      // Extract SVG from response if wrapped in markdown
+      const svgMatch = shaperSVG.match(/<svg[\s\S]*?<\/svg>/i);
+      return svgMatch ? svgMatch[0] : shaperSVG;
+    });
+  }
+
+  async generateParametricDesign(params: {
+    type: 'box' | 'joint' | 'gear' | 'hinge';
+    dimensions: Record<string, number>;
+    material: string;
+    style?: string;
+  }): Promise<{ svg: string; script: string }> {
+    if (!aiRateLimiter.canMakeCall()) {
+      const waitTime = aiRateLimiter.getTimeUntilNextCall();
+      throw new Error(`Rate limit exceeded. Wait ${Math.ceil(waitTime / 1000)} seconds.`);
+    }
+    
+    const model = this.selectModel('complex'); // Parametric design requires complex reasoning
+    const reasoningEffort = this.selectReasoningEffort('complex');
+    
+    return trackAICall(model, 'Parametric Design', async () => {
+      aiRateLimiter.recordCall();
+      
+      const prompt = `Generate a parametric ${params.type} design:
+
+Type: ${params.type}
+Dimensions: ${JSON.stringify(params.dimensions)}
+Material: ${params.material}
+Style: ${params.style || 'functional'}
+
+Create:
+1. A Python script using svgwrite that generates the SVG based on parameters
+2. The resulting SVG with current parameters
+3. Clear parameter documentation
+
+For ${params.type}:
+${this.getParametricRequirements(params.type)}
+
+Return as JSON: { "svg": "...", "script": "...", "documentation": "..." }`;
+
+      this.logModelUsage(model, 'Parametric Design');
+
+      const response = await this.ai.run(model, {
+        reasoning: { effort: reasoningEffort },
+        messages: [
+          {
+            role: "system",
+            content: "You are an expert parametric designer. Create reusable, customizable designs with clean Python scripts."
+          },
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+        max_tokens: 3500,
+        temperature: 0.4
+      });
+
+      try {
+        const result = JSON.parse(response.response);
+        return {
+          svg: result.svg,
+          script: result.script
+        };
+      } catch {
+        // Fallback if not JSON
+        return {
+          svg: `<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="none" stroke="red"/></svg>`,
+          script: `# Parametric ${params.type} generator\nimport svgwrite\n# Add your parameters here`
+        };
+      }
+    });
+  }
+
+  private getParametricRequirements(type: string): string {
+    switch (type) {
+      case 'box':
+        return '- Finger joints with configurable tooth size\n- Adjustable material thickness\n- Optional lid design\n- Kerf compensation';
+      case 'joint':
+        return '- Configurable joint type (finger, dovetail, mortise)\n- Material thickness compensation\n- Tolerance settings';
+      case 'gear':
+        return '- Configurable tooth count and module\n- Center hole sizing\n- Involute gear profile';
+      case 'hinge':
+        return '- Pin diameter and hole spacing\n- Material thickness\n- Number of knuckles';
+      default:
+        return '- Configurable dimensions\n- Material-specific settings\n- Manufacturing tolerances';
+    }
+  }
+
+  async generateMaterialSettings(material: string, thickness: number, machine: 'glowforge' | 'shaper'): Promise<{
+    powerSettings?: { power: number; speed: number; passes: number };
+    toolSettings?: { rpm: number; feedRate: number; plungeRate: number };
+    recommendations: string[];
+  }> {
+    if (!aiRateLimiter.canMakeCall()) {
+      const waitTime = aiRateLimiter.getTimeUntilNextCall();
+      throw new Error(`Rate limit exceeded. Wait ${Math.ceil(waitTime / 1000)} seconds.`);
+    }
+    
+    const model = this.selectModel('balanced');
+    const reasoningEffort = this.selectReasoningEffort('balanced');
+    
+    return trackAICall(model, 'Material Settings', async () => {
+      aiRateLimiter.recordCall();
+      
+      const prompt = `Generate optimal ${machine} settings for:
+
+Material: ${material}
+Thickness: ${thickness}mm
+Machine: ${machine}
+
+Provide:
+${machine === 'glowforge' 
+  ? '- Power percentage (1-100)\n- Speed setting (1-10)\n- Number of passes\n- Focus height adjustment'
+  : '- Spindle RPM\n- Feed rate (mm/min)\n- Plunge rate (mm/min)\n- Recommended bit type'
+}
+- Safety recommendations
+- Test cut suggestions
+- Common issues and solutions
+
+Return as JSON with appropriate settings and recommendations.`;
+
+      this.logModelUsage(model, 'Material Settings');
+
+      const response = await this.ai.run(model, {
+        reasoning: { effort: reasoningEffort },
+        messages: [
+          {
+            role: "system",
+            content: `You are an expert in ${machine} settings and material properties. Provide safe, tested settings.`
+          },
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+        max_tokens: 1500,
+        temperature: 0.3
+      });
+
+      try {
+        return JSON.parse(response.response);
+      } catch {
+        // Fallback settings
+        return {
+          recommendations: [
+            `Test settings on scrap ${material} first`,
+            `Start with conservative settings and increase gradually`,
+            `Ensure proper ventilation and safety equipment`
+          ]
+        };
+      }
+    });
+  }
+
   private createContextualSVGPrompt(request: SVGGenerationRequest): string {
     let contextPrompt = `Create a laser-ready SVG design with the following specifications:
 
@@ -317,13 +599,18 @@ Consider the user's skill progression and preferences based on their project his
 
 Requirements:
 - Generate clean, scalable SVG code
-- Use 0.1mm stroke width for cut lines, 0.05mm for engrave lines
-- Optimize for ${request.material} material properties
+- Use 0.025mm (0.001 inch) stroke width for cut lines, 0.25mm (0.01 inch) for score lines
+- Create separate layers for different operations:
+  * Cut layer: stroke="#FF0000" (red) for through cuts
+  * Score layer: stroke="#0000FF" (blue) for score lines  
+  * Engrave layer: stroke="#000000" (black) for engraving
+- Optimize for ${request.material} material properties with kerf compensation
 - Ensure design fits within ${request.width}x${request.height}mm dimensions
 - Apply ${request.style} design principles
 - Create ${request.complexity} level of detail
-- Include cut and engrave layers properly differentiated
+- Include proper layer grouping with id attributes (cuts, scores, engrave)
 - Consider fabrication constraints and material grain direction
+- Add power/speed metadata comments for Glowforge compatibility
 
 Return only the SVG code without explanations.`;
 

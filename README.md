@@ -1,5 +1,7 @@
 # CutGlueBuild - AI-Powered CNC Design Assistant
 
+![Built with Cloudflare](https://workers.cloudflare.com/built-with-cloudflare.svg)
+
 🏆 **OpenAI Hackathon Submission - Best Overall Category**
 
 Cut. Glue. Build. Repeat. Transform your creative ideas into laser-cut masterpieces with AI-powered tools, premium templates, and step-by-step guides.
@@ -455,7 +457,7 @@ The 3-minute demo video showcases:
 
 ---
 
-**Submission Date**: September 2025  
+**Submission Date**: September 11, 2025  
 **Repository**: https://github.com/cozart-lundin/cutgluebuild  
 **Live Demo**: https://cutgluebuild.com  
 **Category**: Best Overall

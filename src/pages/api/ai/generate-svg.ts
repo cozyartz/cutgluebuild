@@ -1,17 +1,39 @@
 import type { APIRoute } from 'astro';
 import type { Env } from '../../../lib/database';
-import { createAIService } from '../../../lib/cloudflare-ai';
-import type { SVGGenerationRequest } from '../../../lib/cloudflare-ai';
+import { createAgentsAIService } from '../../../lib/agents-ai';
+import type { SVGGenerationRequest } from '../../../lib/agents-ai';
+import { withUsageCheck } from '../../../lib/usage-tracking';
+import { getAuthService, getSessionFromRequest } from '../../../lib/auth';
 
 export const POST: APIRoute = async ({ request, locals }) => {
-  try {
-    // Check if user is authenticated
-    if (!locals.user) {
-      return new Response(JSON.stringify({ error: 'Authentication required' }), {
-        status: 401,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
+  const env = (locals as any)?.runtime?.env as Env;
+  if (!env) {
+    return new Response(JSON.stringify({ error: 'Environment not available' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
+  // Get authenticated user
+  const sessionId = getSessionFromRequest(request);
+  if (!sessionId) {
+    return new Response(JSON.stringify({ error: 'Authentication required' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
+  const authService = getAuthService(env);
+  const currentUser = await authService.getCurrentUser(sessionId);
+  if (!currentUser) {
+    return new Response(JSON.stringify({ error: 'Authentication required' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
+  // Use usage tracking middleware
+  return withUsageCheck(env, currentUser.id, 'ai_generation', async () => {
 
     const body = await request.json();
     const { 
@@ -31,8 +53,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     }
 
     // Get AI service (will use mock in development)
-    const env = locals.runtime?.env as Env;
-    const aiService = createAIService(env);
+    const aiService = createAgentsAIService(env);
 
     const request_data: SVGGenerationRequest = {
       description,
@@ -44,7 +65,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     };
 
     try {
-      const svgData = await aiService.generateContextualSVG(request_data);
+      const svgData = await aiService.generateSVG(request_data);
       
       return new Response(JSON.stringify({ svgData }), {
         status: 200,
@@ -85,4 +106,5 @@ export const POST: APIRoute = async ({ request, locals }) => {
       headers: { 'Content-Type': 'application/json' }
     });
   }
+  }); // Close withUsageCheck
 };

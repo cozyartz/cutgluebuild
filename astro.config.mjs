@@ -7,7 +7,7 @@ import starlight from '@astrojs/starlight';
 import cloudflare from '@astrojs/cloudflare';
 
 export default defineConfig({
-  output: 'hybrid',
+  output: 'server',
   adapter: cloudflare({
     platformProxy: {
       enabled: true
@@ -22,11 +22,23 @@ export default defineConfig({
       logo: {
         src: './src/assets/logo.svg',
       },
-      social: {
-        github: 'https://github.com/cozyartz/cutgluebuild',
-        instagram: 'https://instagram.com/cutgluebuild',
-        'x.com': 'https://x.com/cutgluebuild',
-      },
+      social: [
+        {
+          icon: 'github',
+          label: 'GitHub',
+          href: 'https://github.com/cozyartz/cutgluebuild',
+        },
+        {
+          icon: 'instagram',
+          label: 'Instagram',
+          href: 'https://instagram.com/cutgluebuild',
+        },
+        {
+          icon: 'twitter',
+          label: 'X.com',
+          href: 'https://x.com/cutgluebuild',
+        },
+      ],
       sidebar: [
         {
           label: 'Getting Started',

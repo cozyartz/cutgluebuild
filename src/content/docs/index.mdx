@@ -7,6 +7,8 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 
 # Welcome to CutGlueBuild Documentation
 
+![Built with Cloudflare](https://workers.cloudflare.com/built-with-cloudflare.svg)
+
 CutGlueBuild is an AI-powered platform that transforms your creative ideas into laser-cut masterpieces. This documentation covers everything from content creation to technical development.
 
 ## Quick Navigation
@@ -54,13 +56,14 @@ CutGlueBuild is an AI-powered platform that transforms your creative ideas into 
 
 CutGlueBuild combines several key technologies:
 
-- **Frontend**: Astro 4.x with React components and TypeScript
+- **Frontend**: Astro 5.x with React components and TypeScript
 - **Styling**: Tailwind CSS with dark mode support
 - **Backend**: Cloudflare D1 for database, Cloudflare Workers for API endpoints
-- **AI Integration**: OpenAI GPT-4 for SVG generation and project ideas
+- **AI Integration**: OpenAI gpt-oss models via Cloudflare Workers AI (Agents SDK v0.1.0 + AI SDK v5)
 - **Payments**: Stripe for subscription management
 - **Content**: MDX for blog posts and documentation
 - **Authentication**: Session-based authentication with httpOnly cookies
+- **Edge Computing**: Global deployment via Cloudflare's edge network
 
 ## Getting Help
 

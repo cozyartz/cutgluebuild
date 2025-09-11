@@ -29,6 +29,9 @@ import Footer from '../../components/Footer.astro';
               <a href="#settings" class="block px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                 Settings
               </a>
+              <a href="/account/privacy" class="block px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                Privacy & Data
+              </a>
             </nav>
           </div>
         </div>
@@ -138,59 +141,12 @@ import Footer from '../../components/Footer.astro';
             </div>
           </section>
 
-          <!-- Subscription Section -->
-          <section id="subscription" class="card p-8">
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Subscription</h2>
-            
-            <div class="flex items-center justify-between p-6 bg-green-50 dark:bg-green-900/20 rounded-lg mb-6">
-              <div>
-                <h3 class="font-semibold text-green-900 dark:text-green-100">Maker Plan</h3>
-                <p class="text-green-700 dark:text-green-300">$19/month • Renews on Jan 15, 2025</p>
-              </div>
-              <div class="flex space-x-3">
-                <button class="btn btn-outline">Change Plan</button>
-                <button class="btn btn-primary">Manage Billing</button>
-              </div>
+          <!-- Billing Section -->
+          <section id="billing" class="space-y-6">
+            <div class="flex items-center justify-between">
+              <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Billing & Subscription</h2>
             </div>
-
-            <div class="grid md:grid-cols-2 gap-6">
-              <div>
-                <h4 class="font-medium text-gray-900 dark:text-white mb-3">Plan Features</h4>
-                <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                  <li class="flex items-center">
-                    <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    100 AI tool uses per day
-                  </li>
-                  <li class="flex items-center">
-                    <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    Premium templates
-                  </li>
-                  <li class="flex items-center">
-                    <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    Priority support
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <h4 class="font-medium text-gray-900 dark:text-white mb-3">Billing History</h4>
-                <div class="space-y-2 text-sm">
-                  <div class="flex justify-between">
-                    <span class="text-gray-600 dark:text-gray-400">Dec 15, 2024</span>
-                    <span class="text-gray-900 dark:text-white">$19.00</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-gray-600 dark:text-gray-400">Nov 15, 2024</span>
-                    <span class="text-gray-900 dark:text-white">$19.00</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <div id="billing-dashboard"></div>
           </section>
         </div>
       </div>
@@ -201,6 +157,17 @@ import Footer from '../../components/Footer.astro';
 </Layout>
 
 <script>
+  import BillingDashboard from '../../components/billing/BillingDashboard.tsx';
+  import { createRoot } from 'react-dom/client';
+  import React from 'react';
+
+  // Mount billing dashboard
+  const billingContainer = document.getElementById('billing-dashboard');
+  if (billingContainer) {
+    const billingRoot = createRoot(billingContainer);
+    billingRoot.render(React.createElement(BillingDashboard));
+  }
+
   // Add interactivity for account management
   document.addEventListener('DOMContentLoaded', () => {
     // Handle navigation

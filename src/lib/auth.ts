@@ -1,7 +1,8 @@
-// Cloudflare Workers-based authentication service
-// Uses sessions stored in D1 database with JWT-like tokens
+// Enhanced Cloudflare Workers-based authentication service
+// Uses JWT tokens and proper password hashing
 
 import { getDatabase, type Profile, type Env } from './database';
+import { createJWTManager, createPasswordManager, type JWTPayload, type TokenPair } from './jwt';
 
 export interface AuthUser {
   id: string;
@@ -12,7 +13,14 @@ export interface AuthUser {
 export interface AuthSession {
   id: string;
   user: AuthUser;
+  tokens: TokenPair;
   expires_at: number;
+}
+
+export interface AuthTokens {
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
 }
 
 // Simple token utilities
@@ -24,29 +32,21 @@ function generateUserId(): string {
   return crypto.randomUUID();
 }
 
-async function hashPassword(password: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hash = await crypto.subtle.digest('SHA-256', data);
-  return Array.from(new Uint8Array(hash))
-    .map(b => b.toString(16).padStart(2, '0'))
-    .join('');
-}
-
-async function verifyPassword(password: string, hash: string): Promise<boolean> {
-  const passwordHash = await hashPassword(password);
-  return passwordHash === hash;
-}
-
 export class AuthService {
   private env?: Env;
+  private jwtManager?: any;
+  private passwordManager?: any;
 
   constructor(env?: Env) {
     this.env = env;
+    if (env) {
+      this.jwtManager = createJWTManager(env);
+      this.passwordManager = createPasswordManager();
+    }
   }
 
-  async signUp(email: string, password: string, fullName?: string): Promise<{ user: AuthUser | null; session: AuthSession | null }> {
-    if (!this.env) {
+  async signUp(email: string, password: string, fullName?: string): Promise<{ user: AuthUser | null; session: AuthSession | null; tokens: AuthTokens | null }> {
+    if (!this.env || !this.jwtManager || !this.passwordManager) {
       throw new Error('Authentication not available during build time');
     }
 
@@ -60,14 +60,15 @@ export class AuthService {
 
     try {
       const userId = generateUserId();
-      const passwordHash = await hashPassword(password);
+      const passwordHash = await this.passwordManager.hashPassword(password);
       
-      // Create profile
+      // Create profile with password hash
       const profile = await database.createProfile({
         id: userId,
         email,
         full_name: fullName,
-        subscription_tier: 'free'
+        subscription_tier: 'free',
+        password_hash: passwordHash
       });
 
       if (!profile) {
@@ -78,10 +79,14 @@ export class AuthService {
       const sessionId = generateSessionId();
       const expiresAt = Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60); // 30 days
       
+      // Create JWT tokens
+      const tokens = await this.jwtManager.createTokenPair(userId, email, sessionId);
+      
       const session = await database.createSession({
         id: sessionId,
         user_id: userId,
-        expires_at: expiresAt
+        expires_at: expiresAt,
+        refresh_token: tokens.refreshToken
       });
 
       if (!session) {
@@ -97,29 +102,38 @@ export class AuthService {
       const authSession: AuthSession = {
         id: sessionId,
         user,
+        tokens,
         expires_at: expiresAt
       };
 
-      return { user, session: authSession };
+      const authTokens: AuthTokens = {
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+        expiresIn: 15 * 60 // 15 minutes
+      };
+
+      return { user, session: authSession, tokens: authTokens };
     } catch (error) {
       console.error('Sign up error:', error);
       throw error;
     }
   }
 
-  async signIn(email: string, password: string): Promise<{ user: AuthUser | null; session: AuthSession | null }> {
-    if (!this.env) {
+  async signIn(email: string, password: string): Promise<{ user: AuthUser | null; session: AuthSession | null; tokens: AuthTokens | null }> {
+    if (!this.env || !this.jwtManager || !this.passwordManager) {
       throw new Error('Authentication not available during build time');
     }
 
-    // Note: This is a simplified implementation
-    // In a real app, you'd store password hashes and verify them
-    // For now, we'll create a mock session for development
-    
     const database = getDatabase(this.env);
     const profile = await database.getProfile(email);
     
-    if (!profile) {
+    if (!profile || !profile.password_hash) {
+      throw new Error('Invalid credentials');
+    }
+
+    // Verify password
+    const isValidPassword = await this.passwordManager.verifyPassword(password, profile.password_hash);
+    if (!isValidPassword) {
       throw new Error('Invalid credentials');
     }
 
@@ -127,10 +141,14 @@ export class AuthService {
     const sessionId = generateSessionId();
     const expiresAt = Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60); // 30 days
     
+    // Create JWT tokens
+    const tokens = await this.jwtManager.createTokenPair(profile.id, email, sessionId);
+    
     const session = await database.createSession({
       id: sessionId,
       user_id: profile.id,
-      expires_at: expiresAt
+      expires_at: expiresAt,
+      refresh_token: tokens.refreshToken
     });
 
     if (!session) {
@@ -146,10 +164,17 @@ export class AuthService {
     const authSession: AuthSession = {
       id: sessionId,
       user,
+      tokens,
       expires_at: expiresAt
     };
 
-    return { user, session: authSession };
+    const authTokens: AuthTokens = {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+      expiresIn: 15 * 60 // 15 minutes
+    };
+
+    return { user, session: authSession, tokens: authTokens };
   }
 
   async signOut(sessionId: string): Promise<void> {
@@ -159,6 +184,60 @@ export class AuthService {
 
     const database = getDatabase(this.env);
     await database.deleteSession(sessionId);
+  }
+
+  async getCurrentUserFromToken(accessToken: string): Promise<AuthUser | null> {
+    if (!this.env || !this.jwtManager) {
+      return null;
+    }
+
+    const payload = await this.jwtManager.verifyToken(accessToken, 'access');
+    if (!payload) {
+      return null;
+    }
+
+    const database = getDatabase(this.env);
+    const profile = await database.getProfile(payload.email);
+    if (!profile) {
+      return null;
+    }
+
+    return {
+      id: profile.id,
+      email: profile.email,
+      profile
+    };
+  }
+
+  async refreshTokens(refreshToken: string): Promise<AuthTokens | null> {
+    if (!this.env || !this.jwtManager) {
+      return null;
+    }
+
+    const payload = await this.jwtManager.verifyToken(refreshToken, 'refresh');
+    if (!payload) {
+      return null;
+    }
+
+    // Verify session still exists
+    const database = getDatabase(this.env);
+    const session = await database.getSession(payload.sessionId);
+    if (!session || session.refresh_token !== refreshToken) {
+      return null;
+    }
+
+    // Create new access token
+    const newAccessToken = await this.jwtManager.createAccessToken(
+      payload.sub,
+      payload.email,
+      payload.sessionId
+    );
+
+    return {
+      accessToken: newAccessToken,
+      refreshToken: refreshToken, // Keep the same refresh token
+      expiresIn: 15 * 60 // 15 minutes
+    };
   }
 
   async getCurrentUser(sessionId: string): Promise<AuthUser | null> {

@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-const lastUpdated = 'June 23, 2025';
+const lastUpdated = 'January 11, 2025';
 ---
 
 <Layout title="Terms & Conditions - CutGlueBuild.com" description="Review the terms and conditions for using CutGlueBuild's AI-powered design tools and templates.">
@@ -13,35 +13,243 @@ const lastUpdated = 'June 23, 2025';
     <h1 class="text-3xl font-bold mb-6">Terms & Conditions</h1>
     <p class="text-sm text-gray-500 dark:text-gray-400 mb-10">Last updated: {lastUpdated}</p>
 
-    <section class="space-y-8 text-base leading-7">
+    <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-8">
+      <p class="text-blue-800 dark:text-blue-200 text-sm">
+        <strong>Important:</strong> These terms include binding arbitration and class action waiver provisions. Please read carefully.
+      </p>
+    </div>
+
+    <section class="space-y-12 text-base leading-7">
       <div>
-        <h2 class="text-xl font-semibold mb-2">1. Acceptance of Terms</h2>
-        <p>By using the CutGlueBuild platform ("Service"), you agree to be bound by these Terms and Conditions. If you do not accept these terms, you may not use the Service.</p>
+        <h2 class="text-2xl font-semibold mb-4">1. Acceptance of Terms</h2>
+        <p class="mb-4">By accessing or using the CutGlueBuild platform ("Service"), you agree to be bound by these Terms and Conditions ("Terms"). If you disagree with any part of these terms, you may not access the Service.</p>
+        <p>These Terms apply to all users, including visitors, registered users, and subscribers. By creating an account or making a payment, you confirm that you are at least 13 years old (or 16 in the EU) and have the authority to enter into this agreement.</p>
       </div>
 
       <div>
-        <h2 class="text-xl font-semibold mb-2">2. User Responsibilities</h2>
-        <p>You are solely responsible for your use of the Service, including any content you generate or upload. You agree not to use the Service for any unlawful or unauthorized purpose.</p>
+        <h2 class="text-2xl font-semibold mb-4">2. Description of Service</h2>
+        <p class="mb-4">CutGlueBuild is an AI-powered platform providing:</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>AI-generated SVG designs for CNC and laser cutting</li>
+          <li>Design templates and project ideas</li>
+          <li>Project management and version control tools</li>
+          <li>File export and sharing capabilities</li>
+          <li>Community features and educational content</li>
+        </ul>
+        <p>We reserve the right to modify, suspend, or discontinue any part of the Service at any time with reasonable notice.</p>
       </div>
 
       <div>
-        <h2 class="text-xl font-semibold mb-2">3. Intellectual Property</h2>
-        <p>All content, templates, code, and tools provided by CutGlueBuild remain the intellectual property of the company. You may not copy, distribute, or reverse-engineer any part of the platform without explicit permission.</p>
+        <h2 class="text-2xl font-semibold mb-4">3. User Accounts and Registration</h2>
+        <h3 class="text-lg font-medium mb-2">3.1 Account Creation</h3>
+        <p class="mb-4">To access certain features, you must create an account with accurate, current, and complete information. You are responsible for maintaining the confidentiality of your account credentials.</p>
+        
+        <h3 class="text-lg font-medium mb-2">3.2 Account Security</h3>
+        <p class="mb-4">You must immediately notify us of any unauthorized use of your account. We are not liable for any loss or damage from your failure to protect your account information.</p>
+        
+        <h3 class="text-lg font-medium mb-2">3.3 Account Termination</h3>
+        <p>We may suspend or terminate your account for violation of these Terms, non-payment, or other reasonable cause with appropriate notice.</p>
       </div>
 
       <div>
-        <h2 class="text-xl font-semibold mb-2">4. AI Output</h2>
-        <p>AI-generated content may be unique but is not guaranteed to be error-free or copyright-free. You are responsible for ensuring that any AI-generated content complies with applicable laws and does not infringe on third-party rights.</p>
+        <h2 class="text-2xl font-semibold mb-4">4. Subscription Plans and Billing</h2>
+        
+        <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-6 mb-6">
+          <h3 class="text-lg font-medium mb-2 text-green-800 dark:text-green-200">4.1 Subscription Tiers</h3>
+          <ul class="list-disc pl-6 space-y-2 text-green-800 dark:text-green-200">
+            <li><strong>Free:</strong> Limited features with usage quotas</li>
+            <li><strong>Maker ($19/month):</strong> Premium templates, increased quotas</li>
+            <li><strong>Pro ($49/month):</strong> Unlimited AI, API access, white-label options</li>
+          </ul>
+        </div>
+
+        <h3 class="text-lg font-medium mb-2">4.2 Payment Terms</h3>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Subscriptions are billed monthly in advance via Stripe</li>
+          <li>All fees are non-refundable except as required by law</li>
+          <li>Prices may change with 30 days' notice to active subscribers</li>
+          <li>Failed payments may result in service suspension after 7 days</li>
+          <li>You authorize automatic renewal until cancelled</li>
+        </ul>
+
+        <h3 class="text-lg font-medium mb-2">4.3 Cancellation and Refunds</h3>
+        <p class="mb-4">You may cancel your subscription at any time through your account settings. Cancellation takes effect at the end of the current billing period.</p>
+        <div class="border border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-900/20 rounded-lg p-4">
+          <p class="text-orange-800 dark:text-orange-200 text-sm">
+            <strong>Refund Policy:</strong> We offer prorated refunds for annual subscriptions cancelled within 30 days. Monthly subscriptions are generally non-refundable, but we may provide refunds at our discretion for technical issues or service failures.
+          </p>
+        </div>
       </div>
 
       <div>
-        <h2 class="text-xl font-semibold mb-2">5. Limitation of Liability</h2>
-        <p>CutGlueBuild is not liable for any direct, indirect, incidental, or consequential damages arising from your use of the Service. Use at your own risk.</p>
+        <h2 class="text-2xl font-semibold mb-4">5. Acceptable Use Policy</h2>
+        <h3 class="text-lg font-medium mb-2">5.1 Prohibited Uses</h3>
+        <p class="mb-4">You may not use the Service to:</p>
+        <ul class="list-disc pl-6 mb-6 space-y-2">
+          <li>Create content that is illegal, harmful, or violates third-party rights</li>
+          <li>Generate weapons, dangerous objects, or content promoting violence</li>
+          <li>Infringe on intellectual property, trademarks, or copyrights</li>
+          <li>Attempt to reverse-engineer, hack, or compromise the Service</li>
+          <li>Share login credentials or circumvent usage limitations</li>
+          <li>Use the Service for commercial resale without authorization</li>
+          <li>Upload malicious code, viruses, or harmful content</li>
+        </ul>
+
+        <h3 class="text-lg font-medium mb-2">5.2 Content Moderation</h3>
+        <p>We reserve the right to review, moderate, or remove user content that violates these Terms. Repeated violations may result in account termination.</p>
       </div>
 
       <div>
-        <h2 class="text-xl font-semibold mb-2">6. Modifications</h2>
-        <p>We reserve the right to update these terms at any time. Continued use of the Service after changes constitutes acceptance of the new terms.</p>
+        <h2 class="text-2xl font-semibold mb-4">6. Intellectual Property Rights</h2>
+        
+        <h3 class="text-lg font-medium mb-2">6.1 Platform Ownership</h3>
+        <p class="mb-4">CutGlueBuild owns all rights to the platform, including software, templates, branding, and proprietary algorithms. These rights are protected by copyright and other intellectual property laws.</p>
+        
+        <h3 class="text-lg font-medium mb-2">6.2 User Content</h3>
+        <p class="mb-4">You retain ownership of original content you upload. By using the Service, you grant us a limited license to process, store, and display your content as necessary to provide the Service.</p>
+        
+        <h3 class="text-lg font-medium mb-2">6.3 AI-Generated Content</h3>
+        <p class="mb-4">You own AI-generated content created through the Service, subject to these limitations:</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Generated content may be similar to other users' outputs</li>
+          <li>You are responsible for ensuring content doesn't infringe third-party rights</li>
+          <li>We make no guarantees about originality or copyright clearance</li>
+          <li>Commercial use requires appropriate subscription tier</li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-semibold mb-4">7. AI Services and Disclaimers</h2>
+        
+        <h3 class="text-lg font-medium mb-2">7.1 AI Limitations</h3>
+        <div class="border border-yellow-200 dark:border-yellow-800 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4 mb-4">
+          <p class="text-yellow-800 dark:text-yellow-200 text-sm">
+            <strong>Important:</strong> AI-generated content is provided "as-is" without warranties. Generated designs may require modification for safety and functionality. Always verify designs before fabrication.
+          </p>
+        </div>
+        
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>AI outputs may contain errors or be unsuitable for your intended use</li>
+          <li>Generated designs should be reviewed by qualified professionals</li>
+          <li>We are not responsible for fabrication failures or safety issues</li>
+          <li>AI processing uses third-party services subject to their terms</li>
+        </ul>
+
+        <h3 class="text-lg font-medium mb-2">7.2 Usage Quotas</h3>
+        <p>AI features are subject to usage limits based on your subscription tier. Excessive use may result in temporary restrictions or upgrade requirements.</p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-semibold mb-4">8. Privacy and Data Protection</h2>
+        <p class="mb-4">Your privacy is important to us. Our data practices are detailed in our <a href="/privacy" class="text-blue-600 dark:text-blue-400 hover:underline font-medium">Privacy Policy</a>, which is incorporated by reference into these Terms.</p>
+        
+        <h3 class="text-lg font-medium mb-2">8.1 Data Rights</h3>
+        <p class="mb-4">You have the right to:</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Access and export your personal data</li>
+          <li>Request correction of inaccurate information</li>
+          <li>Delete your account and associated data</li>
+          <li>Withdraw consent for non-essential data processing</li>
+        </ul>
+
+        <p>To exercise these rights, visit your <a href="/account" class="text-blue-600 dark:text-blue-400 hover:underline">Account Settings</a> or contact us at privacy@cutgluebuild.com.</p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-semibold mb-4">9. Disclaimers and Limitation of Liability</h2>
+        
+        <h3 class="text-lg font-medium mb-2">9.1 Service Disclaimer</h3>
+        <p class="mb-4 text-sm uppercase tracking-wide font-medium">THE SERVICE IS PROVIDED "AS-IS" WITHOUT WARRANTIES OF ANY KIND. WE DISCLAIM ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.</p>
+        
+        <h3 class="text-lg font-medium mb-2">9.2 Limitation of Liability</h3>
+        <p class="mb-4 text-sm uppercase tracking-wide font-medium">TO THE MAXIMUM EXTENT PERMITTED BY LAW, CUTGLUEBUILD'S LIABILITY IS LIMITED TO THE AMOUNT PAID FOR THE SERVICE IN THE 12 MONTHS PRECEDING THE CLAIM. WE ARE NOT LIABLE FOR INDIRECT, CONSEQUENTIAL, OR PUNITIVE DAMAGES.</p>
+        
+        <h3 class="text-lg font-medium mb-2">9.3 Fabrication Disclaimer</h3>
+        <p class="mb-4">Generated designs are for reference only. Users are responsible for verifying safety, structural integrity, and compliance with applicable codes before fabrication. We are not liable for damages resulting from fabricated designs.</p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-semibold mb-4">10. Dispute Resolution</h2>
+        
+        <h3 class="text-lg font-medium mb-2">10.1 Governing Law</h3>
+        <p class="mb-4">These Terms are governed by the laws of [Your State/Country], without regard to conflict of law provisions.</p>
+        
+        <h3 class="text-lg font-medium mb-2">10.2 Dispute Resolution Process</h3>
+        <div class="border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 rounded-lg p-4 mb-4">
+          <p class="text-red-800 dark:text-red-200 text-sm font-medium mb-2">Binding Arbitration Agreement</p>
+          <p class="text-red-800 dark:text-red-200 text-sm">
+            Most disputes must be resolved through binding arbitration rather than court proceedings. You waive the right to participate in class action lawsuits.
+          </p>
+        </div>
+        
+        <ol class="list-decimal pl-6 mb-4 space-y-2">
+          <li><strong>Informal Resolution:</strong> Contact support@cutgluebuild.com to resolve disputes informally (required first step)</li>
+          <li><strong>Mediation:</strong> If informal resolution fails, we may pursue mediation</li>
+          <li><strong>Arbitration:</strong> Unresolved disputes proceed to binding arbitration under [Arbitration Rules]</li>
+          <li><strong>Small Claims Exception:</strong> Small claims court disputes under $10,000 are exempt from arbitration</li>
+        </ol>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-semibold mb-4">11. Termination</h2>
+        
+        <h3 class="text-lg font-medium mb-2">11.1 Termination by User</h3>
+        <p class="mb-4">You may terminate your account at any time by deleting it through your account settings or contacting support. Upon termination:</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Your subscription will cancel at the end of the current billing period</li>
+          <li>You may export your data for 30 days after termination</li>
+          <li>Your data will be deleted according to our Privacy Policy</li>
+        </ul>
+
+        <h3 class="text-lg font-medium mb-2">11.2 Termination by CutGlueBuild</h3>
+        <p class="mb-4">We may terminate or suspend your account for:</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Violation of these Terms</li>
+          <li>Non-payment of fees</li>
+          <li>Fraudulent or abusive behavior</li>
+          <li>Extended inactivity (with notice)</li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-semibold mb-4">12. Changes to Terms</h2>
+        <p class="mb-4">We may update these Terms to reflect changes in our services or legal requirements. Significant changes will be communicated through:</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Email notification to active users</li>
+          <li>Prominent notice on our website</li>
+          <li>In-app notifications</li>
+        </ul>
+        <p>Continued use of the Service after changes constitutes acceptance of the new Terms. If you disagree with changes, you may terminate your account.</p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-semibold mb-4">13. Miscellaneous</h2>
+        
+        <h3 class="text-lg font-medium mb-2">13.1 Severability</h3>
+        <p class="mb-4">If any provision of these Terms is found unenforceable, the remaining provisions continue in full force and effect.</p>
+        
+        <h3 class="text-lg font-medium mb-2">13.2 Force Majeure</h3>
+        <p class="mb-4">We are not liable for service interruptions caused by circumstances beyond our reasonable control, including natural disasters, government actions, or third-party service failures.</p>
+        
+        <h3 class="text-lg font-medium mb-2">13.3 Assignment</h3>
+        <p class="mb-4">We may assign these Terms in connection with a merger, acquisition, or sale of assets. You may not assign your rights without our written consent.</p>
+        
+        <h3 class="text-lg font-medium mb-2">13.4 Entire Agreement</h3>
+        <p>These Terms, together with our Privacy Policy, constitute the entire agreement between you and CutGlueBuild regarding the Service.</p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-semibold mb-4">14. Contact Information</h2>
+        <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+          <p class="mb-2"><strong>Company:</strong> Cozyartz Media Group</p>
+          <p class="mb-2"><strong>Legal Contact:</strong> legal@cutgluebuild.com</p>
+          <p class="mb-2"><strong>General Support:</strong> support@cutgluebuild.com</p>
+          <p class="mb-4"><strong>Mailing Address:</strong> [Your Business Address]</p>
+          
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            For questions about these Terms or to report violations, please contact us using the information above. We respond to legal inquiries within 5 business days.
+          </p>
+        </div>
       </div>
     </section>
   </main>
