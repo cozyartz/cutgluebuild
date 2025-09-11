@@ -1,110 +1,114 @@
-import type { APIRoute } from 'astro';
-import type { Env } from '../../../lib/database';
+import { createSecureAPI, parseSecureRequestBody, createSecureResponse, InputValidator, SecurityError } from '../../../lib/secure-api';
 import { createAgentsAIService } from '../../../lib/agents-ai';
 import type { SVGGenerationRequest } from '../../../lib/agents-ai';
 import { withUsageCheck } from '../../../lib/usage-tracking';
-import { getAuthService, getSessionFromRequest } from '../../../lib/auth';
 
-export const POST: APIRoute = async ({ request, locals }) => {
-  const env = (locals as any)?.runtime?.env as Env;
-  if (!env) {
-    return new Response(JSON.stringify({ error: 'Environment not available' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
-  }
-
-  // Get authenticated user
-  const sessionId = getSessionFromRequest(request);
-  if (!sessionId) {
-    return new Response(JSON.stringify({ error: 'Authentication required' }), {
-      status: 401,
-      headers: { 'Content-Type': 'application/json' }
-    });
-  }
-
-  const authService = getAuthService(env);
-  const currentUser = await authService.getCurrentUser(sessionId);
+export const POST = createSecureAPI(async ({ request, locals, secureDb, currentUser }) => {
+  const env = (locals as any)?.runtime?.env;
+  
   if (!currentUser) {
-    return new Response(JSON.stringify({ error: 'Authentication required' }), {
-      status: 401,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    throw new SecurityError('Authentication required');
   }
 
-  // Use usage tracking middleware
+  // Use usage tracking middleware with security wrapper
   return withUsageCheck(env, currentUser.id, 'ai_generation', async () => {
-
-    const body = await request.json();
-    const { 
-      description, 
-      material = 'plywood', 
-      width = 100, 
-      height = 100, 
-      style = 'modern',
-      complexity = 'medium'
-    } = body;
-
-    if (!description) {
-      return new Response(JSON.stringify({ error: 'Description is required' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
-
-    // Get AI service (will use mock in development)
-    const aiService = createAgentsAIService(env);
-
-    const request_data: SVGGenerationRequest = {
-      description,
-      material,
-      width,
-      height,
-      style,
-      complexity
-    };
-
     try {
-      const svgData = await aiService.generateSVG(request_data);
+      // Parse and validate request body securely
+      const body = await parseSecureRequestBody(request, 5000); // 5KB limit for SVG requests
       
-      return new Response(JSON.stringify({ svgData }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      // Validate and sanitize input parameters
+      const description = InputValidator.validateProjectDescription(body.description);
+      if (!description) {
+        throw new SecurityError('Description is required and cannot be empty');
+      }
+      
+      const material = InputValidator.sanitizeString(body.material || 'plywood', 50);
+      const width = InputValidator.validateNumeric(body.width || 100, 10, 2000);  // 10mm to 2000mm
+      const height = InputValidator.validateNumeric(body.height || 100, 10, 2000);
+      const style = InputValidator.sanitizeString(body.style || 'modern', 50);
+      const complexity = InputValidator.sanitizeString(body.complexity || 'medium', 50);
+      
+      // Validate style and complexity values
+      const validStyles = ['modern', 'traditional', 'minimal', 'ornate', 'rustic', 'industrial'];
+      const validComplexity = ['simple', 'medium', 'complex'];
+      
+      if (!validStyles.includes(style)) {
+        throw new SecurityError('Invalid style parameter');
+      }
+      
+      if (!validComplexity.includes(complexity)) {
+        throw new SecurityError('Invalid complexity parameter');
+      }
+
+      // Get user project history for contextual generation (optional)
+      const userHistory = await secureDb.getUserProjects(currentUser.id, 5); // Last 5 projects for context
+
+      const aiService = createAgentsAIService(env);
+
+      const requestData: SVGGenerationRequest = {
+        description,
+        material,
+        width,
+        height,
+        style,
+        complexity,
+        userHistory
+      };
+
+      const svgData = await aiService.generateSVG(requestData);
+      
+      // Validate generated SVG content
+      const validatedSVG = InputValidator.validateSVGContent(svgData);
+      
+      return createSecureResponse({ 
+        svgData: validatedSVG,
+        metadata: {
+          generated_at: new Date().toISOString(),
+          parameters: {
+            material,
+            dimensions: `${width}x${height}mm`,
+            style,
+            complexity
+          }
+        }
+      }, 200, request);
+      
     } catch (aiError) {
       console.error('AI service error:', aiError);
       
-      // Return fallback SVG if AI service fails
-      const fallbackSVG = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
-  <!-- Fallback design: ${description} -->
-  <rect x="5" y="5" width="${width-10}" height="${height-10}" 
-        fill="none" stroke="#000" stroke-width="0.1"/>
-  <circle cx="${width/2}" cy="${height/2}" r="${Math.min(width, height)/4}" 
-          fill="none" stroke="#000" stroke-width="0.1"/>
-  <text x="5" y="${height-5}" font-family="Arial" font-size="4" fill="#666">
-    Fallback: ${description} (${material})
+      // Generate secure fallback SVG
+      const sanitizedDescription = InputValidator.sanitizeString(body?.description || 'design', 100);
+      const sanitizedMaterial = InputValidator.sanitizeString(body?.material || 'plywood', 50);
+      const safeWidth = Math.max(10, Math.min(2000, parseInt(body?.width) || 100));
+      const safeHeight = Math.max(10, Math.min(2000, parseInt(body?.height) || 100));
+      
+      const fallbackSVG = `<svg width="${safeWidth}" height="${safeHeight}" viewBox="0 0 ${safeWidth} ${safeHeight}" xmlns="http://www.w3.org/2000/svg">
+  <!-- Secure fallback design -->
+  <rect x="5" y="5" width="${safeWidth-10}" height="${safeHeight-10}" 
+        fill="none" stroke="#FF0000" stroke-width="0.025"/>
+  <circle cx="${safeWidth/2}" cy="${safeHeight/2}" r="${Math.min(safeWidth, safeHeight)/6}" 
+          fill="none" stroke="#0000FF" stroke-width="0.025"/>
+  <text x="5" y="${safeHeight-5}" font-family="Arial" font-size="6" fill="#666">
+    Fallback: ${sanitizedDescription.substring(0, 20)} (${sanitizedMaterial})
   </text>
-  <!-- Cut layer -->
-  <g id="cuts" stroke="#000" stroke-width="0.1" fill="none">
-    <rect x="5" y="5" width="${width-10}" height="${height-10}"/>
+  <g id="cuts" stroke="#FF0000" stroke-width="0.025" fill="none">
+    <rect x="5" y="5" width="${safeWidth-10}" height="${safeHeight-10}"/>
   </g>
-  <!-- Engrave layer -->
-  <g id="engrave" stroke="#666" stroke-width="0.05" fill="none">
-    <circle cx="${width/2}" cy="${height/2}" r="${Math.min(width, height)/4}"/>
+  <g id="engrave" stroke="#0000FF" stroke-width="0.025" fill="none">
+    <circle cx="${safeWidth/2}" cy="${safeHeight/2}" r="${Math.min(safeWidth, safeHeight)/6}"/>
   </g>
 </svg>`;
 
-      return new Response(JSON.stringify({ svgData: fallbackSVG }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      return createSecureResponse({ 
+        svgData: fallbackSVG,
+        fallback: true,
+        message: 'AI service temporarily unavailable, using fallback design'
+      }, 200, request);
     }
-  } catch (error) {
-    console.error('SVG generation API error:', error);
-    return new Response(JSON.stringify({ error: 'Failed to generate SVG' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
-  }
-  }); // Close withUsageCheck
-};
+  });
+}, {
+  requireAuth: true,
+  strictEndpoint: true,
+  allowedMethods: ['POST'],
+  allowedContentTypes: ['application/json']
+});
