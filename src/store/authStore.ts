@@ -216,21 +216,56 @@ export const useIsLoading = () => useAuthStore((state) => state.isLoading);
 // Helper hooks
 export const useSubscriptionTier = () => {
   const user = useUser();
-  return user?.profile?.subscription_tier || 'free';
+  return user?.profile?.subscription_tier || null;
 };
 
 export const useCanAccessFeature = (feature: string) => {
   const tier = useSubscriptionTier();
+  if (!tier) return false;
   
   const featureAccess: Record<string, string[]> = {
-    'premium_templates': ['maker', 'pro'],
-    'unlimited_ai': ['pro'],
-    'priority_support': ['maker', 'pro'],
-    'api_access': ['pro'],
-    'white_label': ['pro']
+    'ai_generation_unlimited': ['professional'],
+    'premium_templates': ['professional'],
+    'gcode_generation': ['professional'],
+    'priority_support': ['starter', 'professional'],
+    'commercial_license': ['starter', 'professional'],
+    'api_access': ['professional'],
+    'white_label': ['professional'],
+    'phone_support': ['professional']
   };
 
   return featureAccess[feature]?.includes(tier) || false;
+};
+
+// Usage limits by tier
+export const useUsageLimits = () => {
+  const tier = useSubscriptionTier();
+  
+  if (!tier) {
+    return {
+      ai_designs: 0,
+      templates: 0,
+      exports: 0,
+      duration_days: 0
+    };
+  }
+  
+  const limits = {
+    starter: {
+      ai_designs: 25,
+      templates: 100,
+      exports: 50,
+      duration_days: -1 // unlimited
+    },
+    professional: {
+      ai_designs: -1, // unlimited
+      templates: -1, // unlimited
+      exports: -1, // unlimited
+      duration_days: -1 // unlimited
+    }
+  };
+
+  return limits[tier as keyof typeof limits] || limits.starter;
 };
 
 // Initialize auth on app start

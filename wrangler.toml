@@ -1,16 +1,6 @@
 name = "cutgluebuild"
-main = "src/index.ts"
 compatibility_date = "2025-08-25"
 pages_build_output_dir = "dist"
-
-account_id = "51826042d6e31c694331efeb1be34123"
-workers_dev = true
-
-# Routes for multi-tenant subdomain handling
-routes = [
-  { pattern = "*.cutgluebuild.com/*", zone_name = "cutgluebuild.com" },
-  { pattern = "cutgluebuild.com/*", zone_name = "cutgluebuild.com" }
-]
 
 [ai]
 binding = "AI"
@@ -42,11 +32,4 @@ STRIPE_WEBHOOK_SECRET = "whsec_..."
 [env.production.ai]
 binding = "AI"
 
-[[env.production.services]]
-binding = "CF_API"
-service = "cloudflare-api"
-
-# Cloudflare for SaaS configuration
-[[services]]
-binding = "CF_API"
-service = "cloudflare-api"
+# Services removed for Pages deployment

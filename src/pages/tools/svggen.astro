@@ -1,6 +1,23 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
+import { getAuthService, getSessionFromRequest } from '../../lib/auth';
+import type { Env } from '../../lib/database';
+
+// Check authentication before allowing access
+const env = (Astro.locals as any)?.runtime?.env as Env;
+const sessionId = getSessionFromRequest(Astro.request);
+
+if (!sessionId) {
+  return Astro.redirect('/signup?redirect=' + encodeURIComponent('/tools/svggen'));
+}
+
+const authService = getAuthService(env);
+const currentUser = sessionId ? await authService.getCurrentUser(sessionId) : null;
+
+if (!currentUser) {
+  return Astro.redirect('/signup?redirect=' + encodeURIComponent('/tools/svggen'));
+}
 ---
 
 <Layout title="AI SVG Generator - CutGlueBuild.com" description="Generate laser-ready SVG files from text descriptions using AI. Perfect for Glowforge, Cricut, and other cutting machines.">

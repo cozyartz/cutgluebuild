@@ -1,1 +1,98 @@
-import type { APIRoute } from 'astro';\nimport type { Env } from '../../../lib/database';\nimport { createAIService } from '../../../lib/cloudflare-ai';\nimport { getAuthService, getSessionFromRequest } from '../../../lib/auth';\n\nexport const POST: APIRoute = async ({ request, locals }) => {\n  const env = (locals as any)?.runtime?.env as Env;\n  if (!env) {\n    return new Response(JSON.stringify({ error: 'Environment not available' }), {\n      status: 500,\n      headers: { 'Content-Type': 'application/json' }\n    });\n  }\n\n  // Get authenticated user\n  const sessionId = getSessionFromRequest(request);\n  if (!sessionId) {\n    return new Response(JSON.stringify({ error: 'Authentication required' }), {\n      status: 401,\n      headers: { 'Content-Type': 'application/json' }\n    });\n  }\n\n  const authService = getAuthService(env);\n  const currentUser = await authService.getCurrentUser(sessionId);\n  if (!currentUser) {\n    return new Response(JSON.stringify({ error: 'Authentication required' }), {\n      status: 401,\n      headers: { 'Content-Type': 'application/json' }\n    });\n  }\n\n  try {\n    const body = await request.json();\n    const { material, thickness, machine } = body;\n\n    if (!material || !thickness || !machine) {\n      return new Response(JSON.stringify({ \n        error: 'Material, thickness, and machine are required',\n        supportedMachines: ['glowforge', 'shaper'],\n        example: {\n          material: 'plywood',\n          thickness: 6,\n          machine: 'glowforge'\n        }\n      }), {\n        status: 400,\n        headers: { 'Content-Type': 'application/json' }\n      });\n    }\n\n    if (!['glowforge', 'shaper'].includes(machine)) {\n      return new Response(JSON.stringify({ \n        error: 'Unsupported machine type',\n        supportedMachines: ['glowforge', 'shaper']\n      }), {\n        status: 400,\n        headers: { 'Content-Type': 'application/json' }\n      });\n    }\n\n    const aiService = createAIService(env);\n\n    try {\n      const settings = await (aiService as any).generateMaterialSettings(material, thickness, machine);\n      \n      return new Response(JSON.stringify({ \n        ...settings,\n        material,\n        thickness,\n        machine,\n        message: `Optimized ${machine} settings for ${thickness}mm ${material}`\n      }), {\n        status: 200,\n        headers: { 'Content-Type': 'application/json' }\n      });\n    } catch (aiError) {\n      console.error('Material settings generation error:', aiError);\n      \n      return new Response(JSON.stringify({ \n        error: 'Failed to generate material settings',\n        details: aiError.message \n      }), {\n        status: 500,\n        headers: { 'Content-Type': 'application/json' }\n      });\n    }\n  } catch (error) {\n    console.error('Material settings API error:', error);\n    return new Response(JSON.stringify({ \n      error: 'Invalid request format',\n      details: error.message \n    }), {\n      status: 400,\n      headers: { 'Content-Type': 'application/json' }\n    });\n  }\n};\n"
+import type { APIRoute } from 'astro';
+import type { Env } from '../../../lib/database';
+import { createAIService } from '../../../lib/cloudflare-ai';
+import { getAuthService, getSessionFromRequest } from '../../../lib/auth';
+
+export const POST: APIRoute = async ({ request, locals }) => {
+  const env = (locals as any)?.runtime?.env as Env;
+  if (!env) {
+    return new Response(JSON.stringify({ error: 'Environment not available' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
+  // Get authenticated user
+  const sessionId = getSessionFromRequest(request);
+  if (!sessionId) {
+    return new Response(JSON.stringify({ error: 'Authentication required' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
+  const authService = getAuthService(env);
+  const currentUser = await authService.getCurrentUser(sessionId);
+  if (!currentUser) {
+    return new Response(JSON.stringify({ error: 'Authentication required' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
+  try {
+    const body = await request.json();
+    const { material, thickness, machine } = body;
+
+    if (!material || !thickness || !machine) {
+      return new Response(JSON.stringify({ 
+        error: 'Material, thickness, and machine are required',
+        supportedMachines: ['glowforge', 'shaper'],
+        example: {
+          material: 'plywood',
+          thickness: 6,
+          machine: 'glowforge'
+        }
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    if (!['glowforge', 'shaper'].includes(machine)) {
+      return new Response(JSON.stringify({ 
+        error: 'Unsupported machine type',
+        supportedMachines: ['glowforge', 'shaper']
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    const aiService = createAIService(env);
+
+    try {
+      const settings = await (aiService as any).generateMaterialSettings(material, thickness, machine);
+      
+      return new Response(JSON.stringify({ 
+        ...settings,
+        material,
+        thickness,
+        machine,
+        message: `Optimized ${machine} settings for ${thickness}mm ${material}`
+      }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    } catch (aiError) {
+      console.error('Material settings generation error:', aiError);
+      
+      return new Response(JSON.stringify({ 
+        error: 'Failed to generate material settings',
+        details: aiError.message 
+      }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+  } catch (error) {
+    console.error('Material settings API error:', error);
+    return new Response(JSON.stringify({ 
+      error: 'Invalid request format',
+      details: error.message 
+    }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+};

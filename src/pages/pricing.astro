@@ -2,9 +2,46 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+
+// Structured Data for Pricing Page
+const pricingSchema = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "CutGlueBuild AI Tools",
+  "description": "AI-powered CNC and laser cutting software with automated SVG generation and material optimization",
+  "brand": {
+    "@type": "Brand",
+    "name": "CutGlueBuild"
+  },
+  "offers": [
+    {
+      "@type": "Offer", 
+      "name": "Starter Plan",
+      "price": "49",
+      "priceCurrency": "USD",
+      "billingIncrement": "P1M",
+      "description": "Perfect for makers and small workshops",
+      "availability": "https://schema.org/InStock"
+    },
+    {
+      "@type": "Offer",
+      "name": "Professional Plan", 
+      "price": "99",
+      "priceCurrency": "USD",
+      "billingIncrement": "P1M",
+      "description": "Unlimited AI generation and commercial license",
+      "availability": "https://schema.org/InStock"
+    }
+  ]
+};
 ---
 
-<Layout title="Pricing - CutGlueBuild.com" description="Choose the perfect plan for your creative projects. From free tools to professional features.">
+<Layout 
+  title="Professional AI Laser Cutting Software Pricing | CutGlueBuild Plans"
+  description="Professional AI-powered laser cutting plans: $49/mo Starter or $99/mo Professional with unlimited AI and G-code generation. 7-day money-back guarantee."
+  keywords="AI laser cutting software pricing, professional CNC software cost, laser cutting automation plans"
+  structuredData={pricingSchema}
+>
   <Header />
   
   <main class="pt-20 min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -12,156 +49,273 @@ import Footer from '../components/Footer.astro';
       <!-- Hero Section -->
       <div class="text-center mb-16">
         <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-          Simple
+          Professional
           <span class="bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">
             Pricing
           </span>
         </h1>
-        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-          Start free and upgrade as you grow. All plans include access to our core tools and templates.
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">
+          Choose your professional plan. All plans include our AI-powered design tools and 7-day money-back guarantee.
         </p>
+        <div class="inline-flex items-center bg-green-100 dark:bg-green-900 px-4 py-2 rounded-full">
+          <svg class="w-5 h-5 text-green-600 dark:text-green-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+          <span class="text-green-800 dark:text-green-200 font-medium">Save 10+ hours per week vs manual design</span>
+        </div>
+      </div>
+
+      <!-- Value Proposition Banner -->
+      <div class="bg-gradient-to-r from-primary-500 to-secondary-500 rounded-xl p-8 text-white text-center mb-16">
+        <h2 class="text-2xl font-bold mb-4">Why Choose CutGlueBuild?</h2>
+        <div class="grid md:grid-cols-3 gap-6 text-sm">
+          <div>
+            <div class="text-3xl font-bold">$100+</div>
+            <div>Value per AI design (2+ hrs @ $50/hr)</div>
+          </div>
+          <div>
+            <div class="text-3xl font-bold">95%</div>
+            <div>Success rate for manufacturable designs</div>
+          </div>
+          <div>
+            <div class="text-3xl font-bold">< 2min</div>
+            <div>From idea to laser-ready file</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pricing Toggle -->
+      <div class="flex justify-center mb-12">
+        <div class="bg-white dark:bg-gray-800 p-1 rounded-lg border border-gray-200 dark:border-gray-700">
+          <div class="flex items-center">
+            <button 
+              id="monthly-toggle" 
+              class="px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 bg-primary-500 text-white"
+            >
+              Monthly
+            </button>
+            <button 
+              id="yearly-toggle" 
+              class="px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 text-gray-700 dark:text-gray-300"
+            >
+              Yearly
+              <span class="ml-1 text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">Save 20%</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- Pricing Cards -->
-      <div class="grid md:grid-cols-3 gap-8 mb-16">
-        <!-- Free Plan -->
-        <div class="card p-8 relative">
-          <div class="text-center mb-8">
-            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Starter</h3>
-            <div class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-              $0
-              <span class="text-lg font-normal text-gray-600 dark:text-gray-400">/month</span>
-            </div>
-            <p class="text-gray-600 dark:text-gray-400">Perfect for getting started</p>
-          </div>
-          
-          <ul class="space-y-4 mb-8">
-            <li class="flex items-center">
-              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-              </svg>
-              5 AI tool uses per day
-            </li>
-            <li class="flex items-center">
-              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-              </svg>
-              Basic templates
-            </li>
-            <li class="flex items-center">
-              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-              </svg>
-              Community support
-            </li>
-            <li class="flex items-center">
-              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-              </svg>
-              Export to SVG
-            </li>
-          </ul>
-          
-          <button class="w-full btn btn-outline py-3">Get Started Free</button>
-        </div>
-
-        <!-- Maker Plan -->
+      <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-16">
+        <!-- Starter Plan -->
         <div class="card p-8 relative border-2 border-primary-500">
           <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
             <span class="bg-primary-500 text-white px-4 py-1 rounded-full text-sm font-medium">Most Popular</span>
           </div>
           
           <div class="text-center mb-8">
-            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Maker</h3>
-            <div class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-              $19
-              <span class="text-lg font-normal text-gray-600 dark:text-gray-400">/month</span>
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Starter</h3>
+            <div class="pricing-display">
+              <div class="monthly-pricing">
+                <div class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                  $49
+                  <span class="text-lg font-normal text-gray-600 dark:text-gray-400">/month</span>
+                </div>
+              </div>
+              <div class="yearly-pricing hidden">
+                <div class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                  $39
+                  <span class="text-lg font-normal text-gray-600 dark:text-gray-400">/month</span>
+                </div>
+                <div class="text-sm text-green-600 dark:text-green-400">Billed annually ($468/year)</div>
+              </div>
             </div>
-            <p class="text-gray-600 dark:text-gray-400">For serious makers</p>
+            <p class="text-gray-600 dark:text-gray-400">For makers & small workshops</p>
           </div>
           
           <ul class="space-y-4 mb-8">
             <li class="flex items-center">
-              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
               </svg>
-              100 AI tool uses per day
+              <span>25 AI designs per month</span>
             </li>
             <li class="flex items-center">
-              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
               </svg>
-              Premium templates
+              <span>100 template downloads</span>
             </li>
             <li class="flex items-center">
-              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
               </svg>
-              Project history
+              <span>50 exports per month</span>
             </li>
             <li class="flex items-center">
-              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
               </svg>
-              Priority support
+              <span>Commercial license included</span>
             </li>
             <li class="flex items-center">
-              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
               </svg>
-              Advanced vectorization
+              <span>Priority email support</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>7-day money-back guarantee</span>
             </li>
           </ul>
           
-          <div id="maker-checkout-button"></div>
+          <div id="starter-checkout-button"></div>
         </div>
 
-        <!-- Pro Plan -->
+        <!-- Professional Plan -->
         <div class="card p-8 relative">
           <div class="text-center mb-8">
-            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Pro</h3>
-            <div class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-              $49
-              <span class="text-lg font-normal text-gray-600 dark:text-gray-400">/month</span>
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Professional</h3>
+            <div class="pricing-display">
+              <div class="monthly-pricing">
+                <div class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                  $99
+                  <span class="text-lg font-normal text-gray-600 dark:text-gray-400">/month</span>
+                </div>
+              </div>
+              <div class="yearly-pricing hidden">
+                <div class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                  $79
+                  <span class="text-lg font-normal text-gray-600 dark:text-gray-400">/month</span>
+                </div>
+                <div class="text-sm text-green-600 dark:text-green-400">Billed annually ($948/year)</div>
+              </div>
             </div>
-            <p class="text-gray-600 dark:text-gray-400">For professionals</p>
+            <p class="text-gray-600 dark:text-gray-400">For design professionals</p>
           </div>
           
           <ul class="space-y-4 mb-8">
             <li class="flex items-center">
-              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
               </svg>
-              Unlimited AI tool uses
+              <span><strong>Unlimited AI designs</strong></span>
             </li>
             <li class="flex items-center">
-              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
               </svg>
-              All premium templates
+              <span><strong>Unlimited templates & exports</strong></span>
             </li>
             <li class="flex items-center">
-              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
               </svg>
-              Private community access
+              <span>G-code generation</span>
             </li>
             <li class="flex items-center">
-              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
               </svg>
-              Early feature access
+              <span>Premium AI templates</span>
             </li>
             <li class="flex items-center">
-              <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
               </svg>
-              API access
+              <span>API access & integrations</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>Priority phone support</span>
             </li>
           </ul>
           
-          <div id="pro-checkout-button"></div>
+          <div id="professional-checkout-button"></div>
         </div>
+      </div>
+
+      <!-- ROI Calculator -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl p-8 mb-16">
+        <h2 class="text-2xl font-bold text-center text-gray-900 dark:text-white mb-8">
+          Calculate Your ROI
+        </h2>
+        <div class="grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Manual Design Process:</h3>
+            <ul class="space-y-2 text-gray-600 dark:text-gray-300">
+              <li>• 2-4 hours per design</li>
+              <li>• $50-100/hour labor cost</li>
+              <li>• Multiple revisions needed</li>
+              <li>• Risk of manufacturing errors</li>
+            </ul>
+            <div class="mt-4 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
+              <div class="text-red-800 dark:text-red-200 font-bold">Cost: $200-400 per design</div>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">CutGlueBuild AI:</h3>
+            <ul class="space-y-2 text-gray-600 dark:text-gray-300">
+              <li>• 2 minutes per design</li>
+              <li>• $1.96 per design (Starter)</li>
+              <li>• Manufacturing-ready output</li>
+              <li>• 95% success rate</li>
+            </ul>
+            <div class="mt-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+              <div class="text-green-800 dark:text-green-200 font-bold">Break-even: Just 1 design pays for itself</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature Comparison Table -->
+      <div class="overflow-x-auto mb-16">
+        <table class="w-full bg-white dark:bg-gray-800 rounded-xl overflow-hidden">
+          <thead class="bg-gray-50 dark:bg-gray-700">
+            <tr>
+              <th class="px-6 py-4 text-left text-sm font-medium text-gray-900 dark:text-white">Feature</th>
+              <th class="px-6 py-4 text-center text-sm font-medium text-gray-900 dark:text-white">Starter</th>
+              <th class="px-6 py-4 text-center text-sm font-medium text-gray-900 dark:text-white">Professional</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
+            <tr>
+              <td class="px-6 py-4 text-sm text-gray-900 dark:text-white">AI Design Generation</td>
+              <td class="px-6 py-4 text-center text-sm text-gray-600 dark:text-gray-300">25/month</td>
+              <td class="px-6 py-4 text-center text-sm text-gray-600 dark:text-gray-300">Unlimited</td>
+            </tr>
+            <tr>
+              <td class="px-6 py-4 text-sm text-gray-900 dark:text-white">Template Library</td>
+              <td class="px-6 py-4 text-center text-sm text-gray-600 dark:text-gray-300">Full access</td>
+              <td class="px-6 py-4 text-center text-sm text-gray-600 dark:text-gray-300">Premium + AI templates</td>
+            </tr>
+            <tr>
+              <td class="px-6 py-4 text-sm text-gray-900 dark:text-white">G-code Generation</td>
+              <td class="px-6 py-4 text-center">❌</td>
+              <td class="px-6 py-4 text-center">✅</td>
+            </tr>
+            <tr>
+              <td class="px-6 py-4 text-sm text-gray-900 dark:text-white">Commercial License</td>
+              <td class="px-6 py-4 text-center">✅</td>
+              <td class="px-6 py-4 text-center">✅</td>
+            </tr>
+            <tr>
+              <td class="px-6 py-4 text-sm text-gray-900 dark:text-white">API Access</td>
+              <td class="px-6 py-4 text-center">❌</td>
+              <td class="px-6 py-4 text-center">✅</td>
+            </tr>
+            <tr>
+              <td class="px-6 py-4 text-sm text-gray-900 dark:text-white">Support Level</td>
+              <td class="px-6 py-4 text-center text-sm text-gray-600 dark:text-gray-300">Email</td>
+              <td class="px-6 py-4 text-center text-sm text-gray-600 dark:text-gray-300">Email + Phone</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <!-- FAQ Section -->
@@ -173,28 +327,46 @@ import Footer from '../components/Footer.astro';
         <div class="space-y-6">
           <div class="card p-6">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-              Can I change plans anytime?
+              Do you offer a free trial?
             </h3>
             <p class="text-gray-600 dark:text-gray-300">
-              Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately.
+              We offer a 7-day money-back guarantee instead of a free trial. This ensures you get full access to evaluate the platform while we maintain service quality.
             </p>
           </div>
           
+          <div class="card p-6">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              Can I change plans anytime?
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300">
+              Yes! Upgrade or downgrade anytime. Prorated billing ensures you only pay for what you use.
+            </p>
+          </div>
+          
+          <div class="card p-6">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              What's included in the commercial license?
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300">
+              Both plans include full commercial usage rights for all designs you create, including selling physical products made from our templates and AI-generated designs.
+            </p>
+          </div>
+
+          <div class="card p-6">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              Do you offer educational discounts?
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300">
+              Yes! Students and educators get 50% off with valid credentials. Contact us for details.
+            </p>
+          </div>
+
           <div class="card p-6">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
               What payment methods do you accept?
             </h3>
             <p class="text-gray-600 dark:text-gray-300">
               We accept all major credit cards, PayPal, and bank transfers for annual plans.
-            </p>
-          </div>
-          
-          <div class="card p-6">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-              Is there a free trial?
-            </h3>
-            <p class="text-gray-600 dark:text-gray-300">
-              Yes! All paid plans come with a 14-day free trial. No credit card required.
             </p>
           </div>
         </div>
@@ -210,29 +382,80 @@ import Footer from '../components/Footer.astro';
   import { createRoot } from 'react-dom/client';
   import React from 'react';
 
-  // Mount Maker checkout button
-  const makerContainer = document.getElementById('maker-checkout-button');
-  if (makerContainer) {
-    const makerRoot = createRoot(makerContainer);
-    makerRoot.render(
-      React.createElement(CheckoutButton, {
-        tier: 'maker',
-        billingCycle: 'monthly',
-        className: 'w-full btn btn-primary py-3'
-      }, 'Start Free Trial')
-    );
+  // Pricing toggle functionality
+  const monthlyToggle = document.getElementById('monthly-toggle');
+  const yearlyToggle = document.getElementById('yearly-toggle');
+  const monthlyPricing = document.querySelectorAll('.monthly-pricing');
+  const yearlyPricing = document.querySelectorAll('.yearly-pricing');
+
+  let currentBillingCycle = 'monthly';
+
+  function switchToMonthly() {
+    monthlyToggle?.classList.add('bg-primary-500', 'text-white');
+    monthlyToggle?.classList.remove('text-gray-700', 'dark:text-gray-300');
+    yearlyToggle?.classList.remove('bg-primary-500', 'text-white');
+    yearlyToggle?.classList.add('text-gray-700', 'dark:text-gray-300');
+    
+    monthlyPricing.forEach(el => el.classList.remove('hidden'));
+    yearlyPricing.forEach(el => el.classList.add('hidden'));
+    
+    currentBillingCycle = 'monthly';
+    updateCheckoutButtons();
   }
 
-  // Mount Pro checkout button
-  const proContainer = document.getElementById('pro-checkout-button');
-  if (proContainer) {
-    const proRoot = createRoot(proContainer);
-    proRoot.render(
-      React.createElement(CheckoutButton, {
-        tier: 'pro',
-        billingCycle: 'monthly',
-        className: 'w-full btn btn-outline py-3'
-      }, 'Start Free Trial')
-    );
+  function switchToYearly() {
+    yearlyToggle?.classList.add('bg-primary-500', 'text-white');
+    yearlyToggle?.classList.remove('text-gray-700', 'dark:text-gray-300');
+    monthlyToggle?.classList.remove('bg-primary-500', 'text-white');
+    monthlyToggle?.classList.add('text-gray-700', 'dark:text-gray-300');
+    
+    monthlyPricing.forEach(el => el.classList.add('hidden'));
+    yearlyPricing.forEach(el => el.classList.remove('hidden'));
+    
+    currentBillingCycle = 'yearly';
+    updateCheckoutButtons();
   }
+
+  monthlyToggle?.addEventListener('click', switchToMonthly);
+  yearlyToggle?.addEventListener('click', switchToYearly);
+
+  function updateCheckoutButtons() {
+    // Clear existing buttons
+    document.getElementById('starter-checkout-button')!.innerHTML = '';
+    document.getElementById('professional-checkout-button')!.innerHTML = '';
+    
+    // Mount new buttons with current billing cycle
+    mountCheckoutButtons();
+  }
+
+  function mountCheckoutButtons() {
+    // Mount Starter checkout button
+    const starterContainer = document.getElementById('starter-checkout-button');
+    if (starterContainer) {
+      const starterRoot = createRoot(starterContainer);
+      starterRoot.render(
+        React.createElement(CheckoutButton, {
+          tier: 'starter',
+          billingCycle: currentBillingCycle,
+          className: 'w-full btn btn-primary py-3'
+        }, 'Get Started')
+      );
+    }
+
+    // Mount Professional checkout button
+    const professionalContainer = document.getElementById('professional-checkout-button');
+    if (professionalContainer) {
+      const professionalRoot = createRoot(professionalContainer);
+      professionalRoot.render(
+        React.createElement(CheckoutButton, {
+          tier: 'professional',
+          billingCycle: currentBillingCycle,
+          className: 'w-full btn btn-outline py-3'
+        }, 'Get Started')
+      );
+    }
+  }
+
+  // Initial mount
+  mountCheckoutButtons();
 </script>

@@ -6,9 +6,22 @@ export interface Props {
   description?: string;
   image?: string;
   type?: string;
+  keywords?: string;
+  canonical?: string;
+  structuredData?: any;
 }
 
-const { title, description = "Cut. Glue. Build. Repeat. - AI-powered tools and templates for makers and creators.", image = "/og-image.svg", type = "website" } = Astro.props;
+const { 
+  title, 
+  description = "AI-powered CNC laser cutting tools for makers. Generate SVG designs, optimize material usage, and create professional laser-ready files with smart automation.", 
+  image = "/og-image.png", 
+  type = "website",
+  keywords = "AI CNC tools, laser cutting software, SVG generator, maker tools, automated fabrication, smart workshop assistant",
+  canonical,
+  structuredData
+} = Astro.props;
+
+const canonicalURL = canonical ? new URL(canonical, Astro.site) : new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
@@ -16,26 +29,47 @@ const { title, description = "Cut. Glue. Build. Repeat. - AI-powered tools and t
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/CGB-Logo.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
     
     <!-- SEO Meta Tags -->
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="author" content="CutGlueBuild" />
+    <link rel="canonical" href={canonicalURL} />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content={type} />
-    <meta property="og:url" content={Astro.url} />
+    <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(image, Astro.url)} />
+    <meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="CutGlueBuild" />
+    <meta property="og:locale" content="en_US" />
     
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={Astro.url} />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={new URL(image, Astro.url)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@cutgluebuild" />
+    <meta name="twitter:creator" content="@cutgluebuild" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(image, Astro.site)} />
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="theme-color" content="#3b82f6" />
+    <meta name="msapplication-TileColor" content="#3b82f6" />
+    
+    <!-- Structured Data -->
+    {structuredData && (
+      <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    )}
     
     <!-- Preload fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

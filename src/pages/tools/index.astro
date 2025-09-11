@@ -2,9 +2,79 @@
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import { getAuthService, getSessionFromRequest } from '../../lib/auth';
+import type { Env } from '../../lib/database';
+
+// Check authentication before allowing access
+const env = (Astro.locals as any)?.runtime?.env as Env;
+const sessionId = getSessionFromRequest(Astro.request);
+
+if (!sessionId) {
+  return Astro.redirect('/signup?redirect=' + encodeURIComponent('/tools'));
+}
+
+const authService = getAuthService(env);
+const currentUser = sessionId ? await authService.getCurrentUser(sessionId) : null;
+
+if (!currentUser) {
+  return Astro.redirect('/signup?redirect=' + encodeURIComponent('/tools'));
+}
+
+// Structured Data for Tools Page
+const toolsSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "AI CNC Tools",
+  "description": "Professional AI-powered tools for CNC machining and laser cutting automation",
+  "mainEntity": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "AI SVG Generator",
+      "applicationCategory": "DesignApplication",
+      "description": "Generate laser-cutting ready SVG files from text descriptions using artificial intelligence",
+      "operatingSystem": "Web Browser"
+    },
+    {
+      "@type": "SoftwareApplication", 
+      "name": "Project Ideas Generator",
+      "applicationCategory": "DesignApplication",
+      "description": "AI-powered project ideation for woodworking, metalworking, and fabrication",
+      "operatingSystem": "Web Browser"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Image Vectorizer", 
+      "applicationCategory": "DesignApplication",
+      "description": "Convert photos and images to vector formats for precision cutting",
+      "operatingSystem": "Web Browser"
+    }
+  ],
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://cutgluebuild.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "AI Tools",
+        "item": "https://cutgluebuild.com/tools"
+      }
+    ]
+  }
+};
 ---
 
-<Layout title="AI Tools - CutGlueBuild.com" description="Create amazing designs with our AI-powered tools. Generate SVGs, get project ideas, and vectorize images.">
+<Layout 
+  title="Professional AI CNC Tools | Smart Workshop Automation"
+  description="Complete suite of AI-powered CNC and laser cutting tools. Generate SVG designs, optimize workflows, and automate fabrication processes for makers and manufacturers."
+  keywords="AI CNC tools, laser cutting automation, smart fabrication software, SVG generator, workshop AI assistant, precision cutting tools"
+  structuredData={toolsSchema}
+>
   <Header />
   
   <main class="pt-20 min-h-screen bg-gray-50 dark:bg-gray-900">

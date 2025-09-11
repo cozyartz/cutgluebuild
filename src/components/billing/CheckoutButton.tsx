@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useAuthStore, useIsAuthenticated } from '../../store/authStore';
 
 interface CheckoutButtonProps {
-  tier: 'maker' | 'pro';
+  tier: 'starter' | 'professional';
   billingCycle?: 'monthly' | 'yearly';
   className?: string;
   children: React.ReactNode;

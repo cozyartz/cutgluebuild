@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { Wand2, Download, Loader2 } from 'lucide-react';
-import { useUser } from '../../store/authStore';
+import { Wand2, Download, Loader2, Crown } from 'lucide-react';
+import { useUser, useSubscriptionTier, useUsageLimits } from '../../store/authStore';
+import { hasFeatureAccess, getUsageLimit } from '../../lib/pricing';
 
 interface SVGGeneratorProps {
   onGenerate?: (svgData: string, metadata: any) => void;
@@ -9,13 +10,25 @@ interface SVGGeneratorProps {
 
 export default function SVGGenerator({ onGenerate }: SVGGeneratorProps) {
   const user = useUser();
+  const tier = useSubscriptionTier();
+  const limits = useUsageLimits();
   const [description, setDescription] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedSvg, setGeneratedSvg] = useState<string | null>(null);
+  const [usedToday, setUsedToday] = useState(0); // This should come from usage tracking
+
+  const hasSubscription = tier !== null;
+  const canGenerate = hasSubscription && (limits.ai_designs === -1 || usedToday < limits.ai_designs);
+  const remainingGenerations = limits.ai_designs === -1 ? '∞' : Math.max(0, limits.ai_designs - usedToday);
 
   const generateSVG = async () => {
     if (!description.trim()) {
       toast.error('Please provide a description for your design');
+      return;
+    }
+
+    if (!canGenerate) {
+      toast.error(`You've reached your limit of ${limits.ai_designs} designs. Upgrade to continue!`);
       return;
     }
 
@@ -39,6 +52,7 @@ export default function SVGGenerator({ onGenerate }: SVGGeneratorProps) {
       
       const data = await response.json();
       setGeneratedSvg(data.svgData);
+      setUsedToday(prev => prev + 1); // Update usage count
       
       if (onGenerate) {
         onGenerate(data.svgData, { description, material: 'wood' });
@@ -67,7 +81,7 @@ export default function SVGGenerator({ onGenerate }: SVGGeneratorProps) {
     URL.revokeObjectURL(url);
   };
 
-  if (!user) {
+  if (!user || !hasSubscription) {
     return (
       <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
         <div className="text-center">
@@ -76,11 +90,21 @@ export default function SVGGenerator({ onGenerate }: SVGGeneratorProps) {
             AI SVG Generator
           </h3>
           <p className="text-gray-600 dark:text-gray-400 mb-4">
-            Sign in to generate custom laser-ready SVG designs with AI
+            {!user 
+              ? 'Sign in and choose a plan to generate custom laser-ready SVG designs with AI'
+              : 'Subscribe to a plan to generate custom laser-ready SVG designs with AI'
+            }
           </p>
-          <a href="/login" className="btn-primary inline-flex items-center">
-            Sign In to Continue
-          </a>
+          <div className="space-y-2">
+            <a href="/pricing" className="btn-primary inline-flex items-center w-full justify-center">
+              Choose Your Plan
+            </a>
+            {!user && (
+              <a href="/login" className="btn-outline inline-flex items-center w-full justify-center">
+                Sign In
+              </a>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -93,13 +117,24 @@ export default function SVGGenerator({ onGenerate }: SVGGeneratorProps) {
           <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
             <Wand2 className="w-6 h-6 text-gray-700 dark:text-gray-300" />
           </div>
-          <div>
+          <div className="flex-1">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
               AI SVG Generator
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
               Create custom laser-ready designs with AI
             </p>
+          </div>
+          <div className="text-right">
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              {tier === 'professional' && <Crown className="w-4 h-4 text-yellow-500 inline mr-1" />}
+              {tier && tier.charAt(0).toUpperCase() + tier.slice(1)} Plan
+            </div>
+            {tier && (
+              <div className="text-xs text-gray-500">
+                {remainingGenerations} generations left
+              </div>
+            )}
           </div>
         </div>
 
@@ -120,8 +155,10 @@ export default function SVGGenerator({ onGenerate }: SVGGeneratorProps) {
             
             <button
               onClick={generateSVG}
-              disabled={isGenerating || !description.trim()}
-              className="w-full btn-primary flex items-center justify-center space-x-2"
+              disabled={isGenerating || !description.trim() || !canGenerate}
+              className={`w-full btn-primary flex items-center justify-center space-x-2 ${
+                !canGenerate ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
             >
               {isGenerating ? (
                 <>
@@ -135,6 +172,17 @@ export default function SVGGenerator({ onGenerate }: SVGGeneratorProps) {
                 </>
               )}
             </button>
+            
+            {!canGenerate && (
+              <div className="mt-2 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                  You've reached your limit. 
+                  <a href="/pricing" className="underline font-medium ml-1">
+                    Upgrade to continue generating designs
+                  </a>
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="space-y-4">

@@ -7,9 +7,76 @@ import Templates from '../components/home/Templates.astro';
 import Testimonials from '../components/home/Testimonials.astro';
 import CTA from '../components/home/CTA.astro';
 import Footer from '../components/Footer.astro';
+
+// Structured Data for Homepage
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "CutGlueBuild",
+  "url": "https://cutgluebuild.com",
+  "logo": "https://cutgluebuild.com/CGB-Logo.svg",
+  "description": "AI-powered CNC laser cutting tools for makers and creators",
+  "foundingDate": "2025",
+  "sameAs": [
+    "https://twitter.com/cutgluebuild",
+    "https://github.com/cutgluebuild"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "",
+    "contactType": "Customer Service",
+    "email": "support@cutgluebuild.com"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "US"
+  }
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "CutGlueBuild",
+  "url": "https://cutgluebuild.com",
+  "description": "AI-powered CNC laser cutting tools for makers and creators",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://cutgluebuild.com/search?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
+};
+
+const softwareApplicationSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "CutGlueBuild AI Tools",
+  "applicationCategory": "DesignApplication",
+  "operatingSystem": "Web Browser",
+  "description": "AI-powered tools for generating laser-cutting ready SVG designs, optimizing material usage, and automating CNC workflows",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "description": "Free tier with premium subscriptions available"
+  },
+  "creator": {
+    "@type": "Organization",
+    "name": "CutGlueBuild"
+  }
+};
+
+const structuredData = [organizationSchema, websiteSchema, softwareApplicationSchema];
 ---
 
-<Layout title="CutGlueBuild.com - Cut. Glue. Build. Repeat." description="Transform your creative ideas into laser-cut masterpieces with AI-powered tools, premium templates, and step-by-step guides.">
+<Layout 
+  title="AI CNC Laser Cutting Tools | Smart Workshop Assistant for Makers" 
+  description="Transform ideas into laser-ready designs with AI. Generate SVG files, optimize cuts, calculate materials - all automated for CNC and laser cutting projects."
+  keywords="AI CNC tools, laser cutting software, automated SVG generator, maker tools, smart fabrication, workshop assistant, precision cutting"
+  structuredData={structuredData}
+>
   <Header />
   <Hero client:load />
   <Features />

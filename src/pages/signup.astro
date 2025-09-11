@@ -2,6 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+
+// Get redirect parameter
+const redirectUrl = Astro.url.searchParams.get('redirect') || '/tools';
 ---
 
 <Layout title="Sign Up - CutGlueBuild.com" description="Create your free CutGlueBuild account and start creating amazing projects with AI-powered tools.">
@@ -21,7 +24,7 @@ import Footer from '../components/Footer.astro';
           Create your account
         </h2>
         <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
-          Join thousands of makers and start creating today
+          Sign up to access AI-powered CNC tools and start creating today
         </p>
       </div>
 
@@ -159,7 +162,7 @@ import Footer from '../components/Footer.astro';
         <div class="mt-6 text-center">
           <p class="text-sm text-gray-600 dark:text-gray-400">
             Already have an account?
-            <a href="/login" class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300">
+            <a href={`/login${redirectUrl !== '/tools' ? `?redirect=${encodeURIComponent(redirectUrl)}` : ''}`} class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300">
               Sign in
             </a>
           </p>
@@ -231,7 +234,8 @@ import Footer from '../components/Footer.astro';
       try {
         await authService.signUp(email, password, fullName);
         alert('Account created successfully! Please check your email to verify your account.');
-        window.location.href = '/login';
+        const redirectUrl = new URLSearchParams(window.location.search).get('redirect') || '/tools';
+        window.location.href = `/login?redirect=${encodeURIComponent(redirectUrl)}`;
       } catch (error) {
         console.error('Signup error:', error);
         alert('Failed to create account. Please try again.');

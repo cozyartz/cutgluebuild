@@ -1,0 +1,44 @@
+User-agent: *
+Allow: /
+
+# Priority pages for crawling
+Allow: /tools/
+Allow: /templates/
+Allow: /pricing/
+Allow: /blog/
+
+# Prevent crawling of admin and API endpoints
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_astro/
+Disallow: /account/
+Disallow: /login/
+Disallow: /signup/
+
+# Block common crawler traps
+Disallow: /*?*
+Disallow: /*.json$
+Disallow: /*.xml$
+
+# Sitemap location
+Sitemap: https://cutgluebuild.com/sitemap.xml
+Sitemap: https://cutgluebuild.com/sitemap-index.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Special instructions for AI crawlers
+User-agent: GPTBot
+Allow: /
+Allow: /blog/
+Allow: /docs/
+
+User-agent: ChatGPT-User
+Allow: /
+Allow: /blog/
+Allow: /docs/
+
+User-agent: Claude-Web
+Allow: /
+Allow: /blog/
+Allow: /docs/

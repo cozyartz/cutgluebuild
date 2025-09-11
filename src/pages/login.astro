@@ -2,6 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+
+// Get redirect parameter
+const redirectUrl = Astro.url.searchParams.get('redirect') || '/tools';
 ---
 
 <Layout title="Sign In - CutGlueBuild.com" description="Sign in to your CutGlueBuild account to access AI tools and premium templates.">
@@ -126,7 +129,7 @@ import Footer from '../components/Footer.astro';
         <div class="mt-6 text-center">
           <p class="text-sm text-gray-600 dark:text-gray-400">
             Don't have an account?
-            <a href="/signup" class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300">
+            <a href={`/signup${redirectUrl !== '/tools' ? `?redirect=${encodeURIComponent(redirectUrl)}` : ''}`} class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300">
               Sign up for free
             </a>
           </p>
@@ -167,7 +170,8 @@ import Footer from '../components/Footer.astro';
         }
 
         // Redirect to tools page after successful login
-        window.location.href = '/tools';
+        const redirectUrl = new URLSearchParams(window.location.search).get('redirect') || '/tools';
+        window.location.href = redirectUrl;
       } catch (error) {
         console.error('Login error:', error);
         alert('Failed to sign in. Please check your credentials.');

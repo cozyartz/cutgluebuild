@@ -13,7 +13,7 @@ export interface Profile {
   email: string;
   full_name?: string;
   avatar_url?: string;
-  subscription_tier?: 'free' | 'starter' | 'maker' | 'pro';
+  subscription_tier?: 'starter' | 'professional';
   stripe_customer_id?: string;
   password_hash?: string;
   tenant_id?: string;
@@ -99,7 +99,7 @@ export interface BillingSubscription {
   stripe_subscription_id: string;
   stripe_customer_id: string;
   status: 'active' | 'canceled' | 'incomplete' | 'incomplete_expired' | 'past_due' | 'trialing' | 'unpaid';
-  tier: 'free' | 'maker' | 'pro';
+  tier: 'starter' | 'professional';
   current_period_start: number;
   current_period_end: number;
   cancel_at_period_end: boolean;
@@ -137,7 +137,7 @@ export interface UsageRecord {
 export interface UsageQuota {
   id: string;
   user_id: string;
-  tier: 'free' | 'maker' | 'pro';
+  tier: 'starter' | 'professional';
   feature: string;
   used_today: number;
   used_this_month: number;
@@ -164,7 +164,7 @@ export class DatabaseService {
           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
           RETURNING *
         `)
-        .bind(profile.id, profile.email, profile.full_name, profile.avatar_url, profile.subscription_tier || 'free', profile.stripe_customer_id, profile.password_hash, profile.tenant_id, now, now)
+        .bind(profile.id, profile.email, profile.full_name, profile.avatar_url, profile.subscription_tier, profile.stripe_customer_id, profile.password_hash, profile.tenant_id, now, now)
         .first<Profile>();
       
       return result || null;
