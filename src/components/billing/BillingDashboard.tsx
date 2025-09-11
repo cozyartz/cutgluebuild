@@ -209,7 +209,7 @@ export default function BillingDashboard() {
             <div className="flex items-center gap-3 mb-3">
               <div className={`w-3 h-3 rounded-full ${
                 isActive ? 'bg-green-500' : 
-                currentTier === 'free' ? 'bg-gray-400' : 'bg-red-500'
+'bg-red-500'
               }`}></div>
               <span className="font-medium capitalize">
                 {currentTier} Plan
@@ -257,15 +257,15 @@ export default function BillingDashboard() {
             )}
           </div>
 
-          {/* Upgrade/Downgrade Options */}
-          {currentTier === 'free' && (
+          {/* Upgrade Options */}
+          {currentTier === 'starter' && (
             <div className="bg-gradient-to-r from-primary-50 to-secondary-50 p-4 rounded-lg">
-              <h4 className="font-medium text-gray-900 mb-2">Upgrade Your Plan</h4>
+              <h4 className="font-medium text-gray-900 mb-2">Upgrade to Professional</h4>
               <p className="text-sm text-gray-600 mb-3">
-                Unlock more AI tools, premium templates, and advanced features.
+                Unlock unlimited AI generation, premium templates, and advanced features.
               </p>
               <a href="/pricing" className="btn btn-primary btn-sm">
-                View Plans
+                Upgrade Plan
               </a>
             </div>
           )}

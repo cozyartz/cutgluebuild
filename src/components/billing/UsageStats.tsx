@@ -124,9 +124,9 @@ export default function UsageStats() {
           </p>
         </div>
         
-        {currentTier === 'free' && (
+        {currentTier === 'starter' && (
           <a href="/pricing" className="btn btn-primary btn-sm">
-            Upgrade Plan
+            Upgrade to Pro
           </a>
         )}
       </div>
@@ -199,18 +199,18 @@ export default function UsageStats() {
         )}
       </div>
 
-      {/* Upgrade prompt for free users */}
-      {currentTier === 'free' && usageData.some(u => u.used_today > u.limit_daily * 0.8) && (
+      {/* Upgrade prompt for starter users */}
+      {currentTier === 'starter' && usageData.some(u => u.used_today > u.limit_daily * 0.8) && (
         <div className="mt-6 p-4 bg-gradient-to-r from-primary-50 to-secondary-50 rounded-lg">
           <div className="flex items-center justify-between">
             <div>
               <h4 className="font-medium text-gray-900">Approaching Limits</h4>
               <p className="text-sm text-gray-600">
-                Upgrade to get more AI generations and premium features.
+                Upgrade to Professional for unlimited AI generations and premium features.
               </p>
             </div>
             <a href="/pricing" className="btn btn-primary btn-sm">
-              Upgrade Now
+              Upgrade to Pro
             </a>
           </div>
         </div>
