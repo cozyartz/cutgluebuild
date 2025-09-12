@@ -9,6 +9,7 @@ import {
   FabricObject,
 } from 'fabric';
 import toast from 'react-hot-toast';
+import ShaperSVGExporter from './ShaperSVGExporter';
 
 interface DesignEditorProps {
   projectId?: string;
@@ -31,6 +32,8 @@ export default function DesignEditor({
   const [canvas, setCanvas] = useState<Canvas | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTool, setSelectedTool] = useState('select');
+  const [showShaperExport, setShowShaperExport] = useState(false);
+  const [currentSvgData, setCurrentSvgData] = useState<string>('');
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -168,6 +171,14 @@ export default function DesignEditor({
     URL.revokeObjectURL(url);
   };
 
+  const exportForShaper = () => {
+    if (!canvas) return;
+
+    const svgData = canvas.toSVG();
+    setCurrentSvgData(svgData);
+    setShowShaperExport(true);
+  };
+
   return (
     <div className="h-full flex flex-col bg-gray-50 dark:bg-gray-900">
       <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4">
@@ -212,15 +223,49 @@ export default function DesignEditor({
             <button onClick={exportSvg} className="btn btn-outline text-sm">
               Export SVG
             </button>
+            <button 
+              onClick={exportForShaper} 
+              className="btn bg-blue-600 hover:bg-blue-700 text-white text-sm flex items-center space-x-2"
+              title="Export for Shaper Origin"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+              </svg>
+              <span>Export for Shaper</span>
+            </button>
           </div>
         </div>
       </div>
       <div className="flex-1 p-4 overflow-auto">
-        <div className="flex justify-center">
-          <div className="bg-white rounded-lg shadow-lg p-4">
-            <canvas ref={canvasRef} />
+        {showShaperExport ? (
+          <div className="max-w-4xl mx-auto">
+            <div className="mb-4">
+              <button
+                onClick={() => setShowShaperExport(false)}
+                className="btn btn-outline text-sm flex items-center space-x-2"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                <span>Back to Editor</span>
+              </button>
+            </div>
+            <ShaperSVGExporter
+              svgData={currentSvgData}
+              projectTitle={`Project ${projectId || 'Design'}`}
+              onShaperSVGGenerated={(svg) => {
+                console.log('Shaper SVG generated:', svg);
+                toast.success('Shaper SVG ready for download!');
+              }}
+            />
           </div>
-        </div>
+        ) : (
+          <div className="flex justify-center">
+            <div className="bg-white rounded-lg shadow-lg p-4">
+              <canvas ref={canvasRef} />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

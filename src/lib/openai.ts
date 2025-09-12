@@ -22,6 +22,18 @@ export interface ProjectIdeaRequest {
   timeAvailable: string;
 }
 
+export interface ShaperSVGRequest {
+  description?: string;
+  svgData?: string;
+  material: string;
+  thickness: number;
+  cutTypes: { [key: string]: boolean };
+  optimizeForShaper: boolean;
+  includeGuides: boolean;
+  width?: number;
+  height?: number;
+}
+
 export class OpenAIService {
   async generateSVG(request: SVGGenerationRequest): Promise<string> {
     try {
@@ -96,6 +108,45 @@ export class OpenAIService {
     } catch (error) {
       console.error('OpenAI project ideas generation error:', error);
       throw new Error('Failed to generate project ideas with AI');
+    }
+  }
+
+  async generateShaperSVG(request: ShaperSVGRequest): Promise<string> {
+    try {
+      const prompt = this.createShaperSVGPrompt(request);
+      
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4",
+        messages: [
+          {
+            role: "system",
+            content: "You are an expert SVG designer specializing in Shaper Origin handheld CNC routers. Generate SVG code with proper Shaper color-coded cut types: Blue (#0066FF) for engraving, Red (#FF0000) for exterior cuts, Green (#00FF00) for interior cuts, Magenta (#FF00FF) for pocket cuts, and Gray (#888888) for guide lines."
+          },
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+        max_tokens: 2000,
+        temperature: 0.7
+      });
+
+      const svgContent = completion.choices[0]?.message?.content;
+      
+      if (!svgContent) {
+        throw new Error('No Shaper SVG content generated');
+      }
+
+      // Extract SVG from response if wrapped in markdown
+      const svgMatch = svgContent.match(/<svg[\s\S]*?<\/svg>/i);
+      const cleanSVG = svgMatch ? svgMatch[0] : svgContent;
+      
+      // Apply Shaper-specific optimizations
+      return this.applyShaperOptimizations(cleanSVG, request);
+      
+    } catch (error) {
+      console.error('OpenAI Shaper SVG generation error:', error);
+      throw new Error('Failed to generate Shaper SVG with AI');
     }
   }
 
@@ -217,6 +268,98 @@ Format as JSON array with objects containing: title, description, difficulty, ti
     
     return projects;
   }
+
+  private createShaperSVGPrompt(request: ShaperSVGRequest): string {
+    const cutTypeDescriptions = {
+      online: 'Blue (#0066FF) for surface engraving',
+      exterior: 'Red (#FF0000) for cutting positive shapes',
+      interior: 'Green (#00FF00) for cutting through-holes',
+      pocket: 'Magenta (#FF00FF) for material removal pockets',
+      guide: 'Gray (#888888) for reference marks'
+    };
+
+    const enabledCutTypes = Object.entries(request.cutTypes)
+      .filter(([_, enabled]) => enabled)
+      .map(([type, _]) => cutTypeDescriptions[type as keyof typeof cutTypeDescriptions])
+      .join(', ');
+
+    if (request.svgData) {
+      return `Optimize this existing SVG for Shaper Origin handheld CNC router:
+
+${request.svgData}
+
+Material: ${request.material}
+Thickness: ${request.thickness}mm
+Enabled cut types: ${enabledCutTypes}
+
+Requirements:
+- Apply proper Shaper color encoding for cut types
+- Use stroke-width="0.1" for cut lines, "0.05" for guides
+- Set fill="none" on all cutting paths
+- Optimize toolpaths for handheld operation
+- Include guides: ${request.includeGuides}
+- Ensure compatibility with ${request.material} material
+
+Return the optimized SVG code only.`;
+    } else {
+      const width = request.width || 100;
+      const height = request.height || 100;
+      
+      return `Create a Shaper Origin compatible SVG design:
+
+Description: ${request.description || 'Simple geometric design'}
+Dimensions: ${width}mm x ${height}mm
+Material: ${request.material}
+Thickness: ${request.thickness}mm
+Enabled cut types: ${enabledCutTypes}
+
+Requirements:
+- Use proper Shaper color encoding: ${enabledCutTypes}
+- Stroke width 0.1mm for cuts, 0.05mm for guides
+- No fill colors, stroke only
+- Design suitable for ${request.material}
+- Optimize for handheld CNC operation
+- Include alignment guides: ${request.includeGuides}
+
+Return clean SVG code only.`;
+    }
+  }
+
+  private applyShaperOptimizations(svgContent: string, request: ShaperSVGRequest): string {
+    try {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(svgContent, 'image/svg+xml');
+      const svg = doc.documentElement;
+
+      // Add Shaper metadata
+      svg.setAttribute('data-shaper-origin', 'true');
+      svg.setAttribute('data-material', request.material);
+      svg.setAttribute('data-thickness', request.thickness.toString());
+      
+      // Ensure proper stroke settings for all paths
+      const elements = svg.querySelectorAll('path, circle, rect, line, polyline, polygon, ellipse');
+      elements.forEach((element) => {
+        // Remove fill, ensure stroke-only rendering
+        element.setAttribute('fill', 'none');
+        
+        // Apply default stroke width if not set
+        if (!element.getAttribute('stroke-width')) {
+          element.setAttribute('stroke-width', '0.1');
+        }
+        
+        // Ensure stroke color is set
+        if (!element.getAttribute('stroke')) {
+          element.setAttribute('stroke', '#FF0000'); // Default to exterior cut
+        }
+      });
+
+      const serializer = new XMLSerializer();
+      return serializer.serializeToString(svg);
+    } catch (error) {
+      console.warn('Failed to optimize SVG for Shaper, returning original:', error);
+      return svgContent;
+    }
+  }
 }
 
 export const openaiService = new OpenAIService();
@@ -263,6 +406,27 @@ export class MockAIService {
         tips: ["Start with simple patterns", "Test settings on scrap material"]
       }
     ];
+  }
+
+  async generateShaperSVG(request: ShaperSVGRequest): Promise<string> {
+    // Return mock Shaper-optimized SVG with proper color encoding
+    const width = request.width || 150;
+    const height = request.height || 150;
+    
+    return `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" data-shaper-origin="true" data-material="${request.material}" data-thickness="${request.thickness}">
+      <!-- Exterior cut outline -->
+      <rect x="10" y="10" width="${width-20}" height="${height-20}" fill="none" stroke="#FF0000" stroke-width="0.1"/>
+      <!-- Interior cut hole -->
+      <circle cx="${width/2}" cy="${height/2}" r="20" fill="none" stroke="#00FF00" stroke-width="0.1"/>
+      <!-- Engraving details -->
+      <path d="M${width/4},${height/4} L${3*width/4},${3*height/4} M${3*width/4},${height/4} L${width/4},${3*height/4}" fill="none" stroke="#0066FF" stroke-width="0.1"/>
+      ${request.includeGuides ? `<!-- Guide marks -->
+      <line x1="0" y1="${height/2}" x2="10" y2="${height/2}" stroke="#888888" stroke-width="0.05"/>
+      <line x1="${width-10}" y1="${height/2}" x2="${width}" y2="${height/2}" stroke="#888888" stroke-width="0.05"/>` : ''}
+      <text x="5" y="${height-5}" font-family="Arial" font-size="6" fill="#666" opacity="0.5">
+        ${request.material} ${request.thickness}mm
+      </text>
+    </svg>`;
   }
 
   async vectorizeImage(imageData: string, settings: any): Promise<string> {
