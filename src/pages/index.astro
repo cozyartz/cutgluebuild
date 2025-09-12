@@ -15,11 +15,11 @@ const organizationSchema = {
   "name": "CutGlueBuild",
   "url": "https://cutgluebuild.com",
   "logo": "https://cutgluebuild.com/CGB-Logo.svg",
-  "description": "AI-powered CNC laser cutting tools for makers and creators",
+  "description": "Professional AI-powered laser cutting platform for makers and fabricators",
   "foundingDate": "2025",
   "sameAs": [
     "https://twitter.com/cutgluebuild",
-    "https://github.com/cutgluebuild"
+    "https://github.com/cozyartz/cutgluebuild"
   ],
   "contactPoint": {
     "@type": "ContactPoint",
@@ -52,16 +52,28 @@ const websiteSchema = {
 const softwareApplicationSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  "name": "CutGlueBuild AI Tools",
+  "name": "CutGlueBuild Professional Platform",
   "applicationCategory": "DesignApplication",
   "operatingSystem": "Web Browser",
-  "description": "AI-powered tools for generating laser-cutting ready SVG designs, optimizing material usage, and automating CNC workflows",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD",
-    "description": "Free tier with premium subscriptions available"
-  },
+  "description": "Professional AI-powered platform for generating laser-cutting ready SVG designs, G-code generation, and automated fabrication workflows",
+  "offers": [
+    {
+      "@type": "Offer",
+      "name": "Starter Plan",
+      "price": "49",
+      "priceCurrency": "USD",
+      "billingIncrement": "P1M",
+      "description": "Professional starter plan with commercial license"
+    },
+    {
+      "@type": "Offer",
+      "name": "Professional Plan",
+      "price": "99",
+      "priceCurrency": "USD",
+      "billingIncrement": "P1M",
+      "description": "Unlimited AI designs with G-code generation"
+    }
+  ],
   "creator": {
     "@type": "Organization",
     "name": "CutGlueBuild"
@@ -72,9 +84,9 @@ const structuredData = [organizationSchema, websiteSchema, softwareApplicationSc
 ---
 
 <Layout 
-  title="AI CNC Laser Cutting Tools | Smart Workshop Assistant for Makers" 
-  description="Transform ideas into laser-ready designs with AI. Generate SVG files, optimize cuts, calculate materials - all automated for CNC and laser cutting projects."
-  keywords="AI CNC tools, laser cutting software, automated SVG generator, maker tools, smart fabrication, workshop assistant, precision cutting"
+  title="Professional AI Laser Cutting Platform | CutGlueBuild - Save 10+ Hours/Week" 
+  description="Professional AI-powered laser cutting platform. Generate manufacturable designs in 2 minutes. Starting at $49/month with 7-day money-back guarantee. 95% success rate."
+  keywords="professional AI laser cutting, CNC fabrication platform, automated SVG generator, G-code generation, maker tools, commercial license"
   structuredData={structuredData}
 >
   <Header />

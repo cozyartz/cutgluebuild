@@ -161,7 +161,7 @@ const qualityAnalysis = await this.ai.run('@cf/openai/gpt-oss-20b', {
 
 ## Submission Deliverables
 
-1. **Source Code**: https://github.com/cozart-lundin/cutgluebuild
+1. **Source Code**: https://github.com/cozyartz/cutgluebuild
 2. **Live Demo**: https://cutgluebuild.com  
 3. **Documentation**: Comprehensive README with model usage examples
 4. **Demo Video**: 3-minute demonstration of core features
