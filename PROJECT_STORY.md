@@ -9,7 +9,7 @@ The maker movement is exploding, but there's a massive gap between having an ide
 CutGlueBuild is an AI-powered SaaS platform that transforms text descriptions into professional laser-ready designs. Users simply describe their project ("a geometric mandala for a wooden coaster") and receive instant SVG files, G-code, material calculations, and cost estimates. The platform features:
 
 - **AI SVG Generation**: Natural language to manufacturable designs
-- **Smart Template Library**: 500+ professional templates with automatic scaling
+- **Smart Template Library**: 130+ professional templates with automatic scaling
 - **Multi-tenant Architecture**: White-label solutions for makerspaces
 - **Complete Business Platform**: Stripe billing, user management, usage analytics
 

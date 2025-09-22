@@ -3,7 +3,7 @@ import type { APIRoute } from 'astro';
 import { getDatabase, type Env } from '../../../lib/database';
 import { getSessionFromRequest, getAuthService } from '../../../lib/auth';
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
     const body = await request.json();
     const { templateId, userId } = body;
@@ -25,7 +25,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Get database and auth services from environment
-    const env = (globalThis as any).process?.env as Env;
+    const env = (locals as any)?.runtime?.env as Env;
     const database = getDatabase(env);
     const authService = getAuthService(env);
     

@@ -69,7 +69,7 @@ CutGlueBuild is a **production-ready SaaS platform** that brings professional-gr
 - **Version Control**: Complete revision history for all projects
 
 ### Premium Templates
-- 500+ professional-grade templates
+- 130+ professional-grade templates
 - Industry-standard compatibility (Glowforge, Cricut, CNC machines)
 - Organized by category, material, and difficulty
 - AI-generated custom templates

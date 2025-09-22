@@ -1,10 +1,11 @@
 // API endpoint for getting template by ID
 import type { APIRoute } from 'astro';
 import { getDatabase, type Env } from '../../../lib/database';
+import { getAuthService, getSessionFromRequest } from '../../../lib/auth';
 
 export const prerender = false;
 
-export const GET: APIRoute = async ({ params, request }) => {
+export const GET: APIRoute = async ({ params, request, locals }) => {
   try {
     const templateId = params.id;
     if (!templateId) {
@@ -14,8 +15,29 @@ export const GET: APIRoute = async ({ params, request }) => {
       });
     }
 
+    // Get environment from locals
+    const env = (locals as any)?.runtime?.env as Env;
+
+    // Check authentication
+    const sessionId = getSessionFromRequest(request);
+    if (!sessionId) {
+      return new Response(JSON.stringify({ error: 'Authentication required' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    const authService = getAuthService(env);
+    const currentUser = await authService.getCurrentUser(sessionId);
+
+    if (!currentUser) {
+      return new Response(JSON.stringify({ error: 'Invalid session' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
     // Get database service from environment
-    const env = (globalThis as any).process?.env as Env;
     const database = getDatabase(env);
     
     // Get template

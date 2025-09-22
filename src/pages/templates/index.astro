@@ -4,10 +4,26 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import TemplateDownloadButton from '../../components/templates/TemplateDownloadButton.tsx';
 import { getDatabase, type Template } from '../../lib/database';
+import { getAuthService, getSessionFromRequest } from '../../lib/auth';
 import type { Env } from '../../lib/database';
 
+// Check authentication before allowing access
+const env = (Astro.locals as any)?.runtime?.env as Env;
+const sessionId = getSessionFromRequest(Astro.request);
+
+if (!sessionId) {
+  return Astro.redirect('/login?redirect=' + encodeURIComponent('/templates'));
+}
+
+const authService = getAuthService(env);
+const currentUser = sessionId ? await authService.getCurrentUser(sessionId) : null;
+
+if (!currentUser) {
+  return Astro.redirect('/login?redirect=' + encodeURIComponent('/templates'));
+}
+
 // Get database service (with fallback for build)
-const database = getDatabase((Astro.locals as any)?.runtime?.env as Env);
+const database = getDatabase(env);
 
 // Fetch templates from database (with fallback for build)
 let templates: Template[] = [];

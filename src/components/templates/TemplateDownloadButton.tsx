@@ -23,20 +23,18 @@ export default function TemplateDownloadButton({
     try {
       setIsDownloading(true);
 
-      // Check if user is authenticated for premium templates
-      if (isPremium) {
-        if (!user) {
-          toast.error('Please sign in to download premium templates');
-          window.location.href = '/login';
-          return;
-        }
+      // Check if user is authenticated (required for ALL templates)
+      if (!user) {
+        toast.error('Please sign in to download templates');
+        window.location.href = '/login?redirect=' + encodeURIComponent('/templates');
+        return;
+      }
 
-        // Check subscription tier
-        if (!canAccessPremium) {
-          toast.error('Premium templates require a paid subscription');
-          window.location.href = '/pricing';
-          return;
-        }
+      // Check subscription tier for premium templates
+      if (isPremium && !canAccessPremium) {
+        toast.error('Premium templates require a paid subscription');
+        window.location.href = '/pricing';
+        return;
       }
 
       // Get template data via API
