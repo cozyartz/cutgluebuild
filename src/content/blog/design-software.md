@@ -1,6 +1,5 @@
 ---
 title: "Best Design Software for Beginners"
-slug: "design-software"
 excerpt: "A deep dive into top design tools—Adobe Illustrator, Inkscape, Fusion 360, Freepik AI, and more—perfect for laser cutters and creative makers."
 author: "CutGlueBuild Team"
 tags: ["design", "software", "svg", "ai"]

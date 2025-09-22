@@ -1,6 +1,5 @@
 ---
 title: "Essential Laser Cutting Safety Guide"
-slug: "laser-safety-guide"
 excerpt: "Protect yourself and your workspace with this comprehensive safety guide for laser cutting. Learn about ventilation, fire risks, materials to avoid, and critical do’s and don’ts."
 author: "CutGlueBuild Team"
 tags: ["safety", "laser cutting", "guide"]

@@ -4,8 +4,12 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { getCollection } from 'astro:content';
 
+export const prerender = true;
+
 export async function getStaticPaths() {
-  const blogEntries = await getCollection('blog');
+  const blogEntries = await getCollection('blog', ({ data }) => {
+    return data.published !== false;
+  });
   return blogEntries.map(entry => ({
     params: { slug: entry.slug },
     props: { entry },
@@ -13,6 +17,11 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
+
+if (!entry) {
+  return Astro.redirect('/blog/');
+}
+
 const { Content } = await entry.render();
 ---
 

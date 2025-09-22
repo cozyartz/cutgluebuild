@@ -1,6 +1,5 @@
 ---
 title: "DIY Garden Plant Markers with Laser Cutting"
-slug: "diy-garden-plant-markers"
 excerpt: "Create beautiful, weather-resistant garden plant markers with your laser cutter. Includes design tips, SVG instructions, and beginner-friendly materials."
 author: "CutGlueBuild Team"
 tags: ["gardening", "project", "diy", "svg"]

@@ -1,6 +1,5 @@
 ---
 title: "How to Start Selling Laser-Cut Products"
-slug: "selling-laser-cut-products"
 excerpt: "Turn your hobby into a profitable business. Learn the best ways to sell laser-cut products online and in person."
 author: "CutGlueBuild Team"
 tags: ["business", "marketing", "laser-cutting"]

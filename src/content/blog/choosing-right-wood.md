@@ -1,11 +1,12 @@
 ---
 title: "Choosing the Right Wood for Your Laser Cutter Project"
 excerpt: "Not all woods are created equal — learn which types work best for laser cutting, their pros and cons, and how to choose based on your project goals."
-published_at: "2024-12-12"
+published_at: "2024-12-12T08:00:00Z"
 author: "CutGlueBuild Team"
-image: "https://images.pexels.com/photos/1251175/pexels-photo-1251175.jpeg?auto=compress&cs=tinysrgb&w=800"
+featured_image: "https://images.pexels.com/photos/1251175/pexels-photo-1251175.jpeg?auto=compress&cs=tinysrgb&w=800"
 tags: ["materials", "wood", "laser-cutting", "tips"]
-readingTime: 7
+reading_time: 7
+published: true
 ---
 
 ![Laser cut wooden puzzle pieces](https://images.pexels.com/photos/1251175/pexels-photo-1251175.jpeg?auto=compress&cs=tinysrgb&w=800)
