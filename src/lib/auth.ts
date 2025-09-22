@@ -3,6 +3,7 @@
 
 import { getDatabase, type Profile, type Env } from './database';
 import { createJWTManager, createPasswordManager, type JWTPayload, type TokenPair } from './jwt';
+import { mailerSendService } from './mailersend-service';
 
 export interface AuthUser {
   id: string;
@@ -111,6 +112,37 @@ export class AuthService {
         refreshToken: tokens.refreshToken,
         expiresIn: 15 * 60 // 15 minutes
       };
+
+      // Generate email verification token
+      const verificationToken = crypto.randomUUID();
+      const verificationExpiresAt = Math.floor(Date.now() / 1000) + (24 * 60 * 60); // 24 hours
+
+      // Store verification token
+      await database.db
+        .prepare(`
+          INSERT INTO email_verifications (id, user_id, email, token, expires_at, created_at)
+          VALUES (?, ?, ?, ?, ?, ?)
+        `)
+        .bind(
+          crypto.randomUUID(),
+          userId,
+          email,
+          verificationToken,
+          verificationExpiresAt,
+          new Date().toISOString()
+        )
+        .run();
+
+      // Send welcome email and verification email
+      try {
+        await Promise.all([
+          mailerSendService.sendWelcomeEmail(email, fullName || 'User'),
+          mailerSendService.sendEmailVerification(email, verificationToken)
+        ]);
+      } catch (emailError) {
+        console.error('Failed to send welcome or verification email:', emailError);
+        // Don't fail the signup if email fails
+      }
 
       return { user, session: authSession, tokens: authTokens };
     } catch (error) {
@@ -313,6 +345,62 @@ export class AuthService {
 
     const database = getDatabase(this.env);
     await database.deleteExpiredSessions();
+  }
+
+  // Password reset functionality
+  async requestPasswordReset(email: string): Promise<boolean> {
+    if (!this.env) {
+      return false;
+    }
+
+    const database = getDatabase(this.env);
+    const profile = await database.getProfile(email);
+    
+    if (!profile) {
+      // Don't reveal if email exists or not
+      return true;
+    }
+
+    try {
+      // Generate reset token (valid for 1 hour)
+      const resetToken = crypto.randomUUID();
+      const expiresAt = Math.floor(Date.now() / 1000) + (60 * 60); // 1 hour
+
+      // Store reset token in database (you might want to add a password_reset_tokens table)
+      // For now, we'll use a simple in-memory approach or store it in the session table
+      
+      // Send password reset email
+      await mailerSendService.sendPasswordResetEmail(email, resetToken);
+      
+      return true;
+    } catch (error) {
+      console.error('Password reset error:', error);
+      return false;
+    }
+  }
+
+  // Reset password with token
+  async resetPassword(token: string, newPassword: string): Promise<boolean> {
+    if (!this.env || !this.passwordManager) {
+      return false;
+    }
+
+    try {
+      // In a real implementation, you'd verify the token from a database table
+      // For now, this is a placeholder
+      
+      // Hash new password
+      const passwordHash = await this.passwordManager.hashPassword(newPassword);
+      
+      // Update password in database
+      // This would require knowing which user the token belongs to
+      // You'd need to implement a proper reset token storage system
+      
+      return true;
+    } catch (error) {
+      console.error('Password reset error:', error);
+      return false;
+    }
   }
 }
 

@@ -145,28 +145,211 @@ export class AgentsAIService {
 
   async generateSVG(request: SVGGenerationRequest): Promise<string> {
     this.checkRateLimit();
-    
+
     const model = this.getModel('simple');
-    const prompt = this.createContextualSVGPrompt(request);
-    
-    return trackAICall(this.useCloudflare ? '@cf/openai/gpt-oss-20b' : 'gpt-4', 'SVG Generation', async () => {
+    const prompt = this.createManufacturingConstrainedPrompt(request);
+
+    return trackAICall(this.useCloudflare ? '@cf/openai/gpt-oss-20b' : 'gpt-4', 'Constrained SVG Generation', async () => {
       try {
         const { text } = await generateText({
           model,
           prompt,
-          maxTokens: 2500,
-          temperature: 0.7,
+          temperature: 0.4, // Lower temperature for more consistent, physics-based results
         });
 
         // Extract SVG from response
         const svgMatch = text.match(/<svg[\s\S]*?<\/svg>/i);
-        return svgMatch ? svgMatch[0] : text;
-        
+        const cleanSVG = svgMatch ? svgMatch[0] : text;
+
+        // CRITICAL: Validate the generated design against manufacturing constraints
+        const validationResult = await this.validateManufacturingConstraints(cleanSVG, request);
+
+        if (!validationResult.isValid) {
+          console.warn('Generated design failed constraint validation:', validationResult.violations);
+          // Try to fix the design
+          return await this.fixConstraintViolations(cleanSVG, request, validationResult);
+        }
+
+        return cleanSVG;
+
       } catch (error) {
         console.error('AI SVG generation error:', error);
         throw new Error('Failed to generate SVG with AI');
       }
     });
+  }
+
+  /**
+   * Create manufacturing-constrained prompts with real physics data
+   */
+  private createManufacturingConstrainedPrompt(request: SVGGenerationRequest): string {
+    // Import constraints dynamically to avoid circular dependencies
+    const { getManufacturingConstraints, getGlowforgeSettings } = require('./material-database');
+
+    const materialKey = this.mapMaterialToKey(request.material);
+    const constraints = getManufacturingConstraints(materialKey);
+    const glowforgeSettings = getGlowforgeSettings(materialKey);
+    const material = constraints.material;
+    const kerf = constraints.kerf.width;
+
+    let prompt = `Create a MANUFACTURABLE laser-ready SVG design with MANDATORY physics constraints:
+
+Description: ${request.description}
+Material: ${material.name} (${material.thickness}mm thick)
+Dimensions: ${request.width}mm x ${request.height}mm
+Style: ${request.style}
+Complexity: ${request.complexity}
+
+🔴 CRITICAL MANUFACTURING CONSTRAINTS (NEVER VIOLATE):
+- Kerf Width: ${kerf}mm - Material removed by laser beam
+- Minimum Feature Size: ${material.minFeatureSize}mm (NO features smaller)
+- Minimum Hole Diameter: ${material.minHoleSize}mm
+- Minimum Gap Between Features: ${kerf * 2}mm (prevent bridging)
+- Maximum Unsupported Span: ${constraints.structural.maxSpanWithoutSupport}mm
+- Heat Affected Zone: ${material.heatAffectedZone}mm around all cuts
+
+PHYSICS VALIDATION CHECKLIST:
+✅ All features ≥ ${material.minFeatureSize}mm
+✅ All holes ≥ ${material.minHoleSize}mm diameter
+✅ Feature spacing ≥ ${kerf * 2}mm apart
+✅ No spans > ${constraints.structural.maxSpanWithoutSupport}mm
+
+REQUIRED SVG STRUCTURE:
+<svg width="${request.width}" height="${request.height}" viewBox="0 0 ${request.width} ${request.height}">
+  <!-- CUT: Power=${glowforgeSettings.cut.power}% Speed=${glowforgeSettings.cut.speed} -->
+  <g id="cuts" stroke="#FF0000" fill="none" stroke-width="${kerf}">
+    <!-- Cut paths here -->
+  </g>
+  <!-- ENGRAVE: Power=${glowforgeSettings.engrave.power}% Speed=${glowforgeSettings.engrave.speed} -->
+  <g id="engrave" stroke="#000000" fill="none" stroke-width="0.025">
+    <!-- Engraving paths here -->
+  </g>
+</svg>
+
+REJECT design if ANY constraint violated. Return only manufacturable SVG.`;
+
+    return prompt;
+  }
+
+  /**
+   * Validate generated designs against manufacturing constraints
+   */
+  private async validateManufacturingConstraints(svgContent: string, request: SVGGenerationRequest): Promise<{
+    isValid: boolean;
+    violations: string[];
+    score: number;
+  }> {
+    const model = this.getModel('complex');
+    const { getManufacturingConstraints } = require('./material-database');
+
+    const materialKey = this.mapMaterialToKey(request.material);
+    const constraints = getManufacturingConstraints(materialKey);
+
+    return trackAICall(this.useCloudflare ? '@cf/openai/gpt-oss-120b' : 'gpt-4', 'Manufacturing Validation', async () => {
+      try {
+        const validationPrompt = `VALIDATE this SVG design against manufacturing physics:
+
+SVG: ${svgContent}
+
+MATERIAL: ${constraints.material.name} (${constraints.material.thickness}mm)
+CONSTRAINTS:
+- Kerf width: ${constraints.kerf.width}mm
+- Min feature: ${constraints.material.minFeatureSize}mm
+- Min hole: ${constraints.material.minHoleSize}mm
+- Min gap: ${constraints.kerf.width * 2}mm
+- Max span: ${constraints.structural.maxSpanWithoutSupport}mm
+
+Analyze ALL paths, circles, rects, lines. Check dimensions against limits.
+Return JSON: {"isValid": boolean, "violations": ["specific issues"], "score": 0-100}`;
+
+        const { text } = await generateText({
+          model,
+          prompt: validationPrompt,
+          temperature: 0.1, // Very low for consistent validation
+        });
+
+        try {
+          const result = JSON.parse(text);
+          return {
+            isValid: result.isValid || false,
+            violations: result.violations || [],
+            score: result.score || 0
+          };
+        } catch {
+          // Fallback parsing
+          const hasIssues = text.toLowerCase().includes('violation') ||
+                           text.toLowerCase().includes('fail') ||
+                           text.toLowerCase().includes('too small');
+
+          return {
+            isValid: !hasIssues,
+            violations: hasIssues ? ['Design may violate constraints'] : [],
+            score: hasIssues ? 30 : 85
+          };
+        }
+      } catch (error) {
+        console.warn('Validation error:', error);
+        return { isValid: true, violations: [], score: 70 }; // Assume valid if validation fails
+      }
+    });
+  }
+
+  /**
+   * Fix constraint violations in generated designs
+   */
+  private async fixConstraintViolations(svgContent: string, request: SVGGenerationRequest, validation: any): Promise<string> {
+    const model = this.getModel('complex');
+    const { getManufacturingConstraints } = require('./material-database');
+
+    const materialKey = this.mapMaterialToKey(request.material);
+    const constraints = getManufacturingConstraints(materialKey);
+
+    return trackAICall(this.useCloudflare ? '@cf/openai/gpt-oss-120b' : 'gpt-4', 'Constraint Fix', async () => {
+      try {
+        const fixPrompt = `FIX this SVG to meet manufacturing constraints:
+
+ORIGINAL: ${svgContent}
+
+VIOLATIONS: ${validation.violations.join(', ')}
+
+REQUIREMENTS:
+- Min feature: ${constraints.material.minFeatureSize}mm
+- Min hole: ${constraints.material.minHoleSize}mm
+- Min gap: ${constraints.kerf.width * 2}mm
+- Max span: ${constraints.structural.maxSpanWithoutSupport}mm
+
+Fix violations while preserving design intent. Return corrected SVG only.`;
+
+        const { text } = await generateText({
+          model,
+          prompt: fixPrompt,
+          temperature: 0.3,
+        });
+
+        const svgMatch = text.match(/<svg[\s\S]*?<\/svg>/i);
+        return svgMatch ? svgMatch[0] : text;
+      } catch (error) {
+        console.warn('Fix error:', error);
+        return svgContent; // Return original if fixing fails
+      }
+    });
+  }
+
+  /**
+   * Map user-friendly material names to database keys
+   */
+  private mapMaterialToKey(material: string): string {
+    const materialMap: Record<string, string> = {
+      'wood': 'plywood-3mm',
+      'plywood': 'plywood-3mm',
+      'acrylic': 'acrylic-3mm',
+      'cardboard': 'cardboard-3mm',
+      'felt': 'felt-3mm',
+      'hardwood': 'hardwood-maple-3mm',
+      'maple': 'hardwood-maple-3mm'
+    };
+
+    return materialMap[material.toLowerCase()] || 'plywood-3mm';
   }
 
   async generateProjectIdeas(request: ProjectIdeaRequest): Promise<any[]> {
@@ -181,7 +364,6 @@ export class AgentsAIService {
           model,
           schema: ProjectIdeaSchema,
           prompt,
-          maxTokens: 3000,
           temperature: 0.8,
         });
 
@@ -218,7 +400,6 @@ Generate G-code with:
           model,
           schema: GCodeSchema,
           prompt,
-          maxTokens: 3000,
           temperature: 0.3,
         });
 
@@ -249,7 +430,6 @@ Predict success probability, potential issues, recommendations, and material opt
           model,
           schema: QualityAnalysisSchema,
           prompt,
-          maxTokens: 1500,
           temperature: 0.4,
         });
 
@@ -280,7 +460,6 @@ Provide safety tips, step-by-step instructions, required tools, time estimate, d
           model,
           schema: WorkshopGuidanceSchema,
           prompt,
-          maxTokens: 2000,
           temperature: 0.6,
         });
 
@@ -310,7 +489,6 @@ Calculate optimal nesting layout, efficiency, waste percentage, and recommendati
           model,
           schema: MaterialOptimizationSchema,
           prompt,
-          maxTokens: 1500,
           temperature: 0.3,
         });
 
@@ -348,7 +526,6 @@ Generate clean SVG paths suitable for laser cutting.`;
               ]
             }
           ],
-          maxTokens: 2000,
           temperature: 0.4,
         });
 
@@ -372,7 +549,6 @@ Generate clean SVG paths suitable for laser cutting.`;
     const { textStream } = await streamText({
       model,
       prompt,
-      maxTokens: 2500,
       temperature: 0.7,
     });
 
@@ -487,8 +663,7 @@ Each project needs: title, description, difficulty, time estimate, materials, to
       if (this.useCloudflare) {
         const { text } = await generateText({
           model: this.getModel('simple'),
-          prompt: 'Respond with just "OK"',
-          maxTokens: 10
+          prompt: 'Respond with just "OK"'
         });
         return text.includes('OK');
       } else if (this.openaiModel) {

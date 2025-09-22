@@ -206,17 +206,76 @@ wrangler pages deploy dist
 3. Deploy Astro app to Cloudflare Pages with Workers integration
 4. Test authentication and database operations
 
+## Admin System Setup
+
+### GitHub OAuth Configuration
+
+The admin system requires GitHub OAuth for secure authentication. Follow these steps:
+
+#### 1. Create GitHub OAuth App
+1. Go to [GitHub Developer Settings](https://github.com/settings/developers)
+2. Click "New OAuth App"
+3. Fill in the application details:
+   - **Application name**: `CutGlueBuild Local Development`
+   - **Homepage URL**: `http://localhost:4321`
+   - **Application description**: `CutGlueBuild admin authentication for local development`
+   - **Authorization callback URL**: `http://localhost:4321/api/auth/github/callback`
+
+#### 2. Configure Environment Variables
+Add these to your `.env.local` or wrangler.toml:
+
+```bash
+# GitHub OAuth (Local Development)
+GITHUB_CLIENT_ID="your_github_client_id_here"
+GITHUB_CLIENT_SECRET="your_github_client_secret_here"
+```
+
+For production, create a separate OAuth app with:
+- **Homepage URL**: `https://cutgluebuild.com`
+- **Authorization callback URL**: `https://cutgluebuild.com/api/auth/github/callback`
+
+#### 3. Admin Access
+The system automatically grants superadmin privileges to the GitHub username `cozyartz` (Andrea Cozart-Lundin). When you login via GitHub OAuth:
+
+- **Role**: Superadmin
+- **Subscription**: Pro (automatically assigned)
+- **Permissions**: All admin capabilities including:
+  - User management
+  - Template management
+  - System settings
+  - Analytics viewing
+  - AI usage monitoring
+  - Billing management
+  - Content management
+
+#### 4. Access Admin Dashboard
+After configuring OAuth credentials:
+1. Start development server: `npm run dev`
+2. Navigate to `/login`
+3. Click "Continue with GitHub"
+4. Complete OAuth flow
+5. Access admin dashboard at `/admin`
+
+### Admin Features
+- **User Analytics**: Total users, active users, subscription tiers
+- **Template Management**: Download tracking, popular templates
+- **AI Monitoring**: Generation statistics, error rates, response times
+- **System Health**: Active sessions, database status
+- **Activity Logs**: Admin action tracking and audit trails
+
 ## Migration Notes
 
 This project has been migrated from Supabase to Cloudflare D1:
-- **Authentication**: Now uses session-based auth with httpOnly cookies
+- **Authentication**: Now uses session-based auth with httpOnly cookies + GitHub OAuth
 - **Database**: Migrated from PostgreSQL (Supabase) to SQLite (D1)
 - **API**: Server-side operations moved to Cloudflare Workers endpoints
 - **Build**: Optimized for Cloudflare Pages deployment
-- **Security**: Maintains same security model with new architecture
+- **Security**: Enhanced with role-based admin system and activity logging
+- **Admin System**: Complete admin dashboard with GitHub OAuth integration
 
 All functionality has been preserved while gaining:
 - Better performance with edge computing
 - Lower costs with Cloudflare's pricing model
 - Simplified deployment pipeline
 - Enhanced security with session-based authentication
+- Complete admin oversight and management capabilities

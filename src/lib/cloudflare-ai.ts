@@ -99,22 +99,22 @@ export class CloudflareAIService {
       const waitTime = aiRateLimiter.getTimeUntilNextCall();
       throw new Error(`Rate limit exceeded. Wait ${Math.ceil(waitTime / 1000)} seconds.`);
     }
-    
+
     const model = this.selectModel('simple'); // SVG generation is fast task
     const reasoningEffort = this.selectReasoningEffort('simple');
-    
-    return trackAICall(model, 'SVG Generation', async () => {
+
+    return trackAICall(model, 'SVG Generation with Constraints', async () => {
       aiRateLimiter.recordCall();
-      
+
       const prompt = this.createContextualSVGPrompt(request);
-      this.logModelUsage(model, 'SVG Generation');
-      
+      this.logModelUsage(model, 'Constrained SVG Generation');
+
       const response = await this.ai.run(model, {
         reasoning: { effort: reasoningEffort },
         messages: [
           {
             role: "system",
-            content: "You are an expert SVG designer specializing in laser cutting and CNC fabrication. Generate clean, optimized SVG code with proper cut and engrave layers. Always consider user's skill level and previous project patterns."
+            content: "You are a manufacturing-aware SVG designer with deep knowledge of laser cutting physics. You MUST generate designs that pass real-world manufacturing constraints. Every design must be validated against material properties, kerf width, and structural limits. NEVER create designs that will fail when cut."
           },
           {
             role: "user",
@@ -122,18 +122,170 @@ export class CloudflareAIService {
           }
         ],
         max_tokens: 2500,
-        temperature: 0.7
+        temperature: 0.4 // Lower temperature for more consistent, physics-based results
       });
 
       const svgContent = response.response;
-      
+
       if (!svgContent) {
         throw new Error('No SVG content generated');
       }
 
       // Extract SVG from response if wrapped in markdown
       const svgMatch = svgContent.match(/<svg[\s\S]*?<\/svg>/i);
-      return svgMatch ? svgMatch[0] : svgContent;
+      const cleanSVG = svgMatch ? svgMatch[0] : svgContent;
+
+      // CRITICAL: Validate the generated design against manufacturing constraints
+      const validationResult = await this.validateDesignConstraints(cleanSVG, request);
+
+      if (!validationResult.isValid) {
+        // If validation fails, try to fix it with AI
+        console.warn('Generated design failed validation:', validationResult.violations);
+        return await this.fixDesignViolations(cleanSVG, request, validationResult);
+      }
+
+      return cleanSVG;
+    });
+  }
+
+  /**
+   * Validate generated SVG against manufacturing constraints
+   */
+  async validateDesignConstraints(svgContent: string, request: SVGGenerationRequest): Promise<{
+    isValid: boolean;
+    violations: string[];
+    score: number;
+  }> {
+    const { getManufacturingConstraints } = require('./material-database');
+    const materialKey = this.mapMaterialToKey(request.material);
+    const constraints = getManufacturingConstraints(materialKey);
+
+    // Use gpt-oss-120b for complex validation reasoning
+    const model = this.selectModel('complex');
+    const reasoningEffort = this.selectReasoningEffort('complex');
+
+    return trackAICall(model, 'Design Validation', async () => {
+      const validationPrompt = `VALIDATE this SVG design against manufacturing constraints:
+
+SVG Content: ${svgContent}
+
+MANDATORY CONSTRAINTS FOR ${constraints.material.name.toUpperCase()}:
+- Kerf width: ${constraints.kerf.width}mm
+- Min feature size: ${constraints.material.minFeatureSize}mm
+- Min hole size: ${constraints.material.minHoleSize}mm
+- Min gap between features: ${constraints.kerf.width * 2}mm
+- Max span without support: ${constraints.structural.maxSpanWithoutSupport}mm
+- Heat affected zone: ${constraints.material.heatAffectedZone}mm
+
+VALIDATION CHECKLIST:
+1. Parse all SVG paths, circles, rects, and lines
+2. Calculate feature sizes and gaps
+3. Check if any feature violates size limits
+4. Check if any span exceeds structural limits
+5. Verify hole sizes meet minimum requirements
+6. Check feature spacing against kerf requirements
+
+Return JSON: {
+  "isValid": boolean,
+  "violations": ["specific violation descriptions"],
+  "score": number (0-100),
+  "criticalIssues": ["issues that will cause cutting failure"],
+  "recommendations": ["specific fixes needed"]
+}
+
+Be precise - manufacturing failure is expensive. Flag ANY potential issues.`;
+
+      const response = await this.ai.run(model, {
+        reasoning: { effort: reasoningEffort },
+        messages: [
+          {
+            role: "system",
+            content: "You are a manufacturing validation expert. Analyze SVG designs for real-world manufacturability. Be strict - it's better to reject a marginal design than allow cutting failures."
+          },
+          {
+            role: "user",
+            content: validationPrompt
+          }
+        ],
+        max_tokens: 1500,
+        temperature: 0.1 // Very low temperature for consistent validation
+      });
+
+      try {
+        const result = JSON.parse(response.response);
+        return {
+          isValid: result.isValid || false,
+          violations: result.violations || result.criticalIssues || [],
+          score: result.score || 0
+        };
+      } catch {
+        // Fallback if JSON parsing fails
+        const responseText = response.response.toLowerCase();
+        const hasViolations = responseText.includes('violation') || responseText.includes('fail') || responseText.includes('too small');
+
+        return {
+          isValid: !hasViolations,
+          violations: hasViolations ? ['Design may not meet manufacturing constraints'] : [],
+          score: hasViolations ? 30 : 80
+        };
+      }
+    });
+  }
+
+  /**
+   * Attempt to fix design violations using AI
+   */
+  async fixDesignViolations(svgContent: string, request: SVGGenerationRequest, validationResult: any): Promise<string> {
+    const { getManufacturingConstraints } = require('./material-database');
+    const materialKey = this.mapMaterialToKey(request.material);
+    const constraints = getManufacturingConstraints(materialKey);
+
+    // Use complex model for design fixing
+    const model = this.selectModel('complex');
+    const reasoningEffort = this.selectReasoningEffort('complex');
+
+    return trackAICall(model, 'Design Fixing', async () => {
+      const fixPrompt = `FIX this SVG design to meet manufacturing constraints:
+
+ORIGINAL SVG: ${svgContent}
+
+VIOLATIONS FOUND:
+${validationResult.violations.join('\n- ')}
+
+REQUIRED CONSTRAINTS FOR ${constraints.material.name.toUpperCase()}:
+- Minimum feature size: ${constraints.material.minFeatureSize}mm
+- Minimum hole size: ${constraints.material.minHoleSize}mm
+- Minimum gap between features: ${constraints.kerf.width * 2}mm
+- Kerf width: ${constraints.kerf.width}mm
+
+FIXING STRATEGY:
+1. Increase any features below ${constraints.material.minFeatureSize}mm
+2. Enlarge holes below ${constraints.material.minHoleSize}mm diameter
+3. Add spacing between features closer than ${constraints.kerf.width * 2}mm
+4. Reduce spans above ${constraints.structural.maxSpanWithoutSupport}mm
+5. Maintain original design intent while ensuring manufacturability
+
+Return the CORRECTED SVG that will cut successfully.`;
+
+      const response = await this.ai.run(model, {
+        reasoning: { effort: reasoningEffort },
+        messages: [
+          {
+            role: "system",
+            content: "You are an expert at fixing manufacturing issues in SVG designs. Your fixes must be minimal but ensure the design will cut successfully on the first attempt."
+          },
+          {
+            role: "user",
+            content: fixPrompt
+          }
+        ],
+        max_tokens: 3000,
+        temperature: 0.3
+      });
+
+      const fixedSVG = response.response;
+      const svgMatch = fixedSVG.match(/<svg[\s\S]*?<\/svg>/i);
+      return svgMatch ? svgMatch[0] : fixedSVG;
     });
   }
 
@@ -576,45 +728,107 @@ Return as JSON with appropriate settings and recommendations.`;
   }
 
   private createContextualSVGPrompt(request: SVGGenerationRequest): string {
-    let contextPrompt = `Create a laser-ready SVG design with the following specifications:
+    // Import manufacturing constraints for the material
+    const { getManufacturingConstraints, getGlowforgeSettings, MATERIALS } = require('./material-database');
+
+    const materialKey = this.mapMaterialToKey(request.material);
+    const constraints = getManufacturingConstraints(materialKey);
+    const glowforgeSettings = getGlowforgeSettings(materialKey);
+    const material = constraints.material;
+    const kerf = constraints.kerf.width;
+
+    let contextPrompt = `Create a MANUFACTURABLE laser-ready SVG design with MANDATORY physics constraints:
 
 Description: ${request.description}
-Material: ${request.material}
+Material: ${material.name} (${material.thickness}mm thick)
 Dimensions: ${request.width}mm x ${request.height}mm
 Style: ${request.style}
-Complexity: ${request.complexity}`;
+Complexity: ${request.complexity}
+
+CRITICAL MANUFACTURING CONSTRAINTS (DO NOT VIOLATE):
+🔴 Kerf Width: ${kerf}mm - Material lost to laser beam
+🔴 Minimum Feature Size: ${material.minFeatureSize}mm (NO features smaller than this)
+🔴 Minimum Hole Diameter: ${material.minHoleSize}mm
+🔴 Minimum Gap Between Features: ${kerf * 2}mm (features must be this far apart)
+🔴 Maximum Span Without Support: ${constraints.structural.maxSpanWithoutSupport}mm
+🔴 Heat Affected Zone: ${material.heatAffectedZone}mm around all cuts
+
+JOINT TOLERANCES FOR ${material.name.toUpperCase()}:
+- Press fit: ${material.pressFitTolerance}mm (tight assembly)
+- Loose fit: ${material.looseFitTolerance}mm (easy assembly)
+- Sliding fit: ${material.slidingFitTolerance}mm (moving parts)
+
+STRUCTURAL LIMITS:
+- Minimum beam width: ${constraints.structural.minBeamWidth}mm for load-bearing elements
+- Maximum cantilever: ${constraints.structural.maxCantileverLength}mm
+- Wall thickness: minimum ${constraints.structural.minWallThickness}mm
+
+DESIGN VALIDATION CHECKLIST:
+✅ All features are ≥ ${material.minFeatureSize}mm in size
+✅ All holes are ≥ ${material.minHoleSize}mm diameter
+✅ Features are ≥ ${kerf * 2}mm apart (2x kerf width minimum)
+✅ No unsupported spans > ${constraints.structural.maxSpanWithoutSupport}mm
+✅ All corners have radius ≥ ${constraints.dimensional.minRadius}mm
+✅ Design accounts for ${material.thermalExpansion * 1e6} ppm/°C thermal expansion`;
 
     // Add user context if available
     if (request.userHistory && request.userHistory.length > 0) {
       const recentProjects = request.userHistory.slice(0, 3);
       contextPrompt += `
 
-User Context (previous projects):
-${recentProjects.map(p => `- ${p.title}: ${p.project_type}`).join('\n')}
-
-Consider the user's skill progression and preferences based on their project history.`;
+USER SKILL CONTEXT:
+${recentProjects.map(p => `- Previous: ${p.title} (${p.project_type})`).join('\n')}
+Adapt complexity and joint types to user's demonstrated skill level.`;
     }
 
     contextPrompt += `
 
-Requirements:
-- Generate clean, scalable SVG code
-- Use 0.025mm (0.001 inch) stroke width for cut lines, 0.25mm (0.01 inch) for score lines
-- Create separate layers for different operations:
-  * Cut layer: stroke="#FF0000" (red) for through cuts
-  * Score layer: stroke="#0000FF" (blue) for score lines  
-  * Engrave layer: stroke="#000000" (black) for engraving
-- Optimize for ${request.material} material properties with kerf compensation
-- Ensure design fits within ${request.width}x${request.height}mm dimensions
-- Apply ${request.style} design principles
-- Create ${request.complexity} level of detail
-- Include proper layer grouping with id attributes (cuts, scores, engrave)
-- Consider fabrication constraints and material grain direction
-- Add power/speed metadata comments for Glowforge compatibility
+REQUIRED SVG STRUCTURE:
+- Use stroke-width="${kerf}mm" for cut lines (accounting for actual kerf)
+- Layer organization:
+  * <g id="cuts" stroke="#FF0000" fill="none"> - Through cuts
+  * <g id="scores" stroke="#0000FF" fill="none"> - Score lines
+  * <g id="engrave" stroke="#000000" fill="none"> - Engraving
+- Add Glowforge settings as comments:
+  <!-- CUT: Power=${glowforgeSettings.cut.power}% Speed=${glowforgeSettings.cut.speed} -->
+  <!-- ENGRAVE: Power=${glowforgeSettings.engrave.power}% Speed=${glowforgeSettings.engrave.speed} -->
 
-Return only the SVG code without explanations.`;
+MATERIAL-SPECIFIC OPTIMIZATION FOR ${material.name.toUpperCase()}:
+- Kerf compensation: Account for ${kerf}mm material loss
+- Char zone: Keep critical dimensions ${material.heatAffectedZone}mm from edges
+- Grain direction: Orient long features perpendicular to grain (if applicable)
+- Thermal effects: Expect ${(material.thermalExpansion * 1e6 * 30).toFixed(3)}mm expansion per 100mm at room temperature
+
+PHYSICS VALIDATION:
+The design MUST pass these physics checks:
+1. Beam Theory: No span > ${constraints.structural.maxSpanWithoutSupport}mm without support
+2. Feature Size: All features ≥ ${material.minFeatureSize}mm (2D manufacturing limit)
+3. Hole Size: All holes ≥ ${material.minHoleSize}mm (clean cutting limit)
+4. Proximity: Features separated by ≥ ${kerf * 2}mm (prevents bridging)
+5. Aspect Ratio: Max ${material.maxAspectRatio}:1 for thin features (prevents breaking)
+
+REJECT THE DESIGN if it violates any constraint. Suggest modifications instead.
+
+Generate SVG that will cut successfully on first attempt. Return ONLY the SVG code.`;
 
     return contextPrompt;
+  }
+
+  /**
+   * Map user-friendly material names to database keys
+   */
+  private mapMaterialToKey(material: string): string {
+    const materialMap: Record<string, string> = {
+      'wood': 'plywood-3mm',
+      'plywood': 'plywood-3mm',
+      'acrylic': 'acrylic-3mm',
+      'cardboard': 'cardboard-3mm',
+      'felt': 'felt-3mm',
+      'hardwood': 'hardwood-maple-3mm',
+      'maple': 'hardwood-maple-3mm'
+    };
+
+    return materialMap[material.toLowerCase()] || 'plywood-3mm';
   }
 }
 

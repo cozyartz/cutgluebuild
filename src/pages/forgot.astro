@@ -126,7 +126,17 @@ import Footer from '../components/Footer.astro';
       const email = formData.get('email') as string;
 
       try {
-        await authService.resetPassword(email);
+        const response = await fetch('/api/auth/forgot-password', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to send reset email');
+        }
         
         // Show success message and hide form
         if (resetFormContainer && successMessage) {

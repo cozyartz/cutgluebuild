@@ -1,0 +1,72 @@
+{
+  "version": "1.0.0",
+  "created": "2025-09-22T12:00:00Z",
+  "description": "Registry of all template sources and their licenses",
+  "total_estimated_files": "250+",
+  "legal_framework": {
+    "acceptable_licenses": [
+      "MIT",
+      "Apache 2.0", 
+      "GPL v3+",
+      "CC0 (Public Domain)",
+      "CC BY (Attribution)",
+      "CC BY-SA (Attribution-ShareAlike)",
+      "Creative Commons Share-alike 3.0"
+    ],
+    "requirements": {
+      "commercial_use_allowed": true,
+      "modification_allowed": true,
+      "attribution_tracked": true
+    }
+  },
+  "sources": [
+    {
+      "name": "3CatMax LaserFiles",
+      "url": "https://github.com/3CatMax/LaserFiles",
+      "license": "CC0 (Public Domain)",
+      "description": "Collection of laser cutting templates released to public domain",
+      "files": "~50 SVG files",
+      "commercial_use": true,
+      "attribution_required": false,
+      "clone_command": "git clone https://github.com/3CatMax/LaserFiles.git",
+      "status": "verified_legal",
+      "date_added": "2025-09-22T12:00:00Z"
+    },
+    {
+      "name": "Boxes.py",
+      "url": "https://github.com/florianfesti/boxes",
+      "license": "GPL v3+",
+      "description": "Parametric box generator for laser cutting",
+      "files": "100+ generated templates",
+      "commercial_use": true,
+      "attribution_required": true,
+      "clone_command": "git clone https://github.com/florianfesti/boxes.git",
+      "status": "verified_legal",
+      "date_added": "2025-09-22T12:00:00Z"
+    },
+    {
+      "name": "MeArm Robot Templates",
+      "url": "https://github.com/MeArm/MeArm",
+      "license": "Creative Commons Share-alike 3.0",
+      "description": "Laser cut robot arm templates", 
+      "files": "~20 DXF files",
+      "commercial_use": true,
+      "attribution_required": true,
+      "clone_command": "git clone https://github.com/MeArm/MeArm.git",
+      "status": "verified_legal",
+      "date_added": "2025-09-22T12:00:00Z"
+    },
+    {
+      "name": "frank26080115 Laser Projects",
+      "url": "https://github.com/frank26080115/my-laser-projects",
+      "license": "MIT (verified)",
+      "description": "Educational and mechanical laser cutting projects",
+      "files": "~30 SVG/DXF files",
+      "commercial_use": true,
+      "attribution_required": true,
+      "clone_command": "git clone https://github.com/frank26080115/my-laser-projects.git",
+      "status": "verified_legal",
+      "date_added": "2025-09-22T12:00:00Z"
+    }
+  ]
+}

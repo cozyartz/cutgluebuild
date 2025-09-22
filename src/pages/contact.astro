@@ -221,23 +221,31 @@ import Footer from '../components/Footer.astro';
     const formData = new FormData(e.target as HTMLFormElement);
     const data = Object.fromEntries(formData.entries());
     
-    // For now, just compose an email - in production you'd send to a backend
-    const subject = encodeURIComponent(`Privacy Request: ${data['request-type']}`);
-    const body = encodeURIComponent(`
-Name: ${data.name}
-Email: ${data.email}
-Request Type: ${data['request-type']}
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          requestType: data['request-type'],
+          message: data.message
+        }),
+      });
 
-Additional Details:
-${data.message || 'No additional details provided.'}
+      const result = await response.json();
 
-This request was submitted through the CutGlueBuild contact form.
-    `.trim());
-    
-    const mailtoUrl = `mailto:privacy@cutgluebuild.com?subject=${subject}&body=${body}`;
-    window.location.href = mailtoUrl;
-    
-    // Show confirmation
-    alert('Your privacy request has been prepared. Your email client should open with the request details. Please send the email to complete your request.');
+      if (response.ok) {
+        alert(result.message);
+        (e.target as HTMLFormElement).reset();
+      } else {
+        alert(result.error || 'Failed to send message. Please try again.');
+      }
+    } catch (error) {
+      console.error('Contact form error:', error);
+      alert('Failed to send message. Please try again or contact us directly at privacy@cutgluebuild.com');
+    }
   });
 </script>

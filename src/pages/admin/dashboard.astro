@@ -1,0 +1,81 @@
+---
+// Admin Dashboard Page
+// Requires superadmin or admin role to access
+
+import Layout from '../../layouts/Layout.astro';
+import { getDatabase } from '../../lib/database';
+import { GitHubAuthService } from '../../lib/github-auth';
+
+// Check authentication and admin permissions
+const cookies = Astro.request.headers.get('cookie');
+const userId = cookies
+  ?.split(';')
+  .find(c => c.trim().startsWith('cutglue_user_id='))
+  ?.split('=')[1];
+
+if (!userId) {
+  return Astro.redirect('/login?error=auth_required');
+}
+
+// Check if user has admin permissions
+const env = Astro.locals?.runtime?.env;
+if (!env) {
+  return Astro.redirect('/login?error=env_not_available');
+}
+
+const database = getDatabase(env);
+const user = await database.db
+  .prepare('SELECT * FROM profiles WHERE id = ?')
+  .bind(userId)
+  .first();
+
+if (!user || (user.role !== 'admin' && user.role !== 'superadmin')) {
+  return Astro.redirect('/?error=access_denied');
+}
+
+// Get user permissions
+const githubAuth = new GitHubAuthService(env);
+const permissions = await githubAuth.getUserPermissions(userId);
+
+const title = 'Admin Dashboard - CutGlueBuild';
+const description = 'CutGlueBuild admin dashboard for system management and analytics.';
+---
+
+<Layout title={title} description={description}>
+  <main class="min-h-screen">
+    <!-- Admin Dashboard Component -->
+    <div id="admin-dashboard-root"></div>
+
+    <!-- Pass user data to React component -->
+    <script type="application/json" id="admin-user-data">
+      {
+        "user": {
+          "id": Astro.params.userId || userId,
+          "email": user.email,
+          "role": user.role,
+          "permissions": permissions
+        }
+      }
+    </script>
+  </main>
+
+  <script>
+    import('../../components/admin/AdminDashboard.tsx').then(async module => {
+      const AdminDashboard = module.default;
+      const React = await import('react');
+      const ReactDOM = await import('react-dom/client');
+
+      const userData = JSON.parse(document.getElementById('admin-user-data').textContent);
+      const root = ReactDOM.createRoot(document.getElementById('admin-dashboard-root'));
+
+      root.render(React.createElement(AdminDashboard, { userData }));
+    });
+  </script>
+</Layout>
+
+<style>
+  /* Ensure admin dashboard has full height */
+  #admin-dashboard-root {
+    min-height: 100vh;
+  }
+</style>

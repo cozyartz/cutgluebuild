@@ -6,12 +6,20 @@ export type BlogPost = CollectionEntry<'blog'>;
 
 export async function getAllPosts(): Promise<BlogPost[]> {
   const all = await getCollection('blog', (post) => !post.data.draft);
-  return all.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  return all.sort((a, b) => {
+    const dateA = new Date(a.data.published_at || '').getTime();
+    const dateB = new Date(b.data.published_at || '').getTime();
+    return dateB - dateA;
+  });
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
-  const post = await getEntryBySlug('blog', slug);
-  return post && !post.data.draft ? post : null;
+  try {
+    const post = await getEntryBySlug('blog', slug);
+    return post && !post.data.draft ? post : null;
+  } catch {
+    return null;
+  }
 }
 
 export async function getAllPostSlugs(): Promise<string[]> {

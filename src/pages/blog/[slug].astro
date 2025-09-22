@@ -16,7 +16,7 @@ const { entry } = Astro.props;
 const { Content } = await entry.render();
 ---
 
-<Layout title={`${entry.data.title} - CutGlueBuild`} description={entry.data.excerpt} image={entry.data.image}>
+<Layout title={`${entry.data.title} - CutGlueBuild`} description={entry.data.excerpt} image={entry.data.featured_image}>
   <Header />
   
   <!-- Reading Progress Bar -->
@@ -27,10 +27,10 @@ const { Content } = await entry.render();
       <!-- Article Header -->
       <header class="mb-12 text-center">
         <!-- Featured Image -->
-        {entry.data.image && (
+        {entry.data.featured_image && (
           <div class="mb-8">
-            <img 
-              src={entry.data.image} 
+            <img
+              src={entry.data.featured_image} 
               alt={entry.data.title}
               class="w-full h-64 md:h-96 object-cover rounded-2xl shadow-xl"
             />
@@ -60,14 +60,6 @@ const { Content } = await entry.render();
             })}</span>
           </div>
           
-          {entry.data.readingTime && (
-            <div class="blog-meta-item">
-              <svg class="blog-meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-              <span>{entry.data.readingTime} min read</span>
-            </div>
-          )}
           
           {entry.data.author && (
             <div class="blog-meta-item">
@@ -170,8 +162,9 @@ const { Content } = await entry.render();
   // Social sharing analytics (placeholder)
   document.querySelectorAll('.social-share-button').forEach(button => {
     button.addEventListener('click', (e) => {
-      const platform = e.currentTarget.classList.contains('social-share-twitter') ? 'twitter' :
-                      e.currentTarget.classList.contains('social-share-facebook') ? 'facebook' : 'linkedin';
+      const target = e.currentTarget as HTMLElement;
+      const platform = target.classList.contains('social-share-twitter') ? 'twitter' :
+                      target.classList.contains('social-share-facebook') ? 'facebook' : 'linkedin';
       
       // Track social share (placeholder for analytics)
       console.log(`Shared on ${platform}`);
@@ -181,13 +174,33 @@ const { Content } = await entry.render();
   // Newsletter form handling
   const newsletterForm = document.querySelector('.newsletter-signup form');
   if (newsletterForm) {
-    newsletterForm.addEventListener('submit', (e) => {
+    newsletterForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = e.target.querySelector('input[type="email"]').value;
+      const form = e.target as HTMLFormElement;
+      const emailInput = form.querySelector('input[type="email"]') as HTMLInputElement;
+      const email = emailInput.value;
       
-      // Handle newsletter signup (placeholder)
-      console.log('Newsletter signup:', email);
-      alert('Thanks for subscribing! We\'ll be in touch soon.');
+      try {
+        const response = await fetch('/api/newsletter', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          alert(result.message);
+          form.reset();
+        } else {
+          alert(result.error || 'Failed to subscribe. Please try again.');
+        }
+      } catch (error) {
+        console.error('Newsletter signup error:', error);
+        alert('Failed to subscribe. Please try again later.');
+      }
     });
   }
 </script>

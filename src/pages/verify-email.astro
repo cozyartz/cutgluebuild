@@ -1,0 +1,178 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const url = Astro.url;
+const success = url.searchParams.get('success');
+const error = url.searchParams.get('error');
+
+let message = '';
+let isError = false;
+
+if (success) {
+  message = 'Your email has been successfully verified! You can now access all features.';
+} else if (error) {
+  isError = true;
+  switch (error) {
+    case 'missing-token':
+      message = 'Verification link is missing token. Please check your email for the correct link.';
+      break;
+    case 'invalid-token':
+      message = 'This verification link is invalid or has expired. Please request a new one.';
+      break;
+    case 'server-error':
+      message = 'An error occurred during verification. Please try again.';
+      break;
+    default:
+      message = 'An unknown error occurred. Please try again.';
+  }
+}
+---
+
+<Layout title="Email Verification - CutGlueBuild">
+  <Header />
+  
+  <main class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 py-12">
+    <div class="max-w-md mx-auto px-6">
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+        <!-- Icon -->
+        <div class="text-center mb-6">
+          {success ? (
+            <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+          ) : (
+            <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
+            </div>
+          )}
+        </div>
+
+        <!-- Title -->
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white text-center mb-6">
+          Email Verification
+        </h1>
+
+        <!-- Message -->
+        {message && (
+          <div class={`p-4 rounded-lg mb-6 ${isError ? 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800' : 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'}`}>
+            <p class={`text-sm ${isError ? 'text-red-700 dark:text-red-300' : 'text-green-700 dark:text-green-300'}`}>
+              {message}
+            </p>
+          </div>
+        )}
+
+        <!-- Resend verification form (only show if there's an error or no status) -->
+        {(isError || (!success && !error)) && (
+          <div id="resend-section">
+            <p class="text-gray-600 dark:text-gray-300 text-sm text-center mb-4">
+              Didn't receive the verification email or need a new one?
+            </p>
+            
+            <button 
+              id="resend-btn"
+              class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-colors"
+            >
+              Resend Verification Email
+            </button>
+
+            <div id="resend-result" class="mt-4 p-3 rounded-lg hidden"></div>
+          </div>
+        )}
+
+        <!-- Action buttons -->
+        <div class="space-y-3 mt-6">
+          {success ? (
+            <a 
+              href="/tools" 
+              class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-colors text-center block"
+            >
+              Go to Tools
+            </a>
+          ) : (
+            <a 
+              href="/account" 
+              class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-colors text-center block"
+            >
+              Go to Account
+            </a>
+          )}
+          
+          <a 
+            href="/" 
+            class="w-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-2 px-4 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-colors text-center block"
+          >
+            Back to Home
+          </a>
+        </div>
+
+        <!-- Help text -->
+        <div class="mt-8 text-center">
+          <p class="text-xs text-gray-500 dark:text-gray-400">
+            Need help? Contact us at 
+            <a href="mailto:support@cutgluebuild.com" class="text-blue-600 dark:text-blue-400 hover:underline">
+              support@cutgluebuild.com
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  // Handle resend verification email
+  document.getElementById('resend-btn')?.addEventListener('click', async () => {
+    const btn = document.getElementById('resend-btn') as HTMLButtonElement;
+    const resultDiv = document.getElementById('resend-result');
+    
+    if (!btn || !resultDiv) return;
+
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    try {
+      const response = await fetch('/api/auth/resend-verification', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const result = await response.json();
+
+      resultDiv.className = `mt-4 p-3 rounded-lg ${
+        response.ok 
+          ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300'
+          : 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300'
+      }`;
+      
+      resultDiv.innerHTML = `<p class="text-sm">${response.ok ? result.message : result.error}</p>`;
+      resultDiv.classList.remove('hidden');
+
+      if (response.ok) {
+        btn.textContent = 'Email Sent!';
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Resend Verification Email';
+      }
+
+    } catch (error) {
+      console.error('Resend verification error:', error);
+      
+      resultDiv.className = 'mt-4 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300';
+      resultDiv.innerHTML = '<p class="text-sm">Failed to send verification email. Please try again.</p>';
+      resultDiv.classList.remove('hidden');
+      
+      btn.disabled = false;
+      btn.textContent = 'Resend Verification Email';
+    }
+  });
+</script>

@@ -6,6 +6,7 @@ import Stripe from 'stripe';
 import { createStripeService } from '../../../lib/stripe-service';
 import { getDatabase } from '../../../lib/database';
 import type { Env } from '../../../lib/database';
+import { mailerSendService } from '../../../lib/mailersend-service';
 
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
@@ -205,6 +206,27 @@ async function handleSubscriptionUpdated(event: Stripe.Event, database: any, str
     subscription_tier: tier
   });
 
+  // Send subscription notification email
+  try {
+    const profile = await database.getProfile(userId);
+    if (profile) {
+      const action = event.type === 'customer.subscription.created' ? 'upgraded' : 
+                     subscription.status === 'canceled' ? 'cancelled' : 'upgraded';
+      const planName = tier === 'maker' ? 'Maker Plan' : 
+                       tier === 'pro' ? 'Pro Plan' : 'Free Plan';
+      
+      await mailerSendService.sendSubscriptionNotification(
+        profile.email, 
+        profile.full_name || 'User',
+        planName,
+        action
+      );
+    }
+  } catch (emailError) {
+    console.error('Failed to send subscription notification email:', emailError);
+    // Don't fail the webhook for email errors
+  }
+
   console.log('Subscription updated for user:', userId, 'tier:', tier, 'status:', subscription.status);
 }
 
@@ -288,10 +310,51 @@ async function handleInvoiceEvent(event: Stripe.Event, database: any): Promise<v
     console.log('Invoice created for user:', billingSubscription.user_id, 'amount:', invoice.amount_paid / 100);
   }
 
+  // Handle payment success - send invoice receipt
+  if (event.type === 'invoice.payment_succeeded' && invoice.status === 'paid') {
+    try {
+      const profile = await database.getProfile(billingSubscription.user_id);
+      if (profile) {
+        const subscription = await database.getBillingSubscriptionByStripeId(invoice.subscription as string);
+        const planName = subscription?.tier === 'maker' ? 'Maker Plan' : 
+                         subscription?.tier === 'pro' ? 'Pro Plan' : 'Free Plan';
+        
+        await mailerSendService.sendInvoiceReceipt(
+          profile.email,
+          profile.full_name || 'User',
+          {
+            invoiceNumber: invoice.number || invoice.id,
+            amount: invoice.amount_paid / 100,
+            currency: invoice.currency,
+            planName: planName,
+            periodStart: new Date(invoice.period_start * 1000).toLocaleDateString(),
+            periodEnd: new Date(invoice.period_end * 1000).toLocaleDateString(),
+            invoiceUrl: invoice.hosted_invoice_url || ''
+          }
+        );
+      }
+    } catch (emailError) {
+      console.error('Failed to send invoice receipt email:', emailError);
+    }
+  }
+
   // Handle payment failure
   if (event.type === 'invoice.payment_failed') {
     console.warn('Payment failed for user:', billingSubscription.user_id, 'invoice:', invoice.id);
-    // Could implement dunning management here
+    
+    try {
+      const profile = await database.getProfile(billingSubscription.user_id);
+      if (profile) {
+        await mailerSendService.sendPaymentFailedNotification(
+          profile.email,
+          profile.full_name || 'User',
+          invoice.amount_due / 100,
+          invoice.currency
+        );
+      }
+    } catch (emailError) {
+      console.error('Failed to send payment failed notification:', emailError);
+    }
   }
 }
 

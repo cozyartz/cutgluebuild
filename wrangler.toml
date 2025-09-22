@@ -1,42 +1,18 @@
-name = "cutgluebuild"
-compatibility_date = "2025-08-25"
-pages_build_output_dir = "dist"
+name = "cutgluebuild-api"
+main = "src/worker.js"
+compatibility_date = "2024-09-01"
 
-[ai]
-binding = "AI"
-
-[[d1_databases]]
-binding = "DB"
-database_name = "cutgluebuild-db"
-database_id = "6b98a428-d670-4a6b-b24e-cf4ddf362736"
-
-[[env.production.d1_databases]]
-binding = "DB"
-database_name = "cutgluebuild-db-prod"
-database_id = "5413478b-b852-4a19-9dfb-0617c996c738"
+[[r2_buckets]]
+binding = "TEMPLATES_BUCKET"
+bucket_name = "cutgluebuild-templates"
+preview_bucket_name = "cutgluebuild-templates-preview"
 
 [vars]
-ENVIRONMENT = "development"
-DOMAIN = "cutgluebuild.com"
-BASE_URL = "http://localhost:4321"
-STRIPE_PUBLISHABLE_KEY = "pk_test_..."
-STRIPE_WEBHOOK_SECRET = "whsec_..."
-MAILERSEND_FROM_EMAIL = "noreply@cutgluebuild.com"
-MAILERSEND_FROM_NAME = "CutGlueBuild"
-
-GITHUB_CLIENT_ID = "Iv23liM3c4o5P1QtJB6R"
-GITHUB_CLIENT_SECRET = "e8c4b12a3f7e9d8c6b5a4e3f2a1b9c8d7e6f5a4b"
-
-[env.production.vars]
 ENVIRONMENT = "production"
-DOMAIN = "cutgluebuild.com" 
-BASE_URL = "https://cutgluebuild.com"
-STRIPE_PUBLISHABLE_KEY = "pk_live_..."
-STRIPE_WEBHOOK_SECRET = "whsec_..."
-MAILERSEND_FROM_EMAIL = "noreply@cutgluebuild.com"
-MAILERSEND_FROM_NAME = "CutGlueBuild"
 
-[env.production.ai]
-binding = "AI"
+[[env.preview.r2_buckets]]
+binding = "TEMPLATES_BUCKET"
+bucket_name = "cutgluebuild-templates-preview"
 
-# Services removed for Pages deployment
+[env.preview.vars]
+ENVIRONMENT = "preview"

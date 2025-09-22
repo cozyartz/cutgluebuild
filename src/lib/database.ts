@@ -5,6 +5,9 @@ export interface Env {
   DB: D1Database;
   AI: any; // Cloudflare AI binding
   ENVIRONMENT?: string;
+  BASE_URL?: string;
+  GITHUB_CLIENT_ID?: string;
+  GITHUB_CLIENT_SECRET?: string;
 }
 
 // Database types
@@ -13,10 +16,15 @@ export interface Profile {
   email: string;
   full_name?: string;
   avatar_url?: string;
-  subscription_tier?: 'starter' | 'professional';
+  subscription_tier?: 'free' | 'starter' | 'maker' | 'pro' | 'professional';
   stripe_customer_id?: string;
   password_hash?: string;
   tenant_id?: string;
+  github_id?: string;
+  github_username?: string;
+  role?: 'user' | 'admin' | 'superadmin';
+  is_active?: boolean;
+  last_login?: string;
   created_at: string;
   updated_at: string;
 }
@@ -906,6 +914,171 @@ export class DatabaseService {
     } catch (error) {
       console.error('Error deleting user profile:', error);
       return false;
+    }
+  }
+
+  // GitHub OAuth methods
+  async getProfileByGitHubId(githubId: string): Promise<Profile | null> {
+    try {
+      const result = await this.db
+        .prepare('SELECT * FROM profiles WHERE github_id = ?')
+        .bind(githubId)
+        .first<Profile>();
+
+      return result || null;
+    } catch (error) {
+      console.error('Error getting profile by GitHub ID:', error);
+      return null;
+    }
+  }
+
+  async getProfileByEmail(email: string): Promise<Profile | null> {
+    try {
+      const result = await this.db
+        .prepare('SELECT * FROM profiles WHERE email = ?')
+        .bind(email)
+        .first<Profile>();
+
+      return result || null;
+    } catch (error) {
+      console.error('Error getting profile by email:', error);
+      return null;
+    }
+  }
+
+  async updateProfileWithGitHubInfo(profileId: string, githubId: string, githubUsername: string, avatarUrl: string): Promise<void> {
+    try {
+      await this.db
+        .prepare(`
+          UPDATE profiles
+          SET github_id = ?, github_username = ?, avatar_url = ?, last_login = CURRENT_TIMESTAMP
+          WHERE id = ?
+        `)
+        .bind(githubId, githubUsername, avatarUrl, profileId)
+        .run();
+    } catch (error) {
+      console.error('Error updating profile with GitHub info:', error);
+      throw error;
+    }
+  }
+
+  async createGitHubProfile(profile: Omit<Profile, 'created_at' | 'updated_at'>): Promise<Profile | null> {
+    try {
+      const now = new Date().toISOString();
+      const result = await this.db
+        .prepare(`
+          INSERT INTO profiles (
+            id, email, full_name, avatar_url, github_id, github_username,
+            role, subscription_tier, is_active, last_login, created_at, updated_at
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          RETURNING *
+        `)
+        .bind(
+          profile.id, profile.email, profile.full_name, profile.avatar_url,
+          profile.github_id, profile.github_username, profile.role, profile.subscription_tier,
+          profile.is_active ? 1 : 0, profile.last_login, now, now
+        )
+        .first<Profile>();
+
+      return result || null;
+    } catch (error) {
+      console.error('Error creating GitHub profile:', error);
+      return null;
+    }
+  }
+
+  async updateLastLogin(profileId: string): Promise<void> {
+    try {
+      await this.db
+        .prepare('UPDATE profiles SET last_login = CURRENT_TIMESTAMP WHERE id = ?')
+        .bind(profileId)
+        .run();
+    } catch (error) {
+      console.error('Error updating last login:', error);
+      throw error;
+    }
+  }
+
+  async grantAdminPermissions(userId: string, permissions: string[]): Promise<void> {
+    try {
+      for (const permission of permissions) {
+        await this.db
+          .prepare(`
+            INSERT OR IGNORE INTO admin_permissions (id, user_id, permission, granted_by)
+            VALUES (?, ?, ?, ?)
+          `)
+          .bind(crypto.randomUUID(), userId, permission, userId)
+          .run();
+      }
+    } catch (error) {
+      console.error('Error granting admin permissions:', error);
+      throw error;
+    }
+  }
+
+  async logAdminActivity(
+    adminId: string,
+    action: string,
+    resourceType: string,
+    resourceId: string | null,
+    details: Record<string, any>
+  ): Promise<void> {
+    try {
+      await this.db
+        .prepare(`
+          INSERT INTO admin_activity_log (id, admin_id, action, resource_type, resource_id, details, created_at)
+          VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+        `)
+        .bind(
+          crypto.randomUUID(),
+          adminId,
+          action,
+          resourceType,
+          resourceId,
+          JSON.stringify(details)
+        )
+        .run();
+    } catch (error) {
+      console.error('Error logging admin activity:', error);
+      throw error;
+    }
+  }
+
+  async hasPermission(userId: string, permission: string): Promise<boolean> {
+    try {
+      const result = await this.db
+        .prepare(`
+          SELECT COUNT(*) as count
+          FROM admin_permissions
+          WHERE user_id = ? AND permission = ?
+          AND (expires_at IS NULL OR expires_at > unixepoch())
+        `)
+        .bind(userId, permission)
+        .first<{ count: number }>();
+
+      return result ? result.count > 0 : false;
+    } catch (error) {
+      console.error('Error checking user permission:', error);
+      return false;
+    }
+  }
+
+  async getUserPermissions(userId: string): Promise<string[]> {
+    try {
+      const results = await this.db
+        .prepare(`
+          SELECT permission
+          FROM admin_permissions
+          WHERE user_id = ?
+          AND (expires_at IS NULL OR expires_at > unixepoch())
+        `)
+        .bind(userId)
+        .all<{ permission: string }>();
+
+      return results.results?.map((r: { permission: string }) => r.permission) || [];
+    } catch (error) {
+      console.error('Error getting user permissions:', error);
+      return [];
     }
   }
 }

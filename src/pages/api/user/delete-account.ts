@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import type { Env } from '../../../lib/database';
 import { getAuthService, getSessionFromRequest, clearSessionCookie } from '../../../lib/auth';
 import { createDatabaseService } from '../../../lib/database';
+import { mailerSendService } from '../../../lib/mailersend-service';
 
 export const POST: APIRoute = async ({ request, locals }) => {
   const env = (locals as any)?.runtime?.env as Env;
@@ -80,13 +81,24 @@ export const POST: APIRoute = async ({ request, locals }) => {
     // Note: In production, you might want to anonymize rather than delete
     await db.anonymizeBillingRecords(currentUser.id);
     
-    // 5. Finally, delete the user profile
+    // 5. Send account deletion confirmation email before deleting profile
+    try {
+      await mailerSendService.sendAccountDeletionConfirmation(
+        currentUser.email,
+        currentUser.profile?.full_name || 'User'
+      );
+    } catch (emailError) {
+      console.error('Failed to send account deletion confirmation email:', emailError);
+      // Don't fail the deletion if email fails
+    }
+
+    // 6. Finally, delete the user profile
     await db.deleteUserProfile(currentUser.id);
 
     // Clear session cookie in response
     const response = new Response(JSON.stringify({ 
       success: true,
-      message: 'Account successfully deleted',
+      message: 'Account successfully deleted. A confirmation email has been sent.',
       deletedAt: new Date().toISOString()
     }), {
       status: 200,
