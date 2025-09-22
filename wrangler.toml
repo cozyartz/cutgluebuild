@@ -2,6 +2,11 @@ name = "cutgluebuild-api"
 main = "src/worker.js"
 compatibility_date = "2024-09-01"
 
+[[d1_databases]]
+binding = "DB"
+database_name = "cutgluebuild-db"
+database_id = "6b98a428-d670-4a6b-b24e-cf4ddf362736"
+
 [[r2_buckets]]
 binding = "TEMPLATES_BUCKET"
 bucket_name = "cutgluebuild-templates"
