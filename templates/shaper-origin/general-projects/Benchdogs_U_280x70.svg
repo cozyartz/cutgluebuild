@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="842px" height="596px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-miterlimit:10;">
+    <rect x="28.346" y="28.346" width="793.701" height="198.425" style="fill:rgb(0,104,255);"/>
+    <circle cx="85.039" cy="87.874" r="31.181" style="fill:white;stroke:black;stroke-width:0.28px;"/>
+    <circle cx="198.425" cy="87.874" r="31.181" style="fill:white;stroke:black;stroke-width:0.28px;"/>
+    <circle cx="311.811" cy="87.874" r="31.181" style="fill:white;stroke:black;stroke-width:0.28px;"/>
+    <circle cx="425.197" cy="87.874" r="31.181" style="fill:white;stroke:black;stroke-width:0.28px;"/>
+    <circle cx="538.583" cy="87.874" r="31.181" style="fill:white;stroke:black;stroke-width:0.28px;"/>
+    <circle cx="651.969" cy="87.874" r="31.181" style="fill:white;stroke:black;stroke-width:0.28px;"/>
+    <circle cx="765.354" cy="87.874" r="31.181" style="fill:white;stroke:black;stroke-width:0.28px;"/>
+    <circle cx="141.492" cy="172.913" r="31.181" style="fill:white;stroke:black;stroke-width:0.28px;"/>
+    <circle cx="254.878" cy="172.913" r="31.181" style="fill:white;stroke:black;stroke-width:0.28px;"/>
+    <circle cx="368.264" cy="172.913" r="31.181" style="fill:white;stroke:black;stroke-width:0.28px;"/>
+    <path id="Bezugspunkt" d="M28.346,201.699L28.346,226.772L42.479,226.772L28.346,201.699Z" style="fill:rgb(255,0,0);stroke:rgb(255,0,0);stroke-width:0.24px;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;"/>
+</svg>

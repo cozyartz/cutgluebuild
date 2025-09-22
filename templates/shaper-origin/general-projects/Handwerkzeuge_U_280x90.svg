@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="842px" height="596px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <path d="M728.504,363.547L728.504,382.677C728.504,390.5 722.153,396.85 714.331,396.85L640.63,396.85C632.808,396.85 626.457,390.5 626.457,382.677L626.457,363.547C634.854,359.369 640.63,350.699 640.63,340.691C640.63,326.611 629.198,315.179 615.118,315.179C601.038,315.179 589.606,326.611 589.606,340.691C589.606,350.699 595.382,359.369 603.78,363.547L603.78,382.677C603.78,390.5 597.429,396.85 589.606,396.85L28.346,396.85L28.346,141.732L822.047,141.732L822.047,396.85L765.354,396.85C757.532,396.85 751.181,390.5 751.181,382.677L751.181,363.547C759.579,359.369 765.354,350.699 765.354,340.691C765.354,326.611 753.923,315.179 739.843,315.179C725.762,315.179 714.331,326.611 714.331,340.691C714.331,350.699 720.106,359.369 728.504,363.547Z"/>
+    <path id="Bezugspunkt" d="M28.346,371.778L28.346,396.85L42.479,396.85L28.346,371.778Z" style="fill:rgb(255,0,0);stroke:rgb(255,0,0);stroke-width:0.24px;"/>
+    <circle cx="490.394" cy="340.691" r="14.173" style="fill:white;stroke:black;stroke-width:0.13px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;"/>
+    <circle cx="365.669" cy="340.691" r="34.016" style="fill:white;stroke:black;stroke-width:0.31px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;"/>
+    <circle cx="240.945" cy="340.691" r="31.181" style="fill:white;stroke:black;stroke-width:0.28px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;"/>
+    <circle cx="116.22" cy="340.691" r="31.181" style="fill:white;stroke:black;stroke-width:0.28px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;"/>
+    <circle cx="177.846" cy="199.263" r="11.339" style="fill:white;stroke:black;stroke-width:0.14px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;"/>
+    <circle cx="302.341" cy="199.263" r="11.339" style="fill:white;stroke:black;stroke-width:0.14px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;"/>
+</svg>

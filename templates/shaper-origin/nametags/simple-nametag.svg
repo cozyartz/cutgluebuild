@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="120mm" height="40mm" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
+  <title>Simple Nametag Template</title>
+  <!-- Outer boundary -->
+  <rect x="5" y="5" width="110" height="30" rx="5" fill="none" stroke="red" stroke-width="0.1" shaper:cutDepth="6mm" shaper:cutType="exterior"/>
+  <!-- Text area guide -->
+  <rect x="15" y="12" width="90" height="16" fill="none" stroke="blue" stroke-width="0.05" shaper:cutDepth="1mm" shaper:cutType="interior"/>
+</svg>

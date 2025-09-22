@@ -1,0 +1,95 @@
+{
+  "version": "1.0.0",
+  "created": "2025-09-22T12:30:00Z",
+  "description": "Registry of Shaper Origin specific template sources and their licenses",
+  "shaper_origin_specifics": {
+    "file_format": "SVG with Shaper-specific attributes",
+    "required_attributes": [
+      "shaper:cutDepth",
+      "shaper:cutType"
+    ],
+    "supported_cut_types": [
+      "exterior", 
+      "interior",
+      "pocket",
+      "engrave"
+    ],
+    "color_coding": {
+      "red": "exterior cuts",
+      "blue": "interior cuts", 
+      "green": "pocket cuts",
+      "black": "engraving"
+    }
+  },
+  "sources": [
+    {
+      "name": "MarkNahabedian DesignWithSVG",
+      "url": "https://github.com/MarkNahabedian/DesignWithSVG",
+      "license": "MIT",
+      "description": "Tools for generating Shaper Origin SVG files programmatically",
+      "files": "~20 SVG tools and templates",
+      "commercial_use": true,
+      "attribution_required": true,
+      "status": "verified_legal",
+      "date_added": "2025-09-22T12:30:00Z",
+      "specialties": ["nametags", "dividing plates", "joining plates", "programmatic generation"]
+    },
+    {
+      "name": "bieber dovetails",
+      "url": "https://github.com/bieber/dovetails", 
+      "license": "MIT",
+      "description": "Dovetail joint generator for Shaper Origin",
+      "files": "Generated dovetail templates",
+      "commercial_use": true,
+      "attribution_required": true,
+      "status": "verified_legal",
+      "date_added": "2025-09-22T12:30:00Z",
+      "specialties": ["dovetail joints", "woodworking joinery"]
+    },
+    {
+      "name": "wki ShaperProjects",
+      "url": "https://github.com/wki/ShaperProjects",
+      "license": "MIT", 
+      "description": "Various Shaper Origin CNC projects",
+      "files": "~10 SVG project files",
+      "commercial_use": true,
+      "attribution_required": true,
+      "status": "verified_legal",
+      "date_added": "2025-09-22T12:30:00Z",
+      "specialties": ["french cleats", "puzzles", "clamps"]
+    },
+    {
+      "name": "marvingreenberg FaceSVG",
+      "url": "https://github.com/marvingreenberg/FaceSVG",
+      "license": "MIT",
+      "description": "SketchUp plugin for Shaper Origin SVG export",
+      "files": "SketchUp plugin + samples",
+      "commercial_use": true,
+      "attribution_required": true,
+      "status": "verified_legal", 
+      "date_added": "2025-09-22T12:30:00Z",
+      "specialties": ["SketchUp integration", "3D to SVG conversion"]
+    },
+    {
+      "name": "berncodes pyDominoPDF",
+      "url": "https://github.com/berncodes/pyDominoPDF",
+      "license": "GPL v3",
+      "description": "Fiducial marker generator for Shaper Origin",
+      "files": "Python scripts for domino generation",
+      "commercial_use": true,
+      "attribution_required": true,
+      "status": "verified_legal",
+      "date_added": "2025-09-22T12:30:00Z",
+      "specialties": ["ShaperTape alternatives", "fiducial markers"]
+    }
+  ],
+  "template_categories": {
+    "hardware-templates": "Pre-made templates for common hardware installation",
+    "dovetails": "Dovetail joint templates and generators", 
+    "french-cleats": "French cleat mounting system templates",
+    "nametags": "Customizable nametag and signage templates",
+    "joining-plates": "Plates for joining materials and extrusions",
+    "dividing-plates": "Rotary table dividing plates",
+    "general-projects": "Mixed project templates from various sources"
+  }
+}

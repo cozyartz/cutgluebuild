@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="842px" height="596px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-miterlimit:10;">
+    <rect x="28.346" y="28.346" width="793.701" height="198.425" style="fill:rgb(0,104,255);"/>
+    <circle cx="85.039" cy="87.874" r="31.181" style="fill:white;stroke:black;stroke-width:0.28px;"/>
+    <circle cx="198.425" cy="87.874" r="31.181" style="fill:white;stroke:black;stroke-width:0.28px;"/>
+    <circle cx="311.811" cy="87.874" r="31.181" style="fill:white;stroke:black;stroke-width:0.28px;"/>
+    <circle cx="425.197" cy="87.874" r="31.181" style="fill:white;stroke:black;stroke-width:0.28px;"/>
+    <path d="M507.402,116.22L507.402,87.874C507.402,70.665 521.373,56.693 538.583,56.693C555.792,56.693 569.764,70.665 569.764,87.874L569.764,116.22C569.764,133.43 555.792,147.402 538.583,147.402C521.373,147.402 507.402,133.43 507.402,116.22Z" style="fill:white;stroke:black;stroke-width:0.26px;"/>
+    <path d="M620.787,116.22L620.787,87.874C620.787,70.665 634.759,56.693 651.969,56.693C669.178,56.693 683.15,70.665 683.15,87.874L683.15,116.22C683.15,133.43 669.178,147.402 651.969,147.402C634.759,147.402 620.787,133.43 620.787,116.22Z" style="fill:white;stroke:black;stroke-width:0.26px;"/>
+    <path d="M734.173,116.22L734.173,87.874C734.173,70.665 748.145,56.693 765.354,56.693C782.564,56.693 796.535,70.665 796.535,87.874L796.535,116.22C796.535,133.43 782.564,147.402 765.354,147.402C748.145,147.402 734.173,133.43 734.173,116.22Z" style="fill:white;stroke:black;stroke-width:0.26px;"/>
+    <circle cx="141.492" cy="172.913" r="31.181" style="fill:white;stroke:black;stroke-width:0.28px;"/>
+    <circle cx="254.878" cy="172.913" r="31.181" style="fill:white;stroke:black;stroke-width:0.28px;"/>
+    <circle cx="368.264" cy="172.913" r="31.181" style="fill:white;stroke:black;stroke-width:0.28px;"/>
+    <path id="Bezugspunkt" d="M28.346,201.699L28.346,226.772L42.479,226.772L28.346,201.699Z" style="fill:rgb(255,0,0);stroke:rgb(255,0,0);stroke-width:0.24px;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;"/>
+</svg>

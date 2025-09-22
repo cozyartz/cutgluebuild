@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80mm" height="80mm" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+  <title>T-Slot Aluminum Connector Plate</title>
+  <!-- Main plate -->
+  <rect x="10" y="10" width="60" height="60" fill="none" stroke="red" stroke-width="0.1" shaper:cutDepth="6mm" shaper:cutType="exterior"/>
+  <!-- Bolt holes for M5 bolts -->
+  <circle cx="25" cy="25" r="2.5" fill="none" stroke="blue" stroke-width="0.1" shaper:cutDepth="6mm" shaper:cutType="interior"/>
+  <circle cx="55" cy="25" r="2.5" fill="none" stroke="blue" stroke-width="0.1" shaper:cutDepth="6mm" shaper:cutType="interior"/>
+  <circle cx="25" cy="55" r="2.5" fill="none" stroke="blue" stroke-width="0.1" shaper:cutDepth="6mm" shaper:cutType="interior"/>
+  <circle cx="55" cy="55" r="2.5" fill="none" stroke="blue" stroke-width="0.1" shaper:cutDepth="6mm" shaper:cutType="interior"/>
+  <!-- Center relief -->
+  <circle cx="40" cy="40" r="8" fill="none" stroke="green" stroke-width="0.1" shaper:cutDepth="3mm" shaper:cutType="interior"/>
+</svg>

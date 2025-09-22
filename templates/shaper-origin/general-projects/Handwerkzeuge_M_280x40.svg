@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="842px" height="596px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <rect x="28.346" y="141.732" width="793.701" height="113.386"/>
+    <path id="Bezugspunkt" d="M28.346,230.045L28.346,255.118L42.479,255.118L28.346,230.045Z" style="fill:rgb(255,0,0);stroke:rgb(255,0,0);stroke-width:0.24px;"/>
+    <circle cx="177.846" cy="198.425" r="26.929" style="fill:white;stroke:black;stroke-width:0.33px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;"/>
+    <circle cx="302.341" cy="198.425" r="26.929" style="fill:white;stroke:black;stroke-width:0.33px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;"/>
+    <circle cx="436.434" cy="198.425" r="22.677" style="fill:white;stroke:black;stroke-width:0.28px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;"/>
+    <path d="M592.966,188.504C592.966,183.028 588.521,178.583 583.045,178.583L517.848,178.583C512.372,178.583 507.927,183.028 507.927,188.504L507.927,208.346C507.927,213.822 512.372,218.268 517.848,218.268L583.045,218.268C588.521,218.268 592.966,213.822 592.966,208.346L592.966,188.504Z" style="fill:white;stroke:black;stroke-width:0.28px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;"/>
+    <path d="M721.747,188.504C721.747,183.028 717.302,178.583 711.826,178.583L646.629,178.583C641.154,178.583 636.708,183.028 636.708,188.504L636.708,208.346C636.708,213.822 641.154,218.268 646.629,218.268L711.826,218.268C717.302,218.268 721.747,213.822 721.747,208.346L721.747,188.504Z" style="fill:white;stroke:black;stroke-width:0.28px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;"/>
+</svg>

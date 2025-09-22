@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100mm" height="60mm" viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg">
+  <title>Standard Door Hinge Template</title>
+  <!-- Exterior cut for hinge mortise -->
+  <rect x="10" y="10" width="80" height="40" fill="none" stroke="red" stroke-width="0.1" shaper:cutDepth="3mm" shaper:cutType="exterior"/>
+  <!-- Screw holes -->
+  <circle cx="25" cy="20" r="2" fill="none" stroke="blue" stroke-width="0.1" shaper:cutDepth="15mm" shaper:cutType="interior"/>
+  <circle cx="75" cy="20" r="2" fill="none" stroke="blue" stroke-width="0.1" shaper:cutDepth="15mm" shaper:cutType="interior"/>
+  <circle cx="25" cy="40" r="2" fill="none" stroke="blue" stroke-width="0.1" shaper:cutDepth="15mm" shaper:cutType="interior"/>
+  <circle cx="75" cy="40" r="2" fill="none" stroke="blue" stroke-width="0.1" shaper:cutDepth="15mm" shaper:cutType="interior"/>
+</svg>

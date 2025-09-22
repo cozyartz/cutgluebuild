@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200mm" height="50mm" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+  <title>French Cleat Wall Mount</title>
+  <path d="M 10 40 L 190 40 L 190 10 L 10 25 Z" fill="none" stroke="red" stroke-width="0.1" shaper:cutDepth="19mm" shaper:cutType="exterior"/>
+  <circle cx="30" cy="30" r="3" fill="none" stroke="blue" stroke-width="0.1" shaper:cutDepth="19mm" shaper:cutType="interior"/>
+  <circle cx="170" cy="30" r="3" fill="none" stroke="blue" stroke-width="0.1" shaper:cutDepth="19mm" shaper:cutType="interior"/>
+</svg>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="596px" height="842px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <rect x="56.693" y="141.732" width="481.89" height="481.89" style="fill:rgb(0,104,255);"/>
+    <circle cx="180.333" cy="265.372" r="58.819" style="fill:rgb(235,235,235);"/>
+    <circle cx="297.638" cy="382.677" r="58.819" style="fill:rgb(235,235,235);"/>
+    <circle cx="414.943" cy="499.982" r="58.819" style="fill:rgb(235,235,235);"/>
+    <path id="Bezugspunkt" d="M56.693,598.549L56.693,623.622L70.826,623.622L56.693,598.549Z" style="fill:rgb(255,0,0);stroke:rgb(255,0,0);stroke-width:0.24px;"/>
+</svg>
