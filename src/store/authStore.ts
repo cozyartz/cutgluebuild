@@ -19,6 +19,7 @@ interface AuthActions {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, fullName?: string) => Promise<void>;
   signOut: () => Promise<void>;
+  logout: () => Promise<void>;
   initialize: () => Promise<void>;
   refreshUser: () => Promise<void>;
 }
@@ -108,6 +109,10 @@ export const useAuthStore = create<AuthStore>()(
         } finally {
           set({ isLoading: false });
         }
+      },
+
+      logout: async function() {
+        return this.signOut();
       },
 
       initialize: async () => {
