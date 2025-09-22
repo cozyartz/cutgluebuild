@@ -1,0 +1,56 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import UserDashboard from '../components/dashboard/UserDashboard';
+import { getAuthService, getSessionFromRequest } from '../lib/auth';
+import type { Env } from '../lib/database';
+
+// Check authentication
+const env = (Astro.locals as any)?.runtime?.env as Env;
+const sessionId = getSessionFromRequest(Astro.request);
+
+if (!sessionId) {
+  return Astro.redirect('/login?redirect=' + encodeURIComponent('/dashboard'));
+}
+
+const authService = getAuthService(env);
+const currentUser = sessionId ? await authService.getCurrentUser(sessionId) : null;
+
+if (!currentUser) {
+  return Astro.redirect('/login?redirect=' + encodeURIComponent('/dashboard'));
+}
+---
+
+<Layout
+  title="Dashboard - CutGlueBuild"
+  description="Manage your projects, templates, and AI generations in one place."
+>
+  <Header />
+
+  <main class="pt-20 min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <UserDashboard client:load />
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  /* Custom animations for dashboard */
+  @keyframes slideUp {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  :global(.dashboard-animate) {
+    animation: slideUp 0.3s ease-out;
+  }
+</style>
