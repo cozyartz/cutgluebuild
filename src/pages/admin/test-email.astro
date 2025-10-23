@@ -9,7 +9,7 @@ import Layout from '../../layouts/Layout.astro';
       
       <div id="status-container" class="mb-6">
         <button id="check-status" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
-          Check MailerSend Status
+          Check Email Service Status
         </button>
       </div>
 
@@ -40,9 +40,9 @@ import Layout from '../../layouts/Layout.astro';
       <div class="mt-8 text-sm text-gray-600 dark:text-gray-400">
         <h3 class="font-medium mb-2">Setup Instructions:</h3>
         <ol class="list-decimal list-inside space-y-1 text-xs">
-          <li>Get your API key from <a href="https://app.mailersend.com" target="_blank" class="text-blue-600 underline">MailerSend dashboard</a></li>
-          <li>Add MAILERSEND_API_KEY to your environment variables</li>
-          <li>Verify your sending domain in MailerSend</li>
+          <li>Configure Purelymail SMTP in your <a href="https://purelymail.com" target="_blank" class="text-blue-600 underline">Purelymail dashboard</a></li>
+          <li>Add SMTP_PASSWORD to your environment variables</li>
+          <li>Verify your sending domain (cutgluebuild.com)</li>
           <li>Test the configuration using this form</li>
         </ol>
       </div>
@@ -51,7 +51,7 @@ import Layout from '../../layouts/Layout.astro';
 </Layout>
 
 <script>
-  // Check MailerSend status
+  // Check Email Service status
   document.getElementById('check-status')?.addEventListener('click', async () => {
     const resultDiv = document.getElementById('status-result');
     if (!resultDiv) return;

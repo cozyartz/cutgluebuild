@@ -38,7 +38,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     // Parse request body
     const { tier, billing_cycle = 'monthly' } = await request.json();
     
-    if (!tier || !['maker', 'pro'].includes(tier)) {
+    if (!tier || !['starter', 'professional'].includes(tier)) {
       return new Response(JSON.stringify({ error: 'Invalid tier specified' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
@@ -78,10 +78,10 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     // Determine price ID based on tier and billing cycle
     let priceId: string;
-    if (tier === 'maker') {
-      priceId = billing_cycle === 'yearly' ? STRIPE_PRICES.MAKER_YEARLY : STRIPE_PRICES.MAKER_MONTHLY;
-    } else if (tier === 'pro') {
-      priceId = billing_cycle === 'yearly' ? STRIPE_PRICES.PRO_YEARLY : STRIPE_PRICES.PRO_MONTHLY;
+    if (tier === 'starter') {
+      priceId = billing_cycle === 'yearly' ? STRIPE_PRICES.STARTER_YEARLY : STRIPE_PRICES.STARTER_MONTHLY;
+    } else if (tier === 'professional') {
+      priceId = billing_cycle === 'yearly' ? STRIPE_PRICES.PROFESSIONAL_YEARLY : STRIPE_PRICES.PROFESSIONAL_MONTHLY;
     } else {
       return new Response(JSON.stringify({ error: 'Invalid tier' }), {
         status: 400,

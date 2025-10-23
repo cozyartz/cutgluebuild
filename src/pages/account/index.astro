@@ -2,6 +2,23 @@
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import { getAuthService, getSessionFromRequest } from '../../lib/auth';
+import type { Env } from '../../lib/database';
+
+// Check authentication before allowing access
+const env = (Astro.locals as any)?.runtime?.env as Env;
+const sessionId = getSessionFromRequest(Astro.request);
+
+if (!sessionId) {
+  return Astro.redirect('/login?redirect=' + encodeURIComponent('/account'));
+}
+
+const authService = getAuthService(env);
+const currentUser = sessionId ? await authService.getCurrentUser(sessionId) : null;
+
+if (!currentUser) {
+  return Astro.redirect('/login?redirect=' + encodeURIComponent('/account'));
+}
 ---
 
 <Layout title="Account - CutGlueBuild.com" description="Manage your CutGlueBuild account, subscription, and projects.">

@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { mailerSendService } from '../../lib/mailersend-service';
+import { emailService } from '../../lib/email-service';
 import { InputValidator, SecurityError } from '../../lib/security';
 
 export const POST: APIRoute = async ({ request }) => {
@@ -21,7 +21,7 @@ export const POST: APIRoute = async ({ request }) => {
     const sanitizedEmail = InputValidator.validateEmail(email);
 
     // Send newsletter confirmation email
-    const success = await mailerSendService.sendNewsletterConfirmation(sanitizedEmail);
+    const success = await emailService.sendNewsletterConfirmation(sanitizedEmail);
 
     if (success) {
       return new Response(JSON.stringify({ 

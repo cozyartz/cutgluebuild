@@ -15,7 +15,7 @@ export default defineConfig({
   }),
   vite: {
     ssr: {
-      external: ['mailersend', 'gaxios', 'url', 'workers-ai-provider', 'openai', 'fabric', 'zustand'],
+      external: ['gaxios', 'url', 'workers-ai-provider', 'openai', 'fabric', 'zustand'],
       noExternal: ['lucide-react', '@heroicons/react']
     },
     build: {

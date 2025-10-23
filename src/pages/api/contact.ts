@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { mailerSendService } from '../../lib/mailersend-service';
+import { emailService } from '../../lib/email-service';
 import { InputValidator, SecurityError } from '../../lib/security';
 
 export const POST: APIRoute = async ({ request }) => {
@@ -24,7 +24,7 @@ export const POST: APIRoute = async ({ request }) => {
     const sanitizedMessage = message ? InputValidator.sanitizeString(message, 2000) : '';
 
     // Send contact email
-    const success = await mailerSendService.sendContactEmail(
+    const success = await emailService.sendContactEmail(
       sanitizedName,
       sanitizedEmail,
       `Contact Form: ${sanitizedRequestType}`,

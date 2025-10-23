@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getAuthService, getSessionFromRequest } from '../../../lib/auth';
 import { getDatabase, type Env } from '../../../lib/database';
-import { mailerSendService } from '../../../lib/mailersend-service';
+import { emailService } from '../../../lib/email-service';
 
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
@@ -79,7 +79,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       .run();
 
     // Send verification email
-    const success = await mailerSendService.sendEmailVerification(
+    const success = await emailService.sendEmailVerification(
       currentUser.email,
       verificationToken
     );

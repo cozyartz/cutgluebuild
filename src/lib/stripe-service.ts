@@ -60,10 +60,10 @@ export interface UsageRecord {
 
 // Stripe pricing configuration
 export const STRIPE_PRICES = {
-  MAKER_MONTHLY: process.env.STRIPE_PRICE_MAKER_MONTHLY || 'price_maker_monthly',
-  MAKER_YEARLY: process.env.STRIPE_PRICE_MAKER_YEARLY || 'price_maker_yearly',
-  PRO_MONTHLY: process.env.STRIPE_PRICE_PRO_MONTHLY || 'price_pro_monthly',
-  PRO_YEARLY: process.env.STRIPE_PRICE_PRO_YEARLY || 'price_pro_yearly',
+  STARTER_MONTHLY: process.env.STRIPE_PRICE_STARTER_MONTHLY || 'price_starter_monthly',
+  STARTER_YEARLY: process.env.STRIPE_PRICE_STARTER_YEARLY || 'price_starter_yearly',
+  PROFESSIONAL_MONTHLY: process.env.STRIPE_PRICE_PROFESSIONAL_MONTHLY || 'price_professional_monthly',
+  PROFESSIONAL_YEARLY: process.env.STRIPE_PRICE_PROFESSIONAL_YEARLY || 'price_professional_yearly',
   AI_USAGE: process.env.STRIPE_PRICE_AI_USAGE || 'price_ai_usage_metered',
 } as const;
 
@@ -77,19 +77,19 @@ export const SUBSCRIPTION_TIERS = {
       export_formats: ['svg']
     }
   },
-  maker: {
-    name: 'Maker',
-    price_monthly: 1900, // $19.00 in cents
+  starter: {
+    name: 'Starter',
+    price_monthly: 4900, // $49.00 in cents
     limits: {
       ai_calls_per_day: 100,
-      projects: 25,
+      projects: 50,
       templates: 'premium',
       export_formats: ['svg', 'dxf', 'gcode']
     }
   },
-  pro: {
-    name: 'Pro',
-    price_monthly: 4900, // $49.00 in cents
+  professional: {
+    name: 'Professional',
+    price_monthly: 9900, // $99.00 in cents
     limits: {
       ai_calls_per_day: -1, // unlimited
       projects: -1, // unlimited
@@ -314,12 +314,12 @@ export class StripeService {
   }
 
   // Utility Methods
-  getTierFromPriceId(priceId: string): 'free' | 'maker' | 'pro' {
-    if (priceId === STRIPE_PRICES.MAKER_MONTHLY || priceId === STRIPE_PRICES.MAKER_YEARLY) {
-      return 'maker';
+  getTierFromPriceId(priceId: string): 'free' | 'starter' | 'professional' {
+    if (priceId === STRIPE_PRICES.STARTER_MONTHLY || priceId === STRIPE_PRICES.STARTER_YEARLY) {
+      return 'starter';
     }
-    if (priceId === STRIPE_PRICES.PRO_MONTHLY || priceId === STRIPE_PRICES.PRO_YEARLY) {
-      return 'pro';
+    if (priceId === STRIPE_PRICES.PROFESSIONAL_MONTHLY || priceId === STRIPE_PRICES.PROFESSIONAL_YEARLY) {
+      return 'professional';
     }
     return 'free';
   }

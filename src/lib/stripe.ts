@@ -38,7 +38,7 @@ export const PRICING_TIERS: PricingTier[] = [
     id: 'maker',
     name: 'Maker',
     price: 19,
-    priceId: 'price_maker_monthly',
+    priceId: 'price_1SAyP72f9v7xz1zBobbPaT18',
     interval: 'month',
     aiToolLimit: 100,
     popular: true,
@@ -55,7 +55,7 @@ export const PRICING_TIERS: PricingTier[] = [
     id: 'pro',
     name: 'Pro',
     price: 49,
-    priceId: 'price_pro_monthly',
+    priceId: 'price_1SAyP72f9v7xz1zBpnNVyl2w',
     interval: 'month',
     aiToolLimit: -1, // unlimited
     features: [

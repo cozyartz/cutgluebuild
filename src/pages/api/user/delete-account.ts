@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import type { Env } from '../../../lib/database';
 import { getAuthService, getSessionFromRequest, clearSessionCookie } from '../../../lib/auth';
 import { createDatabaseService } from '../../../lib/database';
-import { mailerSendService } from '../../../lib/mailersend-service';
+import { emailService } from '../../../lib/email-service';
 
 export const POST: APIRoute = async ({ request, locals }) => {
   const env = (locals as any)?.runtime?.env as Env;
@@ -83,7 +83,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     
     // 5. Send account deletion confirmation email before deleting profile
     try {
-      await mailerSendService.sendAccountDeletionConfirmation(
+      await emailService.sendAccountDeletionConfirmation(
         currentUser.email,
         currentUser.profile?.full_name || 'User'
       );

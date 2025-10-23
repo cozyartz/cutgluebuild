@@ -6,7 +6,7 @@ import Stripe from 'stripe';
 import { createStripeService } from '../../../lib/stripe-service';
 import { getDatabase } from '../../../lib/database';
 import type { Env } from '../../../lib/database';
-import { mailerSendService } from '../../../lib/mailersend-service';
+import { emailService } from '../../../lib/email-service';
 
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
@@ -212,11 +212,11 @@ async function handleSubscriptionUpdated(event: Stripe.Event, database: any, str
     if (profile) {
       const action = event.type === 'customer.subscription.created' ? 'upgraded' : 
                      subscription.status === 'canceled' ? 'cancelled' : 'upgraded';
-      const planName = tier === 'maker' ? 'Maker Plan' : 
-                       tier === 'pro' ? 'Pro Plan' : 'Free Plan';
+      const planName = tier === 'starter' ? 'Starter Plan' :
+                       tier === 'professional' ? 'Professional Plan' : 'Free Plan';
       
-      await mailerSendService.sendSubscriptionNotification(
-        profile.email, 
+      await emailService.sendSubscriptionNotification(
+        profile.email,
         profile.full_name || 'User',
         planName,
         action
@@ -316,10 +316,10 @@ async function handleInvoiceEvent(event: Stripe.Event, database: any): Promise<v
       const profile = await database.getProfile(billingSubscription.user_id);
       if (profile) {
         const subscription = await database.getBillingSubscriptionByStripeId(invoice.subscription as string);
-        const planName = subscription?.tier === 'maker' ? 'Maker Plan' : 
-                         subscription?.tier === 'pro' ? 'Pro Plan' : 'Free Plan';
+        const planName = subscription?.tier === 'starter' ? 'Starter Plan' :
+                         subscription?.tier === 'professional' ? 'Professional Plan' : 'Free Plan';
         
-        await mailerSendService.sendInvoiceReceipt(
+        await emailService.sendInvoiceReceipt(
           profile.email,
           profile.full_name || 'User',
           {
@@ -345,7 +345,7 @@ async function handleInvoiceEvent(event: Stripe.Event, database: any): Promise<v
     try {
       const profile = await database.getProfile(billingSubscription.user_id);
       if (profile) {
-        await mailerSendService.sendPaymentFailedNotification(
+        await emailService.sendPaymentFailedNotification(
           profile.email,
           profile.full_name || 'User',
           invoice.amount_due / 100,

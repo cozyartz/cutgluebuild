@@ -1,14 +1,14 @@
 import type { APIRoute } from 'astro';
-import { mailerSendService } from '../../lib/mailersend-service';
+import { emailService } from '../../lib/email-service';
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    // Get status of MailerSend service
-    const status = mailerSendService.getStatus();
-    
+    // Get status of Email service
+    const status = emailService.getStatus();
+
     if (!status.configured) {
-      return new Response(JSON.stringify({ 
-        error: 'MailerSend is not configured. Please set MAILERSEND_API_KEY environment variable.',
+      return new Response(JSON.stringify({
+        error: 'Email service is not configured. Please set SMTP_PASSWORD environment variable.',
         status: status
       }), {
         status: 400,
@@ -20,8 +20,8 @@ export const POST: APIRoute = async ({ request }) => {
     const { email } = body;
 
     if (!email) {
-      return new Response(JSON.stringify({ 
-        error: 'Email address is required for testing' 
+      return new Response(JSON.stringify({
+        error: 'Email address is required for testing'
       }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
@@ -29,14 +29,14 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Send test email
-    const success = await mailerSendService.sendNotification(
+    const success = await emailService.sendNotification(
       email,
-      'MailerSend Test Email',
-      'This is a test email to verify that MailerSend is working correctly with CutGlueBuild.'
+      'Email Service Test',
+      'This is a test email to verify that the email service is working correctly with CutGlueBuild.'
     );
 
     if (success) {
-      return new Response(JSON.stringify({ 
+      return new Response(JSON.stringify({
         message: 'Test email sent successfully!',
         status: status
       }), {
@@ -44,8 +44,8 @@ export const POST: APIRoute = async ({ request }) => {
         headers: { 'Content-Type': 'application/json' }
       });
     } else {
-      return new Response(JSON.stringify({ 
-        error: 'Failed to send test email. Check your MailerSend configuration.',
+      return new Response(JSON.stringify({
+        error: 'Failed to send test email. Check your email configuration.',
         status: status
       }), {
         status: 500,
@@ -55,8 +55,8 @@ export const POST: APIRoute = async ({ request }) => {
 
   } catch (error) {
     console.error('Test email API error:', error);
-    
-    return new Response(JSON.stringify({ 
+
+    return new Response(JSON.stringify({
       error: 'Internal server error',
       details: error.message
     }), {
@@ -68,23 +68,23 @@ export const POST: APIRoute = async ({ request }) => {
 
 export const GET: APIRoute = async () => {
   try {
-    // Just return MailerSend status
-    const status = mailerSendService.getStatus();
-    
-    return new Response(JSON.stringify({ 
-      message: 'MailerSend configuration status',
+    // Just return email service status
+    const status = emailService.getStatus();
+
+    return new Response(JSON.stringify({
+      message: 'Email service configuration status',
       status: status,
-      ready: mailerSendService.isReady()
+      ready: emailService.isReady()
     }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });
 
   } catch (error) {
-    console.error('MailerSend status check error:', error);
-    
-    return new Response(JSON.stringify({ 
-      error: 'Failed to check MailerSend status',
+    console.error('Email service status check error:', error);
+
+    return new Response(JSON.stringify({
+      error: 'Failed to check email service status',
       details: error.message
     }), {
       status: 500,

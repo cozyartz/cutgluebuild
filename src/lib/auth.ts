@@ -3,7 +3,7 @@
 
 import { getDatabase, type Profile, type Env } from './database';
 import { createJWTManager, createPasswordManager, type JWTPayload, type TokenPair } from './jwt';
-import { mailerSendService } from './mailersend-service';
+import { emailService } from './email-service';
 
 export interface AuthUser {
   id: string;
@@ -136,8 +136,8 @@ export class AuthService {
       // Send welcome email and verification email
       try {
         await Promise.all([
-          mailerSendService.sendWelcomeEmail(email, fullName || 'User'),
-          mailerSendService.sendEmailVerification(email, verificationToken)
+          emailService.sendWelcomeEmail(email, fullName || 'User'),
+          emailService.sendEmailVerification(email, verificationToken)
         ]);
       } catch (emailError) {
         console.error('Failed to send welcome or verification email:', emailError);
@@ -370,7 +370,7 @@ export class AuthService {
       // For now, we'll use a simple in-memory approach or store it in the session table
       
       // Send password reset email
-      await mailerSendService.sendPasswordResetEmail(email, resetToken);
+      await emailService.sendPasswordResetEmail(email, resetToken);
       
       return true;
     } catch (error) {
