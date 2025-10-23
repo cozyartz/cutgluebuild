@@ -325,7 +325,14 @@ export class EmailService {
             </p>
           </div>
           <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
-            <p style="color: #9ca3af; font-size: 12px; margin: 0;">
+            <p style="color: #6b7280; font-size: 12px; margin: 0 0 10px 0;">
+              <strong>CutGlueBuild</strong> - AI-Powered Laser Cutting Templates
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0 0 10px 0;">
+              Cozyartz Media Group<br>
+              Support: support@cutgluebuild.com
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0;">
               © ${new Date().getFullYear()} CutGlueBuild. All rights reserved.
             </p>
           </div>
@@ -339,21 +346,39 @@ export class EmailService {
     return `
       <!DOCTYPE html>
       <html>
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
       <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f3f4f6;">
-        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 40px 20px;">
-          <h2 style="color: #1f2937;">Reset Your Password</h2>
-          <p style="color: #4b5563; font-size: 16px; line-height: 1.6;">
-            We received a request to reset your password. Click the button below to create a new password:
-          </p>
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${resetUrl}" style="display: inline-block; background: #667eea; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold;">Reset Password</a>
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+          <div style="padding: 40px 20px;">
+            <h2 style="color: #1f2937; margin-top: 0;">Reset Your Password</h2>
+            <p style="color: #4b5563; font-size: 16px; line-height: 1.6;">
+              We received a request to reset your password. Click the button below to create a new password:
+            </p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${resetUrl}" style="display: inline-block; background: #667eea; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold;">Reset Password</a>
+            </div>
+            <p style="color: #6b7280; font-size: 14px; line-height: 1.6;">
+              If you didn't request this, you can safely ignore this email.
+            </p>
+            <p style="color: #9ca3af; font-size: 12px;">
+              This link will expire in 1 hour for your security.
+            </p>
           </div>
-          <p style="color: #6b7280; font-size: 14px; line-height: 1.6;">
-            If you didn't request this, you can safely ignore this email.
-          </p>
-          <p style="color: #9ca3af; font-size: 12px;">
-            This link will expire in 1 hour.
-          </p>
+          <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
+            <p style="color: #6b7280; font-size: 12px; margin: 0 0 10px 0;">
+              <strong>CutGlueBuild</strong> - AI-Powered Laser Cutting Templates
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0 0 10px 0;">
+              Cozyartz Media Group<br>
+              Support: support@cutgluebuild.com
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0;">
+              © ${new Date().getFullYear()} CutGlueBuild. All rights reserved.
+            </p>
+          </div>
         </div>
       </body>
       </html>
@@ -364,18 +389,36 @@ export class EmailService {
     return `
       <!DOCTYPE html>
       <html>
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
       <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f3f4f6;">
-        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 40px 20px;">
-          <h2 style="color: #1f2937;">Verify Your Email Address</h2>
-          <p style="color: #4b5563; font-size: 16px; line-height: 1.6;">
-            Please verify your email address by clicking the button below:
-          </p>
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${verificationUrl}" style="display: inline-block; background: #667eea; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold;">Verify Email</a>
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+          <div style="padding: 40px 20px;">
+            <h2 style="color: #1f2937; margin-top: 0;">Verify Your Email Address</h2>
+            <p style="color: #4b5563; font-size: 16px; line-height: 1.6;">
+              Please verify your email address by clicking the button below:
+            </p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${verificationUrl}" style="display: inline-block; background: #667eea; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold;">Verify Email</a>
+            </div>
+            <p style="color: #6b7280; font-size: 14px; line-height: 1.6;">
+              If you didn't create an account, you can safely ignore this email.
+            </p>
           </div>
-          <p style="color: #6b7280; font-size: 14px; line-height: 1.6;">
-            If you didn't create an account, you can safely ignore this email.
-          </p>
+          <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
+            <p style="color: #6b7280; font-size: 12px; margin: 0 0 10px 0;">
+              <strong>CutGlueBuild</strong> - AI-Powered Laser Cutting Templates
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0 0 10px 0;">
+              Cozyartz Media Group<br>
+              Support: support@cutgluebuild.com
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0;">
+              © ${new Date().getFullYear()} CutGlueBuild. All rights reserved.
+            </p>
+          </div>
         </div>
       </body>
       </html>
@@ -386,15 +429,33 @@ export class EmailService {
     return `
       <!DOCTYPE html>
       <html>
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
       <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f3f4f6;">
-        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 40px 20px;">
-          <h2 style="color: #1f2937;">Subscription ${action}</h2>
-          <p style="color: #4b5563; font-size: 16px;">Hi ${userName},</p>
-          <p style="color: #4b5563; font-size: 16px; line-height: 1.6;">
-            Your subscription has been ${action} to ${planName}.
-          </p>
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${process.env.VITE_SITE_URL || 'https://cutgluebuild.com'}/account" style="display: inline-block; background: #667eea; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold;">Manage Subscription</a>
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+          <div style="padding: 40px 20px;">
+            <h2 style="color: #1f2937; margin-top: 0;">Subscription ${action}</h2>
+            <p style="color: #4b5563; font-size: 16px;">Hi ${userName},</p>
+            <p style="color: #4b5563; font-size: 16px; line-height: 1.6;">
+              Your subscription has been ${action} to ${planName}.
+            </p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${process.env.VITE_SITE_URL || 'https://cutgluebuild.com'}/account" style="display: inline-block; background: #667eea; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold;">Manage Subscription</a>
+            </div>
+          </div>
+          <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
+            <p style="color: #6b7280; font-size: 12px; margin: 0 0 10px 0;">
+              <strong>CutGlueBuild</strong> - AI-Powered Laser Cutting Templates
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0 0 10px 0;">
+              Cozyartz Media Group<br>
+              Support: support@cutgluebuild.com
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0;">
+              © ${new Date().getFullYear()} CutGlueBuild. All rights reserved.
+            </p>
           </div>
         </div>
       </body>
@@ -406,31 +467,49 @@ export class EmailService {
     return `
       <!DOCTYPE html>
       <html>
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
       <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f3f4f6;">
-        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 40px 20px;">
-          <h2 style="color: #1f2937;">Payment Receipt</h2>
-          <p style="color: #4b5563; font-size: 16px;">Hi ${userName},</p>
-          <p style="color: #4b5563; font-size: 16px;">Thank you for your payment!</p>
-          <table style="width: 100%; margin: 20px 0; border-collapse: collapse;">
-            <tr style="border-bottom: 1px solid #e5e7eb;">
-              <td style="padding: 10px; color: #6b7280;">Invoice Number:</td>
-              <td style="padding: 10px; color: #1f2937; font-weight: bold;">${invoiceData.invoiceNumber}</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #e5e7eb;">
-              <td style="padding: 10px; color: #6b7280;">Amount:</td>
-              <td style="padding: 10px; color: #1f2937; font-weight: bold;">${invoiceData.currency.toUpperCase()} ${invoiceData.amount}</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #e5e7eb;">
-              <td style="padding: 10px; color: #6b7280;">Plan:</td>
-              <td style="padding: 10px; color: #1f2937; font-weight: bold;">${invoiceData.planName}</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #e5e7eb;">
-              <td style="padding: 10px; color: #6b7280;">Period:</td>
-              <td style="padding: 10px; color: #1f2937;">${invoiceData.periodStart} - ${invoiceData.periodEnd}</td>
-            </tr>
-          </table>
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${invoiceData.invoiceUrl}" style="display: inline-block; background: #667eea; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold;">View Invoice</a>
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+          <div style="padding: 40px 20px;">
+            <h2 style="color: #1f2937; margin-top: 0;">Payment Receipt</h2>
+            <p style="color: #4b5563; font-size: 16px;">Hi ${userName},</p>
+            <p style="color: #4b5563; font-size: 16px;">Thank you for your payment!</p>
+            <table style="width: 100%; margin: 20px 0; border-collapse: collapse;">
+              <tr style="border-bottom: 1px solid #e5e7eb;">
+                <td style="padding: 10px; color: #6b7280;">Invoice Number:</td>
+                <td style="padding: 10px; color: #1f2937; font-weight: bold;">${invoiceData.invoiceNumber}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e5e7eb;">
+                <td style="padding: 10px; color: #6b7280;">Amount:</td>
+                <td style="padding: 10px; color: #1f2937; font-weight: bold;">${invoiceData.currency.toUpperCase()} ${invoiceData.amount}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e5e7eb;">
+                <td style="padding: 10px; color: #6b7280;">Plan:</td>
+                <td style="padding: 10px; color: #1f2937; font-weight: bold;">${invoiceData.planName}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e5e7eb;">
+                <td style="padding: 10px; color: #6b7280;">Period:</td>
+                <td style="padding: 10px; color: #1f2937;">${invoiceData.periodStart} - ${invoiceData.periodEnd}</td>
+              </tr>
+            </table>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${invoiceData.invoiceUrl}" style="display: inline-block; background: #667eea; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold;">View Invoice</a>
+            </div>
+          </div>
+          <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
+            <p style="color: #6b7280; font-size: 12px; margin: 0 0 10px 0;">
+              <strong>CutGlueBuild</strong> - AI-Powered Laser Cutting Templates
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0 0 10px 0;">
+              Cozyartz Media Group<br>
+              Support: support@cutgluebuild.com
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0;">
+              © ${new Date().getFullYear()} CutGlueBuild. All rights reserved.
+            </p>
           </div>
         </div>
       </body>
@@ -442,15 +521,33 @@ export class EmailService {
     return `
       <!DOCTYPE html>
       <html>
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
       <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f3f4f6;">
-        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 40px 20px;">
-          <h2 style="color: #dc2626;">Payment Failed</h2>
-          <p style="color: #4b5563; font-size: 16px;">Hi ${userName},</p>
-          <p style="color: #4b5563; font-size: 16px;">
-            Your payment of ${currency.toUpperCase()} ${amount} failed. Please update your payment method to continue your subscription.
-          </p>
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${process.env.VITE_SITE_URL || 'https://cutgluebuild.com'}/account/billing" style="display: inline-block; background: #dc2626; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold;">Update Payment Method</a>
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+          <div style="padding: 40px 20px;">
+            <h2 style="color: #dc2626; margin-top: 0;">Payment Failed</h2>
+            <p style="color: #4b5563; font-size: 16px;">Hi ${userName},</p>
+            <p style="color: #4b5563; font-size: 16px;">
+              Your payment of ${currency.toUpperCase()} ${amount} failed. Please update your payment method to continue your subscription.
+            </p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${process.env.VITE_SITE_URL || 'https://cutgluebuild.com'}/account/billing" style="display: inline-block; background: #dc2626; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold;">Update Payment Method</a>
+            </div>
+          </div>
+          <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
+            <p style="color: #6b7280; font-size: 12px; margin: 0 0 10px 0;">
+              <strong>CutGlueBuild</strong> - AI-Powered Laser Cutting Templates
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0 0 10px 0;">
+              Cozyartz Media Group<br>
+              Support: support@cutgluebuild.com
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0;">
+              © ${new Date().getFullYear()} CutGlueBuild. All rights reserved.
+            </p>
           </div>
         </div>
       </body>
@@ -462,15 +559,33 @@ export class EmailService {
     return `
       <!DOCTYPE html>
       <html>
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
       <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f3f4f6;">
-        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 40px 20px;">
-          <h2 style="color: #1f2937;">Your Trial Expires in ${daysRemaining} Days</h2>
-          <p style="color: #4b5563; font-size: 16px;">Hi ${userName},</p>
-          <p style="color: #4b5563; font-size: 16px;">
-            Your trial expires in ${daysRemaining} days. Upgrade now to keep access to premium features.
-          </p>
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${process.env.VITE_SITE_URL || 'https://cutgluebuild.com'}/pricing" style="display: inline-block; background: #667eea; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold;">Upgrade Now</a>
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+          <div style="padding: 40px 20px;">
+            <h2 style="color: #1f2937; margin-top: 0;">Your Trial Expires in ${daysRemaining} Days</h2>
+            <p style="color: #4b5563; font-size: 16px;">Hi ${userName},</p>
+            <p style="color: #4b5563; font-size: 16px;">
+              Your trial expires in ${daysRemaining} days. Upgrade now to keep access to premium features.
+            </p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${process.env.VITE_SITE_URL || 'https://cutgluebuild.com'}/pricing" style="display: inline-block; background: #667eea; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold;">Upgrade Now</a>
+            </div>
+          </div>
+          <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
+            <p style="color: #6b7280; font-size: 12px; margin: 0 0 10px 0;">
+              <strong>CutGlueBuild</strong> - AI-Powered Laser Cutting Templates
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0 0 10px 0;">
+              Cozyartz Media Group<br>
+              Support: support@cutgluebuild.com
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0;">
+              © ${new Date().getFullYear()} CutGlueBuild. All rights reserved.
+            </p>
           </div>
         </div>
       </body>
@@ -482,15 +597,33 @@ export class EmailService {
     return `
       <!DOCTYPE html>
       <html>
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
       <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f3f4f6;">
-        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 40px 20px;">
-          <h2 style="color: #f59e0b;">Usage Limit Warning</h2>
-          <p style="color: #4b5563; font-size: 16px;">Hi ${userName},</p>
-          <p style="color: #4b5563; font-size: 16px;">
-            You've used ${usagePercent}% of your ${limitType} limit. Consider upgrading for unlimited access.
-          </p>
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${process.env.VITE_SITE_URL || 'https://cutgluebuild.com'}/pricing" style="display: inline-block; background: #f59e0b; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold;">Upgrade Plan</a>
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+          <div style="padding: 40px 20px;">
+            <h2 style="color: #f59e0b; margin-top: 0;">Usage Limit Warning</h2>
+            <p style="color: #4b5563; font-size: 16px;">Hi ${userName},</p>
+            <p style="color: #4b5563; font-size: 16px;">
+              You've used ${usagePercent}% of your ${limitType} limit. Consider upgrading for unlimited access.
+            </p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${process.env.VITE_SITE_URL || 'https://cutgluebuild.com'}/pricing" style="display: inline-block; background: #f59e0b; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold;">Upgrade Plan</a>
+            </div>
+          </div>
+          <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
+            <p style="color: #6b7280; font-size: 12px; margin: 0 0 10px 0;">
+              <strong>CutGlueBuild</strong> - AI-Powered Laser Cutting Templates
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0 0 10px 0;">
+              Cozyartz Media Group<br>
+              Support: support@cutgluebuild.com
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0;">
+              © ${new Date().getFullYear()} CutGlueBuild. All rights reserved.
+            </p>
           </div>
         </div>
       </body>
@@ -502,22 +635,40 @@ export class EmailService {
     return `
       <!DOCTYPE html>
       <html>
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
       <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f3f4f6;">
-        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 40px 20px;">
-          <h2 style="color: #dc2626;">Security Alert: ${alertType}</h2>
-          <p style="color: #4b5563; font-size: 16px;">
-            We detected ${alertType} on your account from:
-          </p>
-          <ul style="color: #4b5563; font-size: 16px;">
-            <li>IP Address: ${ipAddress || 'Unknown'}</li>
-            <li>Location: ${location || 'Unknown location'}</li>
-            <li>Time: ${new Date().toISOString()}</li>
-          </ul>
-          <p style="color: #4b5563; font-size: 16px;">
-            If this wasn't you, please secure your account immediately.
-          </p>
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${process.env.VITE_SITE_URL || 'https://cutgluebuild.com'}/account/security" style="display: inline-block; background: #dc2626; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold;">Review Account</a>
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+          <div style="padding: 40px 20px;">
+            <h2 style="color: #dc2626; margin-top: 0;">Security Alert: ${alertType}</h2>
+            <p style="color: #4b5563; font-size: 16px;">
+              We detected ${alertType} on your account from:
+            </p>
+            <ul style="color: #4b5563; font-size: 16px;">
+              <li>IP Address: ${ipAddress || 'Unknown'}</li>
+              <li>Location: ${location || 'Unknown location'}</li>
+              <li>Time: ${new Date().toISOString()}</li>
+            </ul>
+            <p style="color: #4b5563; font-size: 16px;">
+              If this wasn't you, please secure your account immediately.
+            </p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${process.env.VITE_SITE_URL || 'https://cutgluebuild.com'}/account/security" style="display: inline-block; background: #dc2626; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold;">Review Account</a>
+            </div>
+          </div>
+          <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
+            <p style="color: #6b7280; font-size: 12px; margin: 0 0 10px 0;">
+              <strong>CutGlueBuild</strong> - AI-Powered Laser Cutting Templates
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0 0 10px 0;">
+              Cozyartz Media Group<br>
+              Support: support@cutgluebuild.com
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0;">
+              © ${new Date().getFullYear()} CutGlueBuild. All rights reserved.
+            </p>
           </div>
         </div>
       </body>
@@ -529,14 +680,32 @@ export class EmailService {
     return `
       <!DOCTYPE html>
       <html>
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
       <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f3f4f6;">
-        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 40px 20px;">
-          <h2 style="color: #1f2937;">${sharedByName} shared a project with you</h2>
-          <p style="color: #4b5563; font-size: 16px;">
-            ${sharedByName} has shared "${projectName}" with you on CutGlueBuild.
-          </p>
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${shareUrl}" style="display: inline-block; background: #667eea; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold;">View Project</a>
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+          <div style="padding: 40px 20px;">
+            <h2 style="color: #1f2937; margin-top: 0;">${sharedByName} shared a project with you</h2>
+            <p style="color: #4b5563; font-size: 16px;">
+              ${sharedByName} has shared "${projectName}" with you on CutGlueBuild.
+            </p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${shareUrl}" style="display: inline-block; background: #667eea; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold;">View Project</a>
+            </div>
+          </div>
+          <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
+            <p style="color: #6b7280; font-size: 12px; margin: 0 0 10px 0;">
+              <strong>CutGlueBuild</strong> - AI-Powered Laser Cutting Templates
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0 0 10px 0;">
+              Cozyartz Media Group<br>
+              Support: support@cutgluebuild.com
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0;">
+              © ${new Date().getFullYear()} CutGlueBuild. All rights reserved.
+            </p>
           </div>
         </div>
       </body>
@@ -548,15 +717,36 @@ export class EmailService {
     return `
       <!DOCTYPE html>
       <html>
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
       <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f3f4f6;">
-        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 40px 20px;">
-          <h2 style="color: #1f2937;">Welcome to CutGlueBuild Newsletter!</h2>
-          <p style="color: #4b5563; font-size: 16px;">
-            You're now subscribed to receive updates, tips, and news from CutGlueBuild.
-          </p>
-          <p style="color: #6b7280; font-size: 14px; margin-top: 30px;">
-            <a href="${process.env.VITE_SITE_URL || 'https://cutgluebuild.com'}/unsubscribe?email=${encodeURIComponent(userEmail)}" style="color: #6b7280;">Unsubscribe</a>
-          </p>
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+          <div style="padding: 40px 20px;">
+            <h2 style="color: #1f2937; margin-top: 0;">Welcome to CutGlueBuild Newsletter!</h2>
+            <p style="color: #4b5563; font-size: 16px;">
+              You're now subscribed to receive updates, tips, and news from CutGlueBuild.
+            </p>
+            <p style="color: #4b5563; font-size: 16px; line-height: 1.6;">
+              Thank you for joining our community of makers and creators!
+            </p>
+          </div>
+          <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
+            <p style="color: #6b7280; font-size: 12px; margin: 0 0 10px 0;">
+              <strong>CutGlueBuild</strong> - AI-Powered Laser Cutting Templates
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0 0 10px 0;">
+              Cozyartz Media Group<br>
+              Support: support@cutgluebuild.com
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0 0 10px 0;">
+              <a href="${process.env.VITE_SITE_URL || 'https://cutgluebuild.com'}/unsubscribe?email=${encodeURIComponent(userEmail)}" style="color: #9ca3af; text-decoration: underline;">Unsubscribe from newsletter</a>
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0;">
+              © ${new Date().getFullYear()} CutGlueBuild. All rights reserved.
+            </p>
+          </div>
         </div>
       </body>
       </html>
@@ -567,19 +757,37 @@ export class EmailService {
     return `
       <!DOCTYPE html>
       <html>
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
       <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f3f4f6;">
-        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 40px 20px;">
-          <h2 style="color: #1f2937;">Account Deleted</h2>
-          <p style="color: #4b5563; font-size: 16px;">Hi ${userName},</p>
-          <p style="color: #4b5563; font-size: 16px;">
-            Your CutGlueBuild account has been successfully deleted as requested on ${new Date().toLocaleDateString()}.
-          </p>
-          <p style="color: #4b5563; font-size: 16px;">
-            All your data has been permanently removed from our systems.
-          </p>
-          <p style="color: #6b7280; font-size: 14px; margin-top: 30px;">
-            If you have any questions, contact us at support@cutgluebuild.com
-          </p>
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+          <div style="padding: 40px 20px;">
+            <h2 style="color: #1f2937; margin-top: 0;">Account Deleted</h2>
+            <p style="color: #4b5563; font-size: 16px;">Hi ${userName},</p>
+            <p style="color: #4b5563; font-size: 16px;">
+              Your CutGlueBuild account has been successfully deleted as requested on ${new Date().toLocaleDateString()}.
+            </p>
+            <p style="color: #4b5563; font-size: 16px;">
+              All your data has been permanently removed from our systems.
+            </p>
+            <p style="color: #6b7280; font-size: 14px; margin-top: 30px;">
+              If you have any questions, contact us at support@cutgluebuild.com
+            </p>
+          </div>
+          <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
+            <p style="color: #6b7280; font-size: 12px; margin: 0 0 10px 0;">
+              <strong>CutGlueBuild</strong> - AI-Powered Laser Cutting Templates
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0 0 10px 0;">
+              Cozyartz Media Group<br>
+              Support: support@cutgluebuild.com
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 0;">
+              © ${new Date().getFullYear()} CutGlueBuild. All rights reserved.
+            </p>
+          </div>
         </div>
       </body>
       </html>
